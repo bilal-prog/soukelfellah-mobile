@@ -1,0 +1,86 @@
+{
+  "name": "Souk El Fellah",
+  "slug": "SoukElFellah",
+  "scheme": "soukelfellah",
+  "version": "1.0.0",
+  "orientation": "portrait",
+  "userInterfaceStyle": "automatic",
+  "icon": "./assets/images/app-icon-all.png",
+  "updates": {
+    "fallbackToCacheTimeout": 0
+  },
+  "newArchEnabled": true,
+  "jsEngine": "hermes",
+  "assetBundlePatterns": ["**/*"],
+  "android": {
+    "icon": "./assets/images/icon.png",
+    "package": "com.soukelfellah",
+    "adaptiveIcon": {
+      "foregroundImage": "./assets/images/adaptive-icon.png",
+      "backgroundColor": "#FFFFFF"
+    },
+    "allowBackup": false
+  },
+  "ios": {
+    "icon": "./assets/images/adaptive-icon.png",
+    "supportsTablet": true,
+    "bundleIdentifier": "com.soukelfellah",
+    "infoPlist": {
+      "UIBackgroundModes": ["remote-notification"]
+    },
+    "entitlements": {
+      "aps-environment": "development"
+    }
+  },
+  "web": {
+    "favicon": "./assets/images/favicon.png",
+    "bundler": "metro"
+  },
+  "plugins": [
+    "expo-localization",
+    "expo-font",
+    [
+      "expo-splash-screen",
+      {
+        "image": "./assets/images/splash-icon.png",
+        "imageWidth": 300,
+        "resizeMode": "contain",
+        "backgroundColor": "#FFFFFF",
+        "dark": {
+          "image": "./assets/images/splash-icon-dark.png",
+          "imageWidth": 300,
+          "resizeMode": "contain",
+          "backgroundColor": "#000000"
+        }
+      }
+    ],
+    [
+      "react-native-edge-to-edge",
+      {
+        "android": {
+          "parentTheme": "Light",
+          "enforceNavigationBarContrast": false
+        }
+      }
+    ],
+    "expo-build-properties",
+    [
+      "onesignal-expo-plugin",
+      {
+        "mode": "development"
+      }
+    ],
+    "expo-secure-store"
+  ],
+  "experiments": {
+    "tsconfigPaths": true
+  },
+  "extra": {
+    "ignite": {
+      "version": "UNKNOWN"
+    },
+    "bugsnag": {
+      "apiKey": "da4f48a727a29666a58cdd1db6551357"
+    }
+  }
+}
