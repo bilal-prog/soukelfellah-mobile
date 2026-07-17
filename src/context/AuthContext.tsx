@@ -5,8 +5,12 @@ import {
   useCallback,
   useContext,
   useMemo,
+  useEffect,
 } from "react"
 import { useMMKVString } from "react-native-mmkv"
+import { OneSignal } from "react-native-onesignal"
+
+import { socketClient } from "@/services/socket/socketClient"
 
 export type AuthContextType = {
   isAuthenticated: boolean
@@ -46,6 +50,15 @@ export const AuthProvider: FC<PropsWithChildren<AuthProviderProps>> = ({ childre
 
   const isGuest = useMemo(() => isGuestStr === "true", [isGuestStr])
 
+  // Manage socket connection lifecycle
+  useEffect(() => {
+    if (accessToken) {
+      socketClient.connect(accessToken)
+    } else {
+      socketClient.disconnect()
+    }
+  }, [accessToken])
+
   const setGuestMode = useCallback(
     (val: boolean) => {
       setIsGuestStr(val ? "true" : "false")
@@ -78,6 +91,11 @@ export const AuthProvider: FC<PropsWithChildren<AuthProviderProps>> = ({ childre
       setUserPhone(user?.phone)
       setUserRole(user?.role)
       setIsGuestStr("false")
+
+      // Register session with OneSignal
+      if (user?.id) {
+        OneSignal.login(user.id)
+      }
     },
     [
       setAccessToken,
@@ -105,7 +123,7 @@ export const AuthProvider: FC<PropsWithChildren<AuthProviderProps>> = ({ childre
       const { logout } = require("@/services/api/modules/auth")
       try {
         await logout(refreshToken)
-      } catch (e) {
+      } catch {
         // Silent catch
       }
     }
@@ -117,6 +135,9 @@ export const AuthProvider: FC<PropsWithChildren<AuthProviderProps>> = ({ childre
     setUserRole(undefined)
     setFavoritesStr(JSON.stringify([]))
     setIsGuestStr("false")
+
+    // Deregister user session in OneSignal
+    OneSignal.logout()
   }, [
     setAccessToken,
     setRefreshToken,

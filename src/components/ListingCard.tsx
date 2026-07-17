@@ -159,14 +159,17 @@ export const ListingCard = memo(function ListingCard(props: ListingCardProps) {
       {/* Info Content */}
       <View style={$infoContent}>
         <View style={[$row, { alignItems: "center", gap: 4, flexWrap: "wrap", marginBottom: spacing.xxs }]}>
-          {listingDirection === "BUY" && (
+          {listingDirection === "BUY" ? (
             <View style={{ backgroundColor: colors.palette.secondary, paddingHorizontal: 6, paddingVertical: 2, borderRadius: 4 }}>
               <Text text={translate("addListing:directionBuy")} size="xxs" style={{ color: "white", fontWeight: "bold" }} />
             </View>
-          )}
-          {purpose === "RENT" && (
+          ) : purpose === "RENT" ? (
             <View style={{ backgroundColor: colors.palette.tertiary, paddingHorizontal: 6, paddingVertical: 2, borderRadius: 4 }}>
               <Text text={translate("addListing:purposeRent")} size="xxs" style={{ color: "white", fontWeight: "bold" }} />
+            </View>
+          ) : (
+            <View style={{ backgroundColor: colors.palette.primary, paddingHorizontal: 6, paddingVertical: 2, borderRadius: 4 }}>
+              <Text text={translate("addListing:directionSell")} size="xxs" style={{ color: "white", fontWeight: "bold" }} />
             </View>
           )}
           <Text

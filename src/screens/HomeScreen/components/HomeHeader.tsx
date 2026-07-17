@@ -5,7 +5,6 @@ import { useNavigation } from "@react-navigation/native"
 
 import { CategoryCard } from "@/components/CategoryCard"
 import { Text } from "@/components/Text"
-import { translate } from "@/localization/translate"
 import { ApiCategory } from "@/services/api/modules"
 import { useAppTheme } from "@/theme/context"
 
@@ -36,15 +35,6 @@ export const HomeHeader = memo(function HomeHeader({
 
   const handleSearchPress = () => {
     navigation.navigate("Search")
-  }
-
-  const getCategoryTranslation = (name: string) => {
-    const key = name.toLowerCase().replace(/[^a-z0-9]/g, "_")
-    const translated = translate(`categories:${key}` as any)
-    if (translated.startsWith("categories:")) {
-      return name
-    }
-    return translated
   }
 
   const getCategoryEmoji = (slug: string) => {
@@ -83,7 +73,7 @@ export const HomeHeader = memo(function HomeHeader({
             return (
               <CategoryCard
                 key={cat._id}
-                label={getCategoryTranslation(cat.name)}
+                label={cat.name}
                 icon={getCategoryEmoji(cat.slug)}
                 selected={isSelected}
                 onPress={() => {

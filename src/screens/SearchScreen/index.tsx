@@ -1,11 +1,5 @@
 import React, { FC, useState, memo, useCallback, useMemo } from "react"
-import {
-  View,
-  TouchableOpacity,
-  ActivityIndicator,
-  FlatList,
-  Modal,
-} from "react-native"
+import { View, TouchableOpacity, ActivityIndicator, FlatList, Modal } from "react-native"
 import { Ionicons } from "@expo/vector-icons"
 
 import { Screen } from "@/components/Screen"
@@ -19,14 +13,15 @@ import { useAppTheme } from "@/theme/context"
 import { SearchHeader } from "./components/SearchHeader"
 import { SearchListingItem } from "./components/SearchListingItem"
 import { $styles } from "./styles"
+import { useSafeAreaInsetsStyle } from "@/utils/useSafeAreaInsetsStyle"
 
 interface SearchScreenProps extends MainTabScreenProps<"Search"> {}
-
 
 export const SearchScreen: FC<SearchScreenProps> = memo(function SearchScreen(props) {
   const { theme } = useAppTheme()
   const colors = theme.colors
   const styles = $styles(theme)
+  const $bottomContainerInsets = useSafeAreaInsetsStyle(["bottom"])
   const { navigation } = props
 
   const [query, setQuery] = useState("")
@@ -96,7 +91,11 @@ export const SearchScreen: FC<SearchScreenProps> = memo(function SearchScreen(pr
   )
 
   return (
-    <Screen preset="fixed" safeAreaEdges={["top"]} style={styles.container}>
+    <Screen
+      preset="fixed"
+      safeAreaEdges={["top"]}
+      style={[styles.container, $bottomContainerInsets]}
+    >
       {/* Header bar */}
       <View style={styles.header}>
         <TouchableOpacity onPress={handleGoBack}>
@@ -140,7 +139,7 @@ export const SearchScreen: FC<SearchScreenProps> = memo(function SearchScreen(pr
 
       {/* Province Selection Modal */}
       <Modal visible={isProvinceModalVisible} animationType="slide" transparent>
-        <View style={styles.modalOverlay}>
+        <View style={[styles.modalOverlay, $bottomContainerInsets]}>
           <View style={styles.modalContent}>
             <View style={styles.modalHeader}>
               <Text

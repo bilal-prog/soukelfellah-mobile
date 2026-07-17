@@ -24,6 +24,7 @@ export type AppStackParamList = {
   VerifyPhone: { phone: string; registrationParams: any }
   MainTabs: NavigatorScreenParams<MainTabParamList>
   ListingDetails: { listingId: string }
+  Notifications: undefined
 }
 
 export type AppStackScreenProps<T extends keyof AppStackParamList> = NativeStackScreenProps<

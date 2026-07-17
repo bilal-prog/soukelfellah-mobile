@@ -23,7 +23,11 @@ export const MyListingItem = memo(function MyListingItem({
   const imageUri =
     typeof item.images?.[0] === "object" ? item.images[0]?.url : item.images?.[0] || item.image
   const unitText =
-    typeof item.unitId === "object" ? item.unitId?.darijaName || item.unitId?.name : item.unit || ""
+    item.listingType !== "EQUIPMENT"
+      ? typeof item.unitId === "object"
+        ? item.unitId?.name
+        : item.unit || ""
+      : ""
 
   const getDaysAgo = () => {
     if (!item.createdAt) return item.daysAgo ? `${item.daysAgo} ${translate("common:days")}` : translate("common:today")

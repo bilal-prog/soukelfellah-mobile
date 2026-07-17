@@ -18,7 +18,7 @@ export interface ApiListing {
   description: string
   sellerId:
     | string
-    | { _id: string; firstName: string; lastName: string; phone: string; avatarFileId?: any }
+    | { _id: string; firstName: string; lastName: string; phone: string; avatarFileId?: any; createdAt?: string }
   categoryId: string | { _id: string; name: string }
   productTypeId: string | { _id: string; name: string }
   productVariantId?: string

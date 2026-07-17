@@ -53,8 +53,7 @@ export const $styles = (theme: Theme) => ({
   indicators: {
     position: "absolute",
     bottom: 12,
-    left: "50%",
-    transform: [{ translateX: -20 }],
+    alignSelf: "center",
     flexDirection: "row",
     gap: 6,
     backgroundColor: "rgba(0,0,0,0.25)",
@@ -222,4 +221,180 @@ export const $styles = (theme: Theme) => ({
     color: theme.colors.palette.secondary,
     fontSize: 16,
   } as TextStyle,
+
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: theme.spacing.md,
+  } as ViewStyle,
+
+  modalContent: {
+    width: "100%",
+    backgroundColor: theme.colors.palette.surface,
+    borderRadius: 16,
+    padding: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 10,
+    elevation: 5,
+  } as ViewStyle,
+
+  modalHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 16,
+  } as ViewStyle,
+
+  modalTitle: {
+    fontSize: 18,
+    color: theme.colors.text,
+  } as TextStyle,
+
+  reasonsContainer: {
+    gap: 8,
+    marginBottom: 16,
+  } as ViewStyle,
+
+  reasonOption: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 12,
+    borderWidth: 1,
+    borderColor: theme.colors.palette.outlineVariant,
+    borderRadius: 8,
+    gap: 10,
+  } as ViewStyle,
+
+  reasonOptionSelected: {
+    borderColor: theme.colors.palette.primary,
+    backgroundColor: "rgba(15, 82, 56, 0.05)",
+  } as ViewStyle,
+
+  reasonText: {
+    fontSize: 14,
+    color: theme.colors.text,
+  } as TextStyle,
+
+  reasonTextSelected: {
+    color: theme.colors.palette.primary,
+  } as TextStyle,
+
+  descriptionInput: {
+    height: 80,
+    borderWidth: 1,
+    borderColor: theme.colors.palette.outlineVariant,
+    borderRadius: 8,
+    padding: 10,
+    textAlignVertical: "top",
+    marginBottom: 20,
+    color: theme.colors.text,
+    fontSize: 14,
+  } as TextStyle,
+
+  modalActions: {
+    flexDirection: "row",
+    gap: 12,
+    justifyContent: "flex-end",
+  } as ViewStyle,
+
+  modalBtn: {
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderRadius: 8,
+    justifyContent: "center",
+    alignItems: "center",
+    minWidth: 80,
+  } as ViewStyle,
+
+  modalBtnCancel: {
+    backgroundColor: "transparent",
+    borderWidth: 1,
+    borderColor: theme.colors.palette.outline,
+  } as ViewStyle,
+
+  modalBtnSubmit: {
+    backgroundColor: theme.colors.palette.primary,
+  } as ViewStyle,
+
+  modalBtnTextCancel: {
+    color: theme.colors.text,
+    fontSize: 14,
+  } as TextStyle,
+
+  modalBtnTextSubmit: {
+    color: "white",
+    fontSize: 14,
+  } as TextStyle,
+
+  negotiableColor: {
+    color: theme.colors.palette.primary,
+  } as TextStyle,
+
+  badgesRow: {
+    flexDirection: "row",
+    gap: 8,
+    alignItems: "center",
+    flexWrap: "wrap",
+    marginVertical: 4,
+  } as ViewStyle,
+
+  badgeBuy: {
+    backgroundColor: theme.colors.palette.secondary,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 6,
+  } as ViewStyle,
+
+  badgeRent: {
+    backgroundColor: theme.colors.palette.tertiary,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 6,
+  } as ViewStyle,
+
+  badgeSell: {
+    backgroundColor: theme.colors.palette.primary,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 6,
+  } as ViewStyle,
+
+  badgeText: {
+    color: "white",
+    fontWeight: "bold",
+  } as TextStyle,
+
+  ctaBtnWhatsapp: {
+    borderWidth: 2,
+    borderColor: theme.colors.palette.secondary,
+    backgroundColor: "transparent",
+  } as ViewStyle,
+
+  modalSubtitle: {
+    color: theme.colors.palette.onSurfaceVariant,
+    fontSize: 12,
+    marginBottom: 12,
+  } as TextStyle,
+
+  imageViewerBackground: {
+    flex: 1,
+    backgroundColor: "black",
+    justifyContent: "center",
+    alignItems: "center",
+    position: "relative",
+  } as ViewStyle,
+
+  imageViewerCloseBtn: {
+    position: "absolute",
+    top: 50,
+    right: 20,
+    zIndex: 10,
+    padding: 10,
+    backgroundColor: "rgba(0, 0, 0, 0.4)",
+    borderRadius: 25,
+  } as ViewStyle,
 })

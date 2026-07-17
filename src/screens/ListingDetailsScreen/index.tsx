@@ -1,4 +1,4 @@
-import React, { FC, memo, useCallback, useMemo } from "react"
+import { FC, memo, useCallback, useMemo, useState } from "react"
 import {
   View,
   ScrollView,
@@ -7,7 +7,12 @@ import {
   Linking,
   ActivityIndicator,
   Alert,
+  Modal,
+  FlatList,
+  useWindowDimensions,
 } from "react-native"
+// eslint-disable-next-line no-restricted-imports
+import { TextInput } from "react-native"
 import { Ionicons } from "@expo/vector-icons"
 
 import { Screen } from "@/components/Screen"
@@ -16,10 +21,11 @@ import { useAuth } from "@/context/AuthContext"
 import { isRTL } from "@/localization"
 import { translate } from "@/localization/translate"
 import type { AppStackScreenProps } from "@/navigation/navigationTypes"
-import { useListingDetailsQuery } from "@/services/api/hooks"
+import { useListingDetailsQuery, useReportListingMutation } from "@/services/api/hooks"
 import { useAppTheme } from "@/theme/context"
 
 import { $styles } from "./styles"
+import { useSafeAreaInsetsStyle } from "@/utils/useSafeAreaInsetsStyle"
 
 interface ListingDetailsScreenProps extends AppStackScreenProps<"ListingDetails"> {}
 
@@ -39,6 +45,7 @@ const MOCK_DETAILS = {
     lastName: "",
     phone: "0661234567",
     avatarFileId: null,
+    createdAt: "2026-07-16T15:18:22Z",
   },
   model: "2018",
   hours: "1200 hours",
@@ -49,11 +56,31 @@ export const ListingDetailsScreen: FC<ListingDetailsScreenProps> = memo(
     const { theme } = useAppTheme()
     const colors = theme.colors
     const styles = $styles(theme)
+    const $bottomContainerInsets = useSafeAreaInsetsStyle(["bottom"])
     const { navigation, route } = props
     const { listingId } = route.params
     const { toggleFavorite, isFavorite, isAuthenticated, setGuestMode } = useAuth()
 
     const favorited = isFavorite(listingId)
+
+    const { width: screenWidth } = useWindowDimensions()
+    const [activeIndex, setActiveIndex] = useState(0)
+
+    const handleScroll = useCallback((event: any) => {
+      const slideSize = event.nativeEvent.layoutMeasurement.width
+      if (slideSize === 0) return
+      const index = event.nativeEvent.contentOffset.x / slideSize
+      const roundIndex = Math.round(index)
+      setActiveIndex(roundIndex)
+    }, [])
+
+    const [isViewerVisible, setIsViewerVisible] = useState(false)
+    const [viewerIndex, setViewerIndex] = useState(0)
+
+    const handleOpenViewer = useCallback((index: number) => {
+      setViewerIndex(index)
+      setIsViewerVisible(true)
+    }, [])
 
     // Request listing from API
     const { data: apiListing, isLoading } = useListingDetailsQuery(listingId)
@@ -96,6 +123,49 @@ export const ListingDetailsScreen: FC<ListingDetailsScreenProps> = memo(
       [isAuthenticated, setGuestMode],
     )
 
+    const [isReportModalVisible, setIsReportModalVisible] = useState(false)
+    const [selectedReason, setSelectedReason] = useState<string>("SCAM")
+    const [reportDescription, setReportDescription] = useState("")
+
+    const { mutate: reportListing, isPending: isReporting } = useReportListingMutation()
+
+    const handleReportPress = useCallback(() => {
+      checkAuthAndExecute(() => {
+        setIsReportModalVisible(true)
+      })
+    }, [checkAuthAndExecute])
+
+    const handleReportSubmit = useCallback(() => {
+      if (!selectedReason) {
+        Alert.alert(translate("common:error"), translate("listingDetails:report.reasonLabel"))
+        return
+      }
+
+      reportListing(
+        {
+          listingId,
+          reason: selectedReason,
+          description: reportDescription,
+        },
+        {
+          onSuccess: () => {
+            Alert.alert(
+              translate("listingDetails:report.successTitle"),
+              translate("listingDetails:report.successMsg"),
+            )
+            setIsReportModalVisible(false)
+            setReportDescription("")
+          },
+          onError: (err: any) => {
+            Alert.alert(
+              translate("listingDetails:report.errorTitle"),
+              err?.message || translate("listingDetails:report.errorMsg"),
+            )
+          },
+        },
+      )
+    }, [listingId, selectedReason, reportDescription, reportListing])
+
     const handleFavoritePress = useCallback(() => {
       checkAuthAndExecute(() => toggleFavorite(listingId))
     }, [checkAuthAndExecute, toggleFavorite, listingId])
@@ -127,7 +197,11 @@ export const ListingDetailsScreen: FC<ListingDetailsScreenProps> = memo(
     }
 
     return (
-      <Screen preset="fixed" safeAreaEdges={["top"]} style={styles.container}>
+      <Screen
+        preset="fixed"
+        safeAreaEdges={["top"]}
+        style={[styles.container, $bottomContainerInsets]}
+      >
         {/* Top App Bar */}
         <View style={styles.header}>
           <TouchableOpacity onPress={handleGoBack}>
@@ -136,6 +210,9 @@ export const ListingDetailsScreen: FC<ListingDetailsScreenProps> = memo(
           <Text tx="listingDetails:title" style={styles.headerTitle} preset="bold" />
 
           <View style={styles.headerRight}>
+            <TouchableOpacity onPress={handleReportPress}>
+              <Ionicons name="flag-outline" size={24} color={colors.text} />
+            </TouchableOpacity>
             <TouchableOpacity onPress={handleFavoritePress}>
               <Ionicons
                 name={favorited ? "heart" : "heart-outline"}
@@ -155,20 +232,63 @@ export const ListingDetailsScreen: FC<ListingDetailsScreenProps> = memo(
         >
           {/* Gallery Carousel */}
           <View style={styles.galleryContainer}>
-            <Image
-              source={{
-                uri:
-                  typeof listing.images[0] === "object"
-                    ? listing.images[0]?.url
-                    : listing.images[0],
-              }}
-              style={styles.galleryImage}
-              resizeMode="cover"
-            />
-            <View style={styles.indicators}>
-              <View style={[styles.dot, styles.activeDot]} />
-              <View style={styles.dot} />
-            </View>
+            {listing.images && listing.images.length > 1 ? (
+              <>
+                <FlatList
+                  data={listing.images}
+                  horizontal
+                  pagingEnabled
+                  showsHorizontalScrollIndicator={false}
+                  keyExtractor={(_item: any, index: number) => index.toString()}
+                  onMomentumScrollEnd={handleScroll}
+                  renderItem={({ item, index }: { item: any; index: number }) => {
+                    const imgUrl = typeof item === "object" ? item?.url : item
+                    return (
+                      <TouchableOpacity
+                        activeOpacity={0.9}
+                        onPress={() => handleOpenViewer(index)}
+                      >
+                        <Image
+                          source={{ uri: imgUrl }}
+                          style={{ width: screenWidth, height: "100%" }}
+                          resizeMode="cover"
+                        />
+                      </TouchableOpacity>
+                    )
+                  }}
+                />
+                <View style={styles.indicators}>
+                  {listing.images.map((_item: any, index: number) => (
+                    <View
+                      key={index}
+                      style={[
+                        styles.dot,
+                        activeIndex === index && styles.activeDot,
+                      ]}
+                    />
+                  ))}
+                </View>
+              </>
+            ) : (
+              <TouchableOpacity
+                activeOpacity={0.9}
+                onPress={() => handleOpenViewer(0)}
+                style={{ width: "100%", height: "100%" }}
+              >
+                <Image
+                  source={{
+                    uri:
+                      listing.images && listing.images.length > 0
+                        ? typeof listing.images[0] === "object"
+                          ? listing.images[0]?.url
+                          : listing.images[0]
+                        : undefined,
+                  }}
+                  style={styles.galleryImage}
+                  resizeMode="cover"
+                />
+              </TouchableOpacity>
+            )}
           </View>
 
           {/* Product Details Section */}
@@ -177,21 +297,57 @@ export const ListingDetailsScreen: FC<ListingDetailsScreenProps> = memo(
             <View style={styles.priceTitleSection}>
               <View style={styles.priceRow}>
                 {listing.priceType === "CONTACT" ? (
-                  <Text text={translate("addListing:priceTypeContact")} preset="display" style={styles.priceText} />
+                  <Text
+                    text={translate("addListing:priceTypeContact")}
+                    preset="display"
+                    style={styles.priceText}
+                  />
                 ) : (
                   <>
-                    <Text text={`${listing.price} ${translate("common:currency")}`} preset="display" style={styles.priceText} />
+                    <Text
+                      text={`${listing.price} ${translate("common:currency")}`}
+                      preset="display"
+                      style={styles.priceText}
+                    />
                     {listing.priceType === "NEGOTIABLE" && (
                       <View style={styles.negotiationBadge}>
                         <Text
                           tx="common:negotiable"
                           size="xxs"
                           preset="bold"
-                          style={{ color: colors.palette.primary }}
+                          style={styles.negotiableColor}
                         />
                       </View>
                     )}
                   </>
+                )}
+              </View>
+              {/* Direction & Purpose Badges */}
+              <View style={styles.badgesRow}>
+                {listing.listingDirection === "BUY" ? (
+                  <View style={styles.badgeBuy}>
+                    <Text
+                      text={translate("addListing:directionBuy")}
+                      size="xxs"
+                      style={styles.badgeText}
+                    />
+                  </View>
+                ) : listing.purpose === "RENT" ? (
+                  <View style={styles.badgeRent}>
+                    <Text
+                      text={translate("addListing:purposeRent")}
+                      size="xxs"
+                      style={styles.badgeText}
+                    />
+                  </View>
+                ) : (
+                  <View style={styles.badgeSell}>
+                    <Text
+                      text={translate("addListing:directionSell")}
+                      size="xxs"
+                      style={styles.badgeText}
+                    />
+                  </View>
                 )}
               </View>
               <Text text={listing.title} preset="bold" size="lg" style={styles.titleText} />
@@ -223,19 +379,16 @@ export const ListingDetailsScreen: FC<ListingDetailsScreenProps> = memo(
                     size="sm"
                   />
                   <Text
-                    text={`${translate("listingDetails:memberSince")} 2022`}
+                    text={`${translate("listingDetails:memberSince")} ${
+                      typeof listing.sellerId === "object" && listing.sellerId?.createdAt
+                        ? new Date(listing.sellerId.createdAt).getFullYear()
+                        : 2026
+                    }`}
                     size="xxs"
                     style={styles.locationText}
                   />
                 </View>
               </View>
-              <TouchableOpacity style={styles.sellerChevronBtn}>
-                <Ionicons
-                  name={isRTL ? "chevron-back" : "chevron-forward"}
-                  size={22}
-                  color={colors.palette.onSurfaceVariant}
-                />
-              </TouchableOpacity>
             </View>
 
             {/* Specs Bento Grid */}
@@ -244,7 +397,11 @@ export const ListingDetailsScreen: FC<ListingDetailsScreenProps> = memo(
                 <View style={styles.specBox}>
                   <Ionicons name="calendar-outline" size={20} color={colors.palette.primary} />
                   <Text tx="listingDetails:specs.model" size="xxs" style={styles.locationText} />
-                  <Text text={listing.modelYear || translate("common:notSpecified")} preset="bold" size="xs" />
+                  <Text
+                    text={listing.modelYear || translate("common:notSpecified")}
+                    preset="bold"
+                    size="xs"
+                  />
                 </View>
                 <View style={styles.specBox}>
                   <Ionicons name="time-outline" size={20} color={colors.palette.primary} />
@@ -263,7 +420,11 @@ export const ListingDetailsScreen: FC<ListingDetailsScreenProps> = memo(
                 </View>
                 {listing.condition && (
                   <View style={styles.specBox}>
-                    <Ionicons name="shield-checkmark-outline" size={20} color={colors.palette.primary} />
+                    <Ionicons
+                      name="shield-checkmark-outline"
+                      size={20}
+                      color={colors.palette.primary}
+                    />
                     <Text tx="addListing:conditionLabel" size="xxs" style={styles.locationText} />
                     <Text
                       text={
@@ -304,21 +465,136 @@ export const ListingDetailsScreen: FC<ListingDetailsScreenProps> = memo(
             <Text tx="common:call" style={styles.ctaTextCall} preset="bold" />
           </TouchableOpacity>
 
-          <TouchableOpacity
-            onPress={handleWhatsapp}
-            style={[
-              styles.ctaBtn,
-              {
-                borderWidth: 2,
-                borderColor: colors.palette.secondary,
-                backgroundColor: "transparent",
-              },
-            ]}
-          >
+          <TouchableOpacity onPress={handleWhatsapp} style={[styles.ctaBtn, styles.ctaBtnWhatsapp]}>
             <Ionicons name="logo-whatsapp" size={20} color={colors.palette.secondary} />
             <Text tx="common:whatsapp" style={styles.ctaTextWa} preset="bold" />
           </TouchableOpacity>
         </View>
+        {/* Report Modal */}
+        <Modal
+          visible={isReportModalVisible}
+          animationType="slide"
+          transparent
+          onRequestClose={() => setIsReportModalVisible(false)}
+        >
+          <View style={styles.modalOverlay}>
+            <View style={styles.modalContent}>
+              <View style={styles.modalHeader}>
+                <Text tx="listingDetails:report.title" style={styles.modalTitle} preset="bold" />
+                <TouchableOpacity onPress={() => setIsReportModalVisible(false)}>
+                  <Ionicons name="close" size={24} color={colors.text} />
+                </TouchableOpacity>
+              </View>
+
+              <Text tx="listingDetails:report.reasonLabel" size="xs" style={styles.modalSubtitle} />
+
+              <View style={styles.reasonsContainer}>
+                {(["SCAM", "SPAM", "INCORRECT", "OFFENSIVE", "OTHER"] as const).map((reason) => {
+                  const isSelected = selectedReason === reason
+                  const txKey = `listingDetails:report.reasons.${reason.toLowerCase()}` as any
+                  return (
+                    <TouchableOpacity
+                      key={reason}
+                      style={[styles.reasonOption, isSelected && styles.reasonOptionSelected]}
+                      onPress={() => setSelectedReason(reason)}
+                    >
+                      <Ionicons
+                        name={isSelected ? "radio-button-on" : "radio-button-off"}
+                        size={20}
+                        color={isSelected ? colors.palette.primary : colors.palette.outline}
+                      />
+                      <Text
+                        tx={txKey}
+                        style={[styles.reasonText, isSelected && styles.reasonTextSelected]}
+                      />
+                    </TouchableOpacity>
+                  )
+                })}
+              </View>
+
+              <TextInput
+                style={styles.descriptionInput}
+                placeholder={translate("listingDetails:report.descriptionPlaceholder")}
+                placeholderTextColor={colors.palette.outline}
+                value={reportDescription}
+                onChangeText={setReportDescription}
+                multiline
+                numberOfLines={3}
+              />
+
+              <View style={styles.modalActions}>
+                <TouchableOpacity
+                  style={[styles.modalBtn, styles.modalBtnCancel]}
+                  onPress={() => setIsReportModalVisible(false)}
+                  disabled={isReporting}
+                >
+                  <Text tx="listingDetails:report.cancel" style={styles.modalBtnTextCancel} />
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={[styles.modalBtn, styles.modalBtnSubmit]}
+                  onPress={handleReportSubmit}
+                  disabled={isReporting}
+                >
+                  {isReporting ? (
+                    <ActivityIndicator size="small" color="white" />
+                  ) : (
+                    <Text
+                      tx="listingDetails:report.submit"
+                      style={styles.modalBtnTextSubmit}
+                      preset="bold"
+                    />
+                  )}
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </Modal>
+
+        {/* Full Screen Image Viewer Modal */}
+        <Modal
+          visible={isViewerVisible}
+          transparent={true}
+          animationType="fade"
+          onRequestClose={() => setIsViewerVisible(false)}
+        >
+          <View style={styles.imageViewerBackground}>
+            <TouchableOpacity
+              style={styles.imageViewerCloseBtn}
+              onPress={() => setIsViewerVisible(false)}
+            >
+              <Ionicons name="close" size={30} color="white" />
+            </TouchableOpacity>
+
+            {listing.images && listing.images.length > 0 && (
+              <FlatList
+                data={listing.images}
+                horizontal
+                pagingEnabled
+                showsHorizontalScrollIndicator={false}
+                keyExtractor={(_item: any, index: number) => index.toString()}
+                initialScrollIndex={viewerIndex >= 0 && viewerIndex < listing.images.length ? viewerIndex : 0}
+                getItemLayout={(_data, index) => ({
+                  length: screenWidth,
+                  offset: screenWidth * index,
+                  index,
+                })}
+                renderItem={({ item }) => {
+                  const imgUrl = typeof item === "object" ? item?.url : item
+                  return (
+                    <View style={{ width: screenWidth, justifyContent: "center", alignItems: "center" }}>
+                      <Image
+                        source={{ uri: imgUrl }}
+                        style={{ width: "100%", height: "100%" }}
+                        resizeMode="contain"
+                      />
+                    </View>
+                  )
+                }}
+              />
+            )}
+          </View>
+        </Modal>
       </Screen>
     )
   },

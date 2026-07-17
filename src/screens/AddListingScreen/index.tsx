@@ -1,4 +1,5 @@
-import React, { FC, useState, memo, useCallback } from "react"
+import React, { FC, useState, memo, useCallback, useMemo } from "react"
+import { useQueryClient } from "@tanstack/react-query"
 import {
   View,
   ScrollView,
@@ -32,6 +33,7 @@ import {
 import { useAppTheme } from "@/theme/context"
 
 import { $styles } from "./styles"
+import { useSafeAreaInsetsStyle } from "@/utils/useSafeAreaInsetsStyle"
 
 interface AddListingScreenProps extends MainTabScreenProps<"Add"> {}
 
@@ -39,7 +41,9 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
   const { theme } = useAppTheme()
   const colors = theme.colors
   const styles = $styles(theme)
+  const $bottomContainerInsets = useSafeAreaInsetsStyle(["bottom"])
   const { navigation } = props
+  const queryClient = useQueryClient()
 
   const { isAuthenticated } = useAuth()
 
@@ -71,6 +75,18 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
   const [priceType, setPriceType] = useState<"FIXED" | "NEGOTIABLE" | "CONTACT">("FIXED")
   const [condition, setCondition] = useState<"NEW" | "USED" | undefined>(undefined)
 
+  const [selectedCategory, setSelectedCategory] = useState<any>(null)
+  const [selectedProductType, setSelectedProductType] = useState<any>(null)
+  const [selectedUnit, setSelectedUnit] = useState<any>(null)
+
+  const [categoryError, setCategoryError] = useState("")
+  const [productTypeError, setProductTypeError] = useState("")
+  const [unitError, setUnitError] = useState("")
+
+  const [isCategoryModalVisible, setIsCategoryModalVisible] = useState(false)
+  const [isProductTypeModalVisible, setIsProductTypeModalVisible] = useState(false)
+  const [isUnitModalVisible, setIsUnitModalVisible] = useState(false)
+
   const [isRegionModalVisible, setIsRegionModalVisible] = useState(false)
   const [isProvinceModalVisible, setIsProvinceModalVisible] = useState(false)
 
@@ -89,6 +105,51 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
     { enabled: !!selectedRegion },
   )
 
+  const productCategories = useMemo(() => {
+    return (
+      categories?.filter((c) => {
+        const isEquip =
+          c.slug.toLowerCase().includes("equip") || c.slug.toLowerCase().includes("mach")
+        return !isEquip
+      }) || []
+    )
+  }, [categories])
+
+  const filteredProductTypes = useMemo(() => {
+    if (selectedCat === "EQUIPMENT") {
+      return (
+        productTypes?.filter((p) => {
+          const pCatId =
+            typeof p.categoryId === "object" && p.categoryId !== null
+              ? (p.categoryId as any)._id
+              : p.categoryId
+          return pCatId === selectedCategory?._id
+        }) || []
+      )
+    }
+    if (!selectedCategory) return []
+    return (
+      productTypes?.filter((p) => {
+        const pCatId =
+          typeof p.categoryId === "object" && p.categoryId !== null
+            ? (p.categoryId as any)._id
+            : p.categoryId
+        return pCatId === selectedCategory?._id
+      }) || []
+    )
+  }, [productTypes, selectedCategory, selectedCat])
+
+  const mappedAllowedUnits = useMemo(() => {
+    if (!selectedProductType) return []
+    const allowed = selectedProductType.allowedUnits || []
+    return allowed
+      .map((u: any) => {
+        if (typeof u === "object" && u !== null) return u
+        return units?.find((unitItem: any) => unitItem._id === u)
+      })
+      .filter(Boolean)
+  }, [selectedProductType, units])
+
   const handleGoBack = useCallback(() => {
     if (step > 1) {
       setStep(step - 1)
@@ -101,40 +162,34 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
     setSelectedCat(type)
     if (type === "EQUIPMENT") {
       setCondition("USED")
+      // Auto-resolve Category and Unit for Equipment
+      const equipCat = categories?.find(
+        (c) => c.slug.toLowerCase().includes("equip") || c.slug.toLowerCase().includes("mach"),
+      )
+      if (equipCat) {
+        setSelectedCategory(equipCat)
+      }
+      const pieceUnit = units?.find(
+        (u) => u.name.toLowerCase() === "piece" || u.name.toLowerCase() === "pieces",
+      )
+      if (pieceUnit) {
+        setSelectedUnit(pieceUnit)
+      }
+      setSelectedProductType(null) // Let the user select the equipment type (Tractor, Pump, Plow)
     } else {
       setCondition(undefined)
       setPurpose("SELL")
+      setSelectedCategory(null)
+      setSelectedProductType(null)
+      setSelectedUnit(null)
     }
+    setCategoryError("")
+    setProductTypeError("")
+    setUnitError("")
     setStep(2)
   }
 
-  const handlePickImage = async () => {
-    if (images.length >= 5) {
-      Alert.alert(
-        translate("addListing:photoLimitErrorTitle"),
-        translate("addListing:photoLimitErrorMsg"),
-      )
-      return
-    }
-
-    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync()
-    if (permissionResult.granted === false) {
-      Alert.alert(
-        translate("addListing:permissionDeniedTitle"),
-        translate("addListing:permissionDeniedMsg"),
-      )
-      return
-    }
-
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      quality: 0.8,
-    })
-
-    if (result.canceled || !result.assets?.[0]) return
-
-    const localUri = result.assets[0].uri
+  const uploadImage = (localUri: string) => {
     const filename = localUri.split("/").pop() || "upload.jpg"
     const match = /\.(\w+)$/.exec(filename)
     const type = match ? `image/${match[1]}` : `image/jpeg`
@@ -158,6 +213,76 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
     )
   }
 
+  const handleLaunchCamera = async () => {
+    const permissionResult = await ImagePicker.requestCameraPermissionsAsync()
+    if (permissionResult.granted === false) {
+      Alert.alert(
+        translate("addListing:cameraPermissionDeniedTitle"),
+        translate("addListing:cameraPermissionDeniedMsg"),
+      )
+      return
+    }
+
+    const result = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      quality: 0.8,
+    })
+
+    if (result.canceled || !result.assets?.[0]) return
+    uploadImage(result.assets[0].uri)
+  }
+
+  const handleLaunchLibrary = async () => {
+    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync()
+    if (permissionResult.granted === false) {
+      Alert.alert(
+        translate("addListing:permissionDeniedTitle"),
+        translate("addListing:permissionDeniedMsg"),
+      )
+      return
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      quality: 0.8,
+    })
+
+    if (result.canceled || !result.assets?.[0]) return
+    uploadImage(result.assets[0].uri)
+  }
+
+  const handlePickImage = () => {
+    if (images.length >= 5) {
+      Alert.alert(
+        translate("addListing:photoLimitErrorTitle"),
+        translate("addListing:photoLimitErrorMsg"),
+      )
+      return
+    }
+
+    Alert.alert(
+      translate("addListing:addPhotoSourceTitle"),
+      "",
+      [
+        {
+          text: translate("addListing:cameraOption"),
+          onPress: handleLaunchCamera,
+        },
+        {
+          text: translate("addListing:galleryOption"),
+          onPress: handleLaunchLibrary,
+        },
+        {
+          text: translate("addListing:cancelOption"),
+          style: "cancel",
+        },
+      ],
+      { cancelable: true },
+    )
+  }
+
   const removePhoto = (index: number) => {
     setImages(images.filter((_, i) => i !== index))
     setImageIds(imageIds.filter((_, i) => i !== index))
@@ -169,6 +294,9 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
     setQuantityError("")
     setAddressError("")
     setDescriptionError("")
+    setCategoryError("")
+    setProductTypeError("")
+    setUnitError("")
 
     const isPriceRequired =
       (priceType === "FIXED" || priceType === "NEGOTIABLE") && listingDirection === "SELL"
@@ -194,28 +322,24 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
       setDescriptionError(translate("addListing:descriptionMinLength"))
       isValid = false
     }
+    if (selectedCat === "PRODUCT" && !selectedCategory) {
+      setCategoryError(translate("addListing:categoryRequired"))
+      isValid = false
+    }
+    if (!selectedProductType) {
+      setProductTypeError(translate("addListing:productTypeRequired"))
+      isValid = false
+    }
+    if (selectedCat === "PRODUCT" && !selectedUnit) {
+      setUnitError(translate("addListing:unitRequired"))
+      isValid = false
+    }
 
     if (!isValid) return
 
-    // Resolve matching categoryId, productTypeId, and unitId from active database seeds
-    const selectedCategory =
-      categories?.find((c) => {
-        const isEquip =
-          c.slug.toLowerCase().includes("equip") || c.slug.toLowerCase().includes("mach")
-        return selectedCat === "EQUIPMENT" ? isEquip : !isEquip
-      }) || categories?.[0]
-
-    const categoryId = selectedCategory?._id || "64b0c1230000000000000001"
-
-    const validProductType =
-      productTypes?.find((p) => p.categoryId === categoryId) || productTypes?.[0]
-
-    const productTypeId = validProductType?._id || "64b0d4560000000000000002"
-
-    const unitId =
-      typeof validProductType?.allowedUnits?.[0] === "object"
-        ? validProductType.allowedUnits[0]?._id
-        : validProductType?.allowedUnits?.[0] || units?.[0]?._id || "64b0b7890000000000000003"
+    const categoryId = selectedCategory?._id
+    const productTypeId = selectedProductType?._id
+    const unitId = selectedUnit?._id
 
     const payload = {
       title,
@@ -243,6 +367,7 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
 
     createListingMutation.mutate(payload, {
       onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ["listings"] })
         Alert.alert(translate("addListing:successTitle"), translate("addListing:successMsg"), [
           {
             text: translate("addListing:successOk"),
@@ -262,6 +387,12 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
               setPurpose("SELL")
               setPriceType("FIXED")
               setCondition(undefined)
+              setSelectedCategory(null)
+              setSelectedProductType(null)
+              setSelectedUnit(null)
+              setCategoryError("")
+              setProductTypeError("")
+              setUnitError("")
               setStep(1)
               navigation.navigate("Home")
             },
@@ -283,15 +414,15 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
     selectedCat,
     selectedRegion,
     selectedProvince,
-    categories,
-    productTypes,
-    units,
     createListingMutation,
     navigation,
     priceType,
     condition,
     purpose,
     listingDirection,
+    selectedCategory,
+    selectedProductType,
+    selectedUnit,
   ])
 
   const renderLocationIcon = useCallback(
@@ -417,6 +548,124 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
 
             {/* General Fields Form */}
             <View style={styles.formGroup}>
+              {/* Category Selector (only for PRODUCT listings) */}
+              {selectedCat === "PRODUCT" && (
+                <View style={styles.inputField}>
+                  <Text tx="addListing:categoryRequired" size="xxs" style={styles.selectLabel} />
+                  <TouchableOpacity
+                    onPress={() => setIsCategoryModalVisible(true)}
+                    style={styles.selectTrigger}
+                  >
+                    <View style={styles.selectContent}>
+                      <Text
+                        text={
+                          selectedCategory
+                            ? selectedCategory.name
+                            : translate("addListing:selectCategoryPlaceholder")
+                        }
+                        style={styles.selectValueText}
+                      />
+                      <Ionicons
+                        name="chevron-down"
+                        size={20}
+                        color={colors.palette.onSurfaceVariant}
+                      />
+                    </View>
+                  </TouchableOpacity>
+                  {categoryError ? (
+                    <Text
+                      text={categoryError}
+                      size="xxs"
+                      style={{ color: colors.palette.error, marginTop: 4 }}
+                    />
+                  ) : null}
+                </View>
+              )}
+
+              {/* Product Type Selector */}
+              <View style={styles.inputField}>
+                <Text tx="addListing:productTypeRequired" size="xxs" style={styles.selectLabel} />
+                <TouchableOpacity
+                  onPress={() => {
+                    if (selectedCat === "PRODUCT" && !selectedCategory) {
+                      Alert.alert(
+                        translate("addListing:missingInfoTitle"),
+                        translate("addListing:selectCategoryPlaceholder"),
+                      )
+                      return
+                    }
+                    setIsProductTypeModalVisible(true)
+                  }}
+                  style={styles.selectTrigger}
+                >
+                  <View style={styles.selectContent}>
+                    <Text
+                      text={
+                        selectedProductType
+                          ? selectedProductType.name
+                          : translate("addListing:selectProductTypePlaceholder")
+                      }
+                      style={styles.selectValueText}
+                    />
+                    <Ionicons
+                      name="chevron-down"
+                      size={20}
+                      color={colors.palette.onSurfaceVariant}
+                    />
+                  </View>
+                </TouchableOpacity>
+                {productTypeError ? (
+                  <Text
+                    text={productTypeError}
+                    size="xxs"
+                    style={{ color: colors.palette.error, marginTop: 4 }}
+                  />
+                ) : null}
+              </View>
+
+              {/* Unit Selector (only for PRODUCT listings) */}
+              {selectedCat === "PRODUCT" && (
+                <View style={styles.inputField}>
+                  <Text tx="addListing:unitRequired" size="xxs" style={styles.selectLabel} />
+                  <TouchableOpacity
+                    onPress={() => {
+                      if (!selectedProductType) {
+                        Alert.alert(
+                          translate("addListing:missingInfoTitle"),
+                          translate("addListing:selectProductTypePlaceholder"),
+                        )
+                        return
+                      }
+                      setIsUnitModalVisible(true)
+                    }}
+                    style={styles.selectTrigger}
+                  >
+                    <View style={styles.selectContent}>
+                      <Text
+                        text={
+                          selectedUnit
+                            ? selectedUnit.name
+                            : translate("addListing:selectUnitPlaceholder")
+                        }
+                        style={styles.selectValueText}
+                      />
+                      <Ionicons
+                        name="chevron-down"
+                        size={20}
+                        color={colors.palette.onSurfaceVariant}
+                      />
+                    </View>
+                  </TouchableOpacity>
+                  {unitError ? (
+                    <Text
+                      text={unitError}
+                      size="xxs"
+                      style={{ color: colors.palette.error, marginTop: 4 }}
+                    />
+                  ) : null}
+                </View>
+              )}
+
               <View style={styles.inputField}>
                 <Text tx="addListing:listingDirectionLabel" size="xxs" style={styles.selectLabel} />
                 <View style={styles.segmentRow}>
@@ -761,7 +1010,7 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
 
       {/* Region Selection Modal */}
       <Modal visible={isRegionModalVisible} animationType="slide" transparent>
-        <View style={styles.modalOverlay}>
+        <View style={[styles.modalOverlay, $bottomContainerInsets]}>
           <View style={styles.modalContent}>
             <View style={styles.modalHeader}>
               <Text tx="addListing:selectRegionPlaceholder" preset="bold" size="sm" />
@@ -799,7 +1048,7 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
 
       {/* Province Selection Modal */}
       <Modal visible={isProvinceModalVisible} animationType="slide" transparent>
-        <View style={styles.modalOverlay}>
+        <View style={[styles.modalOverlay, $bottomContainerInsets]}>
           <View style={styles.modalContent}>
             <View style={styles.modalHeader}>
               <Text
@@ -835,6 +1084,131 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
                 )}
               />
             )}
+          </View>
+        </View>
+      </Modal>
+
+      {/* Category Selection Modal */}
+      <Modal visible={isCategoryModalVisible} animationType="slide" transparent>
+        <View style={[styles.modalOverlay, $bottomContainerInsets]}>
+          <View style={styles.modalContent}>
+            <View style={styles.modalHeader}>
+              <Text
+                tx="addListing:selectCategoryPlaceholder"
+                preset="bold"
+                size="sm"
+                style={{ textAlign: "left", flex: 1 }}
+              />
+              <TouchableOpacity onPress={() => setIsCategoryModalVisible(false)}>
+                <Ionicons name="close" size={24} color={colors.text} />
+              </TouchableOpacity>
+            </View>
+            <FlatList
+              data={productCategories}
+              keyExtractor={(item: any) => item._id}
+              renderItem={({ item }: any) => (
+                <TouchableOpacity
+                  style={styles.modalItem}
+                  onPress={() => {
+                    setSelectedCategory(item)
+                    setSelectedProductType(null)
+                    setSelectedUnit(null)
+                    setIsCategoryModalVisible(false)
+                    setCategoryError("")
+                  }}
+                >
+                  <Text text={item.name} style={{ textAlign: "left", width: "100%" }} />
+                </TouchableOpacity>
+              )}
+            />
+          </View>
+        </View>
+      </Modal>
+
+      {/* Product Type Selection Modal */}
+      <Modal visible={isProductTypeModalVisible} animationType="slide" transparent>
+        <View style={[styles.modalOverlay, $bottomContainerInsets]}>
+          <View style={styles.modalContent}>
+            <View style={styles.modalHeader}>
+              <Text
+                tx="addListing:selectProductTypePlaceholder"
+                preset="bold"
+                size="sm"
+                style={{ textAlign: "left", flex: 1 }}
+              />
+              <TouchableOpacity onPress={() => setIsProductTypeModalVisible(false)}>
+                <Ionicons name="close" size={24} color={colors.text} />
+              </TouchableOpacity>
+            </View>
+            <FlatList
+              data={filteredProductTypes}
+              keyExtractor={(item: any) => item._id}
+              renderItem={({ item }: any) => (
+                <TouchableOpacity
+                  style={styles.modalItem}
+                  onPress={() => {
+                    setSelectedProductType(item)
+                    // If it is EQUIPMENT, auto-set the unit to piece
+                    if (selectedCat === "EQUIPMENT") {
+                      const pieceUnit = units?.find(
+                        (u) =>
+                          u.name.toLowerCase() === "piece" || u.name.toLowerCase() === "pieces",
+                      )
+                      if (pieceUnit) {
+                        setSelectedUnit(pieceUnit)
+                      }
+                    } else {
+                      // If it's a product, auto-set the unit to the first allowed unit
+                      const firstUnit =
+                        typeof item.allowedUnits?.[0] === "object"
+                          ? item.allowedUnits[0]
+                          : units?.find((u) => u._id === item.allowedUnits?.[0])
+                      setSelectedUnit(firstUnit || null)
+                    }
+                    setIsProductTypeModalVisible(false)
+                    setProductTypeError("")
+                    setUnitError("")
+                  }}
+                >
+                  <Text text={item.name} style={{ textAlign: "left", width: "100%" }} />
+                </TouchableOpacity>
+              )}
+            />
+          </View>
+        </View>
+      </Modal>
+
+      {/* Unit Selection Modal */}
+      <Modal visible={isUnitModalVisible} animationType="slide" transparent>
+        <View style={[styles.modalOverlay, $bottomContainerInsets]}>
+          <View style={styles.modalContent}>
+            <View style={styles.modalHeader}>
+              <Text
+                tx="addListing:selectUnitPlaceholder"
+                preset="bold"
+                size="sm"
+                style={{ textAlign: "left", flex: 1 }}
+              />
+              <TouchableOpacity onPress={() => setIsUnitModalVisible(false)}>
+                <Ionicons name="close" size={24} color={colors.text} />
+              </TouchableOpacity>
+            </View>
+            <FlatList
+              data={mappedAllowedUnits}
+              keyExtractor={(item: any) => item._id}
+              renderItem={({ item }: any) => (
+                <TouchableOpacity
+                  style={styles.modalItem}
+                  onPress={() => {
+                    setSelectedUnit(item)
+                    setIsUnitModalVisible(false)
+                    setUnitError("")
+                  }}
+                >
+                  <Text text={item.name} style={{ textAlign: "left", width: "100%" }} />
+                </TouchableOpacity>
+              )}
+            />
           </View>
         </View>
       </Modal>

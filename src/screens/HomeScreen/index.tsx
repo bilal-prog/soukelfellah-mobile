@@ -5,7 +5,7 @@ import { Ionicons } from "@expo/vector-icons"
 import { Screen } from "@/components/Screen"
 import { Text } from "@/components/Text"
 import type { MainTabScreenProps } from "@/navigation/navigationTypes"
-import { useCategoriesQuery } from "@/services/api/hooks"
+import { useCategoriesQuery, useUnreadNotificationsCountQuery } from "@/services/api/hooks"
 import { getListings } from "@/services/api/modules/listings"
 import { useAppTheme } from "@/theme/context"
 
@@ -14,7 +14,6 @@ import { HomeListingItem } from "./components/HomeListingItem"
 import { HomeHeader } from "./components/HomeHeader"
 
 interface HomeScreenProps extends MainTabScreenProps<"Home"> {}
-
 
 export const HomeScreen: FC<HomeScreenProps> = memo(function HomeScreen(props) {
   const { theme } = useAppTheme()
@@ -31,10 +30,12 @@ export const HomeScreen: FC<HomeScreenProps> = memo(function HomeScreen(props) {
   const [firstLoad, setFirstLoad] = useState(true)
 
   const { data: categories, refetch: refetchCategories } = useCategoriesQuery()
+  const { data: unreadCount } = useUnreadNotificationsCountQuery()
 
   const fetchListings = useCallback(
     async (pageNum: number, isRefresh: boolean) => {
       if (pageNum === 1) {
+        setHasMore(true)
         if (isRefresh) {
           setIsRefreshing(true)
         }
@@ -61,9 +62,12 @@ export const HomeScreen: FC<HomeScreenProps> = memo(function HomeScreen(props) {
             })
           }
           setHasMore(newListings.length === 10)
+        } else {
+          setHasMore(false)
         }
       } catch (error) {
         console.error("Error fetching listings:", error)
+        setHasMore(false)
       } finally {
         setIsRefreshing(false)
         setIsLoadingMore(false)
@@ -130,9 +134,12 @@ export const HomeScreen: FC<HomeScreenProps> = memo(function HomeScreen(props) {
           <Ionicons name="menu-outline" size={28} color={colors.palette.primary} />
         </TouchableOpacity>
         <Text tx="home:title" style={styles.headerTitle} preset="display" />
-        <TouchableOpacity style={styles.headerButton}>
+        <TouchableOpacity
+          style={styles.headerButton}
+          onPress={() => navigation.navigate("Notifications")}
+        >
           <Ionicons name="notifications-outline" size={26} color={colors.palette.primary} />
-          <View style={styles.notificationBadge} />
+          {!!unreadCount && unreadCount > 0 && <View style={styles.notificationBadge} />}
         </TouchableOpacity>
       </View>
 

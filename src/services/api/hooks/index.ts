@@ -16,6 +16,11 @@ import {
   GetListingsParams,
   CreateListingParams,
   RegisterParams,
+  getNotifications,
+  markNotificationRead,
+  getUnreadNotificationsCount,
+  deleteNotification,
+  reportListing,
 } from "../modules"
 
 const extractErrorMessage = (error: any): string => {
@@ -174,5 +179,69 @@ export const useMeasurementUnitsQuery = (options?: { enabled?: boolean }) => {
       return res.units
     },
     ...options,
+  })
+}
+
+// --- Notifications Hooks ---
+
+export const useNotificationsQuery = (limit = 20, offset = 0, options?: { enabled?: boolean }) => {
+  return useQuery({
+    queryKey: ["notifications", limit, offset],
+    queryFn: async () => {
+      const res = await getNotifications(limit, offset)
+      if (res.kind === "failure") throw new Error(extractErrorMessage(res.error))
+      return res
+    },
+    ...options,
+  })
+}
+
+export const useUnreadNotificationsCountQuery = (options?: { enabled?: boolean }) => {
+  return useQuery({
+    queryKey: ["unreadNotificationsCount"],
+    queryFn: async () => {
+      const res = await getUnreadNotificationsCount()
+      if (res.kind === "failure") throw new Error(extractErrorMessage(res.error))
+      return res.count
+    },
+    ...options,
+  })
+}
+
+export const useMarkNotificationReadMutation = () => {
+  return useMutation({
+    mutationFn: async (id?: string) => {
+      const res = await markNotificationRead(id)
+      if (res.kind === "failure") throw new Error(extractErrorMessage(res.error))
+      return res
+    },
+  })
+}
+
+export const useDeleteNotificationMutation = () => {
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const res = await deleteNotification(id)
+      if (res.kind === "failure") throw new Error(extractErrorMessage(res.error))
+      return res
+    },
+  })
+}
+
+export const useReportListingMutation = () => {
+  return useMutation({
+    mutationFn: async ({
+      listingId,
+      reason,
+      description,
+    }: {
+      listingId: string
+      reason: string
+      description?: string
+    }) => {
+      const res = await reportListing(listingId, reason, description)
+      if (res.kind === "failure") throw new Error(extractErrorMessage(res.error))
+      return res
+    },
   })
 }

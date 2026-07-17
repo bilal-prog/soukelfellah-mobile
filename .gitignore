@@ -36,6 +36,7 @@ local.properties
 #
 node_modules/
 npm-debug.log
+yarn-error.log
 
 # BUCK
 buck-out/
@@ -81,12 +82,27 @@ npm-debug.*
 *.mobileprovision
 *.orig.*
 web-build/
+google-services.json
+GoogleService-Info.plist
 
 # Configurations
 !env.js
+.env*
+souk-el-fellah-4ef5e-firebase-adminsdk-fbsvc-dcb07def24.json
 
 /coverage
 
-# Dependency Graph Visualizations
-app-dependency-graph.svg
-app-dependency-graph.png
+# Yarn
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
+# ESLint cache
+.eslintcache
+
+# Local builds
+*.apk
+*.aab

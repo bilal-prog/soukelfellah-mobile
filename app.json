@@ -1,6 +1,6 @@
 {
   "name": "Souk El Fellah",
-  "slug": "SoukElFellah",
+  "slug": "souk-el-fellah",
   "scheme": "soukelfellah",
   "version": "1.0.0",
   "orientation": "portrait",
@@ -11,7 +11,9 @@
   },
   "newArchEnabled": true,
   "jsEngine": "hermes",
-  "assetBundlePatterns": ["**/*"],
+  "assetBundlePatterns": [
+    "**/*"
+  ],
   "android": {
     "icon": "./assets/images/icon.png",
     "package": "com.soukelfellah",
@@ -26,7 +28,9 @@
     "supportsTablet": true,
     "bundleIdentifier": "com.soukelfellah",
     "infoPlist": {
-      "UIBackgroundModes": ["remote-notification"]
+      "UIBackgroundModes": [
+        "remote-notification"
+      ]
     },
     "entitlements": {
       "aps-environment": "development"
@@ -70,7 +74,14 @@
         "mode": "development"
       }
     ],
-    "expo-secure-store"
+    "expo-secure-store",
+    [
+      "expo-image-picker",
+      {
+        "photosPermission": "The app accesses your photos to let you upload pictures for your listing.",
+        "cameraPermission": "The app accesses your camera to let you take photos of your items for sale."
+      }
+    ]
   ],
   "experiments": {
     "tsconfigPaths": true
@@ -81,6 +92,27 @@
     },
     "bugsnag": {
       "apiKey": "da4f48a727a29666a58cdd1db6551357"
+    },
+    "eas": {
+      "build": {
+        "experimental": {
+          "ios": {
+            "appExtensions": [
+              {
+                "targetName": "OneSignalNotificationServiceExtension",
+                "bundleIdentifier": "com.soukelfellah.OneSignalNotificationServiceExtension",
+                "entitlements": {
+                  "com.apple.security.application-groups": [
+                    "group.com.soukelfellah.onesignal"
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      },
+      "projectId": "0c1c991b-2626-4a98-82a7-ed7b85d0f123"
     }
-  }
+  },
+  "owner": "bilal-dev"
 }

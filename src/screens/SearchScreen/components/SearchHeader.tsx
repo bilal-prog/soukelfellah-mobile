@@ -50,15 +50,6 @@ export const SearchHeader = memo(function SearchHeader(props: SearchHeaderProps)
   const { theme } = useAppTheme()
   const colors = theme.colors
 
-  const getCategoryTranslation = (name: string) => {
-    const key = name.toLowerCase().replace(/[^a-z0-9]/g, "_")
-    const translated = translate(`categories:${key}` as any)
-    if (translated.startsWith("categories:")) {
-      return name
-    }
-    return translated
-  }
-
   /*
 
 in the search screen the province selecter doesn't open, and the list of the categories keeps rerendering and scrolling to the initial scroll each tile I choose some category 
@@ -133,7 +124,7 @@ in the search screen the province selecter doesn't open, and the list of the cat
                 style={[styles.chipItem, active ? styles.chipActive : styles.chipInactive]}
               >
                 <Text
-                  text={getCategoryTranslation(cat.name)}
+                  text={cat.name}
                   size="xs"
                   preset="bold"
                   style={active ? styles.chipTextActive : styles.chipTextInactive}

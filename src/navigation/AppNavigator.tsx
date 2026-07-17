@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack"
 
 import { useAuth } from "@/context/AuthContext"
 import { ListingDetailsScreen } from "@/screens/ListingDetailsScreen"
+import { NotificationsScreen } from "@/screens/NotificationsScreen"
 import { LoginScreen } from "@/screens/LoginScreen"
 import { RegisterScreen } from "@/screens/RegisterScreen"
 import { VerifyPhoneScreen } from "@/screens/VerifyPhoneScreen"
@@ -44,6 +45,7 @@ const AppStack = () => {
         <>
           <Stack.Screen name="MainTabs" component={MainTabNavigator} />
           <Stack.Screen name="ListingDetails" component={ListingDetailsScreen} />
+          <Stack.Screen name="Notifications" component={NotificationsScreen} />
         </>
       ) : (
         <>
