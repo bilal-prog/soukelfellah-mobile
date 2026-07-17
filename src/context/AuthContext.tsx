@@ -9,8 +9,10 @@ import {
 } from "react"
 import { useMMKVString } from "react-native-mmkv"
 import { OneSignal } from "react-native-onesignal"
+import { useQueryClient } from "@tanstack/react-query"
 
 import { socketClient } from "@/services/socket/socketClient"
+import { useLogoutMutation } from "@/services/api/hooks"
 
 export type AuthContextType = {
   isAuthenticated: boolean
@@ -47,6 +49,9 @@ export const AuthProvider: FC<PropsWithChildren<AuthProviderProps>> = ({ childre
   const [userRole, setUserRole] = useMMKVString("AuthProvider.userRole")
   const [favoritesStr, setFavoritesStr] = useMMKVString("AuthProvider.favorites")
   const [isGuestStr, setIsGuestStr] = useMMKVString("AuthProvider.isGuest")
+
+  const queryClient = useQueryClient()
+  const logoutMutation = useLogoutMutation()
 
   const isGuest = useMemo(() => isGuestStr === "true", [isGuestStr])
 
@@ -120,9 +125,8 @@ export const AuthProvider: FC<PropsWithChildren<AuthProviderProps>> = ({ childre
 
   const logout = useCallback(async () => {
     if (refreshToken) {
-      const { logout } = require("@/services/api/modules/auth")
       try {
-        await logout(refreshToken)
+        await logoutMutation.mutateAsync(refreshToken)
       } catch {
         // Silent catch
       }
@@ -135,6 +139,9 @@ export const AuthProvider: FC<PropsWithChildren<AuthProviderProps>> = ({ childre
     setUserRole(undefined)
     setFavoritesStr(JSON.stringify([]))
     setIsGuestStr("false")
+    
+    // Clear React Query cache to remove user-specific queries (e.g. notifications, private listings)
+    queryClient.clear()
 
     // Deregister user session in OneSignal
     OneSignal.logout()
@@ -148,6 +155,8 @@ export const AuthProvider: FC<PropsWithChildren<AuthProviderProps>> = ({ childre
     setUserRole,
     refreshToken,
     setIsGuestStr,
+    queryClient,
+    logoutMutation,
   ])
 
   const toggleFavorite = useCallback(

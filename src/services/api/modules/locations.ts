@@ -16,7 +16,7 @@ export interface ApiCategory {
   _id: string
   name: string
   slug: string
-  icon?: string
+  icon?: string | { _id: string; url: string }
 }
 
 export interface ApiProductType {

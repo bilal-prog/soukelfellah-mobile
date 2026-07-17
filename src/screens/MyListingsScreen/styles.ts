@@ -23,6 +23,21 @@ export const $styles = (theme: Theme) => ({
     color: theme.colors.palette.primary,
   } as TextStyle,
 
+  headerButton: {
+    padding: 4,
+    position: "relative",
+  } as ViewStyle,
+
+  notificationBadge: {
+    position: "absolute",
+    top: 4,
+    right: 4,
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: theme.colors.palette.error,
+  } as ViewStyle,
+
   profileCard: {
     flexDirection: "row",
     alignItems: "center",

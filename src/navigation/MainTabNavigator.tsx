@@ -116,7 +116,7 @@ const $tabBarItem: ThemedStyle<ViewStyle> = ({ spacing }) => ({
 const $tabBarLabel: ThemedStyle<TextStyle> = ({ typography }) => ({
   fontSize: 12,
   fontFamily: typography.primary.medium,
-  lineHeight: 16,
+  lineHeight: 18,
 })
 
 export default MainTabNavigator

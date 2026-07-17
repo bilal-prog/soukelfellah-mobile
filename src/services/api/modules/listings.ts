@@ -57,6 +57,8 @@ export interface GetListingsParams {
   offset?: number
   page?: number
   sellerId?: string
+  status?: string
+  province?: string
 }
 
 export interface CreateListingParams {
@@ -157,4 +159,15 @@ export const uploadListingImage = async (
     return { kind: "failure", error: response.data || response.problem } as const
   }
   return { kind: "ok", file: response.data!.data[0] } as const
+}
+
+export const updateListing = async (id: string, params: CreateListingParams) => {
+  const response = await apiClient.put<{ success: boolean; data: ApiListing }>(
+    `/api/listings/${id}`,
+    params,
+  )
+  if (!response.ok) {
+    return { kind: "failure", error: response.data || response.problem } as const
+  }
+  return { kind: "ok", listing: response.data!.data } as const
 }

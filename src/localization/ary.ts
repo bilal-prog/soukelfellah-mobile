@@ -36,10 +36,12 @@ const ary: Translations = {
     noFavorites: "ما عندك حتى شي إعلان فالمفضلة",
     noFavoritesDesc: "تصفح الإعلانات وكليك على القلب باش تضيف المنتوجات هنا.",
     today: "اليوم",
+    yesterday: "البارح",
     daysAgo: "أيام مضت",
     days: "أيام",
     views: "مشاهدة",
     hoursUnit: "ساعة",
+    noResults: "ما لقينا حتى نتيجة",
   },
   welcome: {
     title: "مرحبا بك في سوق الفلاح",
@@ -190,6 +192,10 @@ const ary: Translations = {
     selectProductTypePlaceholder: "اختر نوع المنتج",
     selectUnitPlaceholder: "اختر وحدة القياس",
   },
+  editListing: {
+    title: "تعديل الإعلان",
+    saveBtn: "حفظ التغييرات",
+  },
   myListings: {
     title: "إعلاناتي",
     stats: {
@@ -209,6 +215,7 @@ const ary: Translations = {
     deleteTitle: "حذف الإعلان",
     deleteNotSupported: "الحذف غير مدعوم حالياً فالسيرفر.",
     markSoldSuccess: "بصحتك! تم تغيير حالة الإعلان إلى مباع.",
+    updateSuccess: "تم تحديث الإعلان ديالك بنجاح!",
   },
   listingDetails: {
     title: "تفاصيل الإعلان",
@@ -276,6 +283,15 @@ const ary: Translations = {
     headUnit: "راس",
     berkane: "بركان",
     settat: "سطات",
+  },
+  notifications: {
+    title: "الإشعارات",
+    markAllRead: "علم على كولشي مقري",
+    emptyTitle: "ما كاين حتى إشعار دابا",
+    emptyDesc: "ملي يوصلوك إشعارات جديدة، غادي تبان هنا.",
+    deleteTitle: "مسح الإشعار",
+    deleteConfirm: "واش متأكد بغيتي تمسح هاد الإشعار؟",
+    deleteAction: "مسح",
   },
 }
 

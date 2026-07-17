@@ -4,12 +4,14 @@ import { Ionicons } from "@expo/vector-icons"
 
 import { Text } from "@/components/Text"
 import { translate } from "@/localization/translate"
+import { formatListingDate } from "@/utils/formatDate"
 
 interface MyListingItemProps {
   item: any
   activeTab: string
   onMarkSold: (id: string) => void
   onDelete: (id: string) => void
+  onEdit: (id: string) => void
   styles: any
 }
 
@@ -18,6 +20,7 @@ export const MyListingItem = memo(function MyListingItem({
   activeTab,
   onMarkSold,
   onDelete,
+  onEdit,
   styles,
 }: MyListingItemProps) {
   const imageUri =
@@ -29,12 +32,13 @@ export const MyListingItem = memo(function MyListingItem({
         : item.unit || ""
       : ""
 
-  const getDaysAgo = () => {
-    if (!item.createdAt) return item.daysAgo ? `${item.daysAgo} ${translate("common:days")}` : translate("common:today")
-    const createdDate = new Date(item.createdAt)
-    const diffTime = Math.abs(new Date().getTime() - createdDate.getTime())
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
-    return diffDays <= 1 ? translate("common:today") : `${diffDays} ${translate("common:daysAgo")}`
+  const getCreatedDateText = () => {
+    if (!item.createdAt) {
+      return item.daysAgo
+        ? `${item.daysAgo} ${translate("common:days")}`
+        : translate("common:today")
+    }
+    return formatListingDate(item.createdAt)
   }
 
   return (
@@ -45,23 +49,40 @@ export const MyListingItem = memo(function MyListingItem({
 
         <View style={styles.listingInfo}>
           <View>
-            <Text text={item.title} preset="bold" size="sm" numberOfLines={1} />
-            <Text
-              text={`${item.price} ${translate("common:currency")}${unitText ? " / " + unitText : ""}`}
-              preset="bold"
-              size="sm"
-              style={styles.listingPriceText}
-            />
+            <Text text={item.title} preset="bold" size="xs" numberOfLines={1} />
+            {item.priceType === "CONTACT" ? (
+              <Text
+                text={translate("addListing:priceTypeContact")}
+                preset="bold"
+                size="xs"
+                style={styles.listingPriceText}
+              />
+            ) : item.price !== undefined && item.price !== null && item.price !== "" ? (
+              <Text
+                text={`${item.price} ${translate("common:currency")}${unitText ? " / " + unitText : ""}${
+                  item.priceType === "NEGOTIABLE"
+                    ? ` (${translate("addListing:priceTypeNegotiable")})`
+                    : ""
+                }`}
+                preset="bold"
+                size="xs"
+                style={styles.listingPriceText}
+              />
+            ) : null}
           </View>
 
           <View style={styles.listingMeta}>
             <View style={styles.metaItem}>
               <Ionicons name="eye-outline" size={14} color={styles.metaText.color} />
-              <Text text={`${item.viewsCount || 0} ${translate("common:views")}`} size="xxs" style={styles.metaText} />
+              <Text
+                text={`${item.viewsCount || 0} ${translate("common:views")}`}
+                size="xxs"
+                style={styles.metaText}
+              />
             </View>
             <View style={styles.metaItem}>
               <Ionicons name="time-outline" size={14} color={styles.metaText.color} />
-              <Text text={getDaysAgo()} size="xxs" style={styles.metaText} />
+              <Text text={getCreatedDateText()} size="xxs" style={styles.metaText} />
             </View>
           </View>
         </View>
@@ -70,7 +91,7 @@ export const MyListingItem = memo(function MyListingItem({
       {/* Sub row action buttons */}
       {activeTab === "active" && (
         <View style={styles.listingActions}>
-          <TouchableOpacity style={styles.actionBtn}>
+          <TouchableOpacity onPress={() => onEdit(item._id)} style={styles.actionBtn}>
             <Ionicons name="create-outline" size={16} color={styles.actionTextEdit.color} />
             <Text tx="common:edit" size="xxs" style={styles.actionTextEdit} />
           </TouchableOpacity>

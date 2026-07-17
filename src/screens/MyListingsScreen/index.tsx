@@ -9,7 +9,11 @@ import { Text } from "@/components/Text"
 import { useAuth } from "@/context/AuthContext"
 import { translate } from "@/localization/translate"
 import type { MainTabScreenProps } from "@/navigation/navigationTypes"
-import { useListingsQuery, useMarkListingSoldMutation } from "@/services/api/hooks"
+import {
+  useListingsQuery,
+  useMarkListingSoldMutation,
+  useUnreadNotificationsCountQuery,
+} from "@/services/api/hooks"
 import { useAppTheme } from "@/theme/context"
 
 import { MyListingItem } from "./components/MyListingItem"
@@ -21,7 +25,9 @@ interface MyListingsScreenProps extends MainTabScreenProps<"MyAccount"> {}
 
 const MOCK_MY_LISTINGS: any[] = []
 
-export const MyListingsScreen: FC<MyListingsScreenProps> = memo(function MyListingsScreen() {
+export const MyListingsScreen: FC<MyListingsScreenProps> = memo(function MyListingsScreen({
+  navigation,
+}) {
   const { theme } = useAppTheme()
   const colors = theme.colors
   const styles = $styles(theme)
@@ -29,12 +35,13 @@ export const MyListingsScreen: FC<MyListingsScreenProps> = memo(function MyListi
 
   const [activeTab, setActiveTab] = useState<"active" | "paused" | "sold">("active")
 
-  // Query active database listings belonging to this seller
+  // Query database listings belonging to this seller matching the selected tab status
   const {
     data: apiListings,
     isLoading,
     refetch,
-  } = useListingsQuery(userId ? { sellerId: userId } : undefined)
+  } = useListingsQuery(userId ? { sellerId: userId, status: activeTab, limit: 100 } : undefined)
+  const { data: unreadCount } = useUnreadNotificationsCountQuery()
 
   const totalViews = useMemo(() => {
     if (!apiListings) return 0
@@ -50,14 +57,10 @@ export const MyListingsScreen: FC<MyListingsScreenProps> = memo(function MyListi
   const markListingSoldMutation = useMarkListingSoldMutation()
 
   const handleLogout = useCallback(() => {
-    Alert.alert(
-      translate("myListings:logoutTitle"),
-      translate("myListings:logoutConfirm"),
-      [
-        { text: translate("common:cancel"), style: "cancel" },
-        { text: translate("myListings:logoutAction"), style: "destructive", onPress: () => logout() },
-      ],
-    )
+    Alert.alert(translate("myListings:logoutTitle"), translate("myListings:logoutConfirm"), [
+      { text: translate("common:cancel"), style: "cancel" },
+      { text: translate("myListings:logoutAction"), style: "destructive", onPress: () => logout() },
+    ])
   }, [logout])
 
   const handleDelete = useCallback((_id: string) => {
@@ -72,17 +75,26 @@ export const MyListingsScreen: FC<MyListingsScreenProps> = memo(function MyListi
           refetch()
         },
         onError: (err: any) => {
-          Alert.alert(translate("common:error"), err.message || translate("addListing:publishErrorDefault"))
+          Alert.alert(
+            translate("common:error"),
+            err.message || translate("addListing:publishErrorDefault"),
+          )
         },
       })
     },
     [markListingSoldMutation, refetch],
   )
 
+  const handleEdit = useCallback(
+    (id: string) => {
+      navigation.navigate("EditListing", { listingId: id })
+    },
+    [navigation],
+  )
+
   const visibleListings = useMemo(() => {
-    const list = apiListings && apiListings.length > 0 ? apiListings : MOCK_MY_LISTINGS
-    return list.filter((item) => item.status === activeTab)
-  }, [apiListings, activeTab])
+    return apiListings || MOCK_MY_LISTINGS
+  }, [apiListings])
 
   const renderMyListingCard = useCallback(
     ({ item }: { item: any }) => {
@@ -92,11 +104,12 @@ export const MyListingsScreen: FC<MyListingsScreenProps> = memo(function MyListi
           activeTab={activeTab}
           onMarkSold={handleMarkSold}
           onDelete={handleDelete}
+          onEdit={handleEdit}
           styles={styles}
         />
       )
     },
-    [activeTab, handleMarkSold, handleDelete, styles],
+    [activeTab, handleMarkSold, handleDelete, handleEdit, styles],
   )
 
   const renderMyListingsHeader = useCallback(() => {
@@ -137,8 +150,13 @@ export const MyListingsScreen: FC<MyListingsScreenProps> = memo(function MyListi
           <Ionicons name="log-out-outline" size={26} color={colors.palette.error} />
         </TouchableOpacity>
         <Text tx="myListings:title" style={styles.headerTitle} preset="bold" />
-        <TouchableOpacity>
-          <Ionicons name="notifications-outline" size={26} color={colors.text} />
+
+        <TouchableOpacity
+          style={styles.headerButton}
+          onPress={() => navigation.navigate("Notifications")}
+        >
+          <Ionicons name="notifications-outline" size={26} color={colors.palette.primary} />
+          {!!unreadCount && unreadCount > 0 && <View style={styles.notificationBadge} />}
         </TouchableOpacity>
       </View>
 

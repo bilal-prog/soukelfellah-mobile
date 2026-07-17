@@ -1,6 +1,7 @@
 import { ViewStyle, TextStyle } from "react-native"
 
 import type { Theme } from "@/theme/types"
+import { isRTL } from "@/localization"
 
 export const $styles = (theme: Theme) => ({
   container: {
@@ -24,6 +25,21 @@ export const $styles = (theme: Theme) => ({
     flex: 1,
     textAlign: "left",
   } as TextStyle,
+
+  headerButton: {
+    padding: 4,
+    position: "relative",
+  } as ViewStyle,
+
+  notificationBadge: {
+    position: "absolute",
+    top: 4,
+    right: 4,
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: theme.colors.palette.error,
+  } as ViewStyle,
 
   flatListContent: {
     paddingHorizontal: theme.spacing.marginMobile,
@@ -116,7 +132,7 @@ export const $styles = (theme: Theme) => ({
   } as ViewStyle,
 
   priceInputsRow: {
-    flexDirection: "row",
+    flexDirection: isRTL ? "row-reverse" : "row",
     gap: 12,
   } as ViewStyle,
 

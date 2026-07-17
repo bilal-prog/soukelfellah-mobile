@@ -26,6 +26,7 @@ import { useAppTheme } from "@/theme/context"
 
 import { $styles } from "./styles"
 import { useSafeAreaInsetsStyle } from "@/utils/useSafeAreaInsetsStyle"
+import { formatFullAddress } from "@/utils/formatAddress"
 
 interface ListingDetailsScreenProps extends AppStackScreenProps<"ListingDetails"> {}
 
@@ -220,9 +221,9 @@ export const ListingDetailsScreen: FC<ListingDetailsScreenProps> = memo(
                 color={favorited ? colors.palette.error : colors.text}
               />
             </TouchableOpacity>
-            <TouchableOpacity>
+            {/* <TouchableOpacity>
               <Ionicons name="share-social-outline" size={26} color={colors.text} />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         </View>
 
@@ -244,10 +245,7 @@ export const ListingDetailsScreen: FC<ListingDetailsScreenProps> = memo(
                   renderItem={({ item, index }: { item: any; index: number }) => {
                     const imgUrl = typeof item === "object" ? item?.url : item
                     return (
-                      <TouchableOpacity
-                        activeOpacity={0.9}
-                        onPress={() => handleOpenViewer(index)}
-                      >
+                      <TouchableOpacity activeOpacity={0.9} onPress={() => handleOpenViewer(index)}>
                         <Image
                           source={{ uri: imgUrl }}
                           style={{ width: screenWidth, height: "100%" }}
@@ -261,10 +259,7 @@ export const ListingDetailsScreen: FC<ListingDetailsScreenProps> = memo(
                   {listing.images.map((_item: any, index: number) => (
                     <View
                       key={index}
-                      style={[
-                        styles.dot,
-                        activeIndex === index && styles.activeDot,
-                      ]}
+                      style={[styles.dot, activeIndex === index && styles.activeDot]}
                     />
                   ))}
                 </View>
@@ -357,7 +352,7 @@ export const ListingDetailsScreen: FC<ListingDetailsScreenProps> = memo(
                   size={16}
                   color={colors.palette.onSurfaceVariant}
                 />
-                <Text text={listing.location.address} size="xs" style={styles.locationText} />
+                <Text text={formatFullAddress(listing.location)} size="xs" style={styles.locationText} />
               </View>
             </View>
 
@@ -573,7 +568,9 @@ export const ListingDetailsScreen: FC<ListingDetailsScreenProps> = memo(
                 pagingEnabled
                 showsHorizontalScrollIndicator={false}
                 keyExtractor={(_item: any, index: number) => index.toString()}
-                initialScrollIndex={viewerIndex >= 0 && viewerIndex < listing.images.length ? viewerIndex : 0}
+                initialScrollIndex={
+                  viewerIndex >= 0 && viewerIndex < listing.images.length ? viewerIndex : 0
+                }
                 getItemLayout={(_data, index) => ({
                   length: screenWidth,
                   offset: screenWidth * index,
@@ -582,7 +579,9 @@ export const ListingDetailsScreen: FC<ListingDetailsScreenProps> = memo(
                 renderItem={({ item }) => {
                   const imgUrl = typeof item === "object" ? item?.url : item
                   return (
-                    <View style={{ width: screenWidth, justifyContent: "center", alignItems: "center" }}>
+                    <View
+                      style={{ width: screenWidth, justifyContent: "center", alignItems: "center" }}
+                    >
                       <Image
                         source={{ uri: imgUrl }}
                         style={{ width: "100%", height: "100%" }}

@@ -1,6 +1,7 @@
 import { ViewStyle, TextStyle, ImageStyle } from "react-native"
 
 import type { Theme } from "@/theme/types"
+import { isRTL } from "@/localization"
 
 export const $styles = (theme: Theme) => ({
   container: {
@@ -193,7 +194,7 @@ export const $styles = (theme: Theme) => ({
     borderTopWidth: 1,
     borderColor: theme.colors.palette.outlineVariant,
     padding: 16,
-    flexDirection: "row",
+    flexDirection: isRTL ? "row-reverse" : "row",
     gap: 12,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: -4 },

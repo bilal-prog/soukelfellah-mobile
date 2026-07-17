@@ -1,6 +1,7 @@
 import React, { memo } from "react"
 
 import { ListingCard } from "@/components/ListingCard"
+import { formatFullAddress } from "@/utils/formatAddress"
 
 interface SearchListingItemProps {
   item: any
@@ -26,11 +27,12 @@ export const SearchListingItem = memo(function SearchListingItem({
             : item.unit || undefined
           : undefined
       }
-      locationName={item.location.address}
+      locationName={formatFullAddress(item.location)}
       imageUri={typeof item.images[0] === "object" ? item.images[0]?.url : item.images[0]}
       phone={typeof item.sellerId === "object" ? item.sellerId?.phone : "0600000000"}
       isNew={item.isNew}
       rating={item.rating}
+      createdAt={item.createdAt}
       onPress={onPress}
     />
   )

@@ -1,4 +1,4 @@
-import React, { FC, useState, memo, useCallback, useMemo } from "react"
+import React, { FC, useState, memo, useCallback, useMemo, useEffect } from "react"
 import { View, TouchableOpacity, ActivityIndicator, FlatList, Modal } from "react-native"
 import { Ionicons } from "@expo/vector-icons"
 
@@ -7,7 +7,12 @@ import { Text } from "@/components/Text"
 import { isRTL } from "@/localization"
 import { translate } from "@/localization/translate"
 import type { MainTabScreenProps } from "@/navigation/navigationTypes"
-import { useListingsQuery, useCategoriesQuery, useLocationsQuery } from "@/services/api/hooks"
+import {
+  useListingsQuery,
+  useCategoriesQuery,
+  useLocationsQuery,
+  useUnreadNotificationsCountQuery,
+} from "@/services/api/hooks"
 import { useAppTheme } from "@/theme/context"
 
 import { SearchHeader } from "./components/SearchHeader"
@@ -25,52 +30,43 @@ export const SearchScreen: FC<SearchScreenProps> = memo(function SearchScreen(pr
   const { navigation } = props
 
   const [query, setQuery] = useState("")
+  const [debouncedQuery, setDebouncedQuery] = useState("")
   const [selectedCat, setSelectedCat] = useState("all")
   const [minPrice, setMinPrice] = useState("")
+  const [debouncedMinPrice, setDebouncedMinPrice] = useState("")
   const [maxPrice, setMaxPrice] = useState("")
+  const [debouncedMaxPrice, setDebouncedMaxPrice] = useState("")
   const [selectedCity, setSelectedCity] = useState("all")
   const [isProvinceModalVisible, setIsProvinceModalVisible] = useState(false)
 
-  const { data: apiListings, isLoading } = useListingsQuery()
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedQuery(query)
+      setDebouncedMinPrice(minPrice)
+      setDebouncedMaxPrice(maxPrice)
+    }, 500)
+
+    return () => {
+      clearTimeout(handler)
+    }
+  }, [query, minPrice, maxPrice])
+
+  const searchParams = useMemo(() => {
+    return {
+      search: debouncedQuery.trim() || undefined,
+      categoryId: selectedCat !== "all" ? selectedCat : undefined,
+      minPrice: debouncedMinPrice ? parseFloat(debouncedMinPrice) : undefined,
+      maxPrice: debouncedMaxPrice ? parseFloat(debouncedMaxPrice) : undefined,
+      province: selectedCity !== "all" ? selectedCity : undefined,
+    }
+  }, [debouncedQuery, selectedCat, debouncedMinPrice, debouncedMaxPrice, selectedCity])
+
+  const { data: apiListings, isLoading } = useListingsQuery(searchParams)
   const { data: categories } = useCategoriesQuery()
+  const { data: unreadCount } = useUnreadNotificationsCountQuery()
   const { data: dbProvinces } = useLocationsQuery({ type: "province" })
 
-  const filteredListings = useMemo(() => {
-    const source = apiListings || []
-
-    return (source as any[]).filter((item: any) => {
-      if (query.trim()) {
-        const matchesTitle = item.title.toLowerCase().includes(query.toLowerCase())
-        const matchesDesc = item.description?.toLowerCase().includes(query.toLowerCase()) || false
-        if (!matchesTitle && !matchesDesc) return false
-      }
-
-      if (selectedCat !== "all") {
-        const itemCategoryId =
-          typeof item.categoryId === "object" ? item.categoryId?._id : item.categoryId
-        if (itemCategoryId !== selectedCat) return false
-      }
-
-      if (minPrice) {
-        if (item.price < parseFloat(minPrice)) return false
-      }
-      if (maxPrice) {
-        if (item.price > parseFloat(maxPrice)) return false
-      }
-
-      if (selectedCity !== "all") {
-        const provinceMatch = item.location?.province
-          ?.toLowerCase()
-          .includes(selectedCity.toLowerCase())
-        const addressMatch = item.location?.address
-          ?.toLowerCase()
-          .includes(selectedCity.toLowerCase())
-        if (!provinceMatch && !addressMatch) return false
-      }
-
-      return true
-    })
-  }, [apiListings, query, selectedCat, minPrice, maxPrice, selectedCity])
+  const filteredListings = apiListings || []
 
   const handleGoBack = useCallback(() => {
     navigation.goBack()
@@ -83,6 +79,28 @@ export const SearchScreen: FC<SearchScreenProps> = memo(function SearchScreen(pr
     [navigation],
   )
 
+  const renderEmptyState = useCallback(() => {
+    if (isLoading) {
+      return (
+        <ActivityIndicator
+          size="large"
+          color={colors.palette.primary}
+          style={{ marginTop: 40 }}
+        />
+      )
+    }
+    return (
+      <View style={{ alignItems: "center", marginTop: 40 }}>
+        <Ionicons name="search-outline" size={48} color={colors.palette.outline} />
+        <Text
+          tx="common:noResults"
+          preset="bold"
+          style={{ color: colors.palette.onSurfaceVariant, marginTop: 12 }}
+        />
+      </View>
+    )
+  }, [isLoading, colors])
+
   const renderListingItem = useCallback(
     ({ item }: { item: any }) => {
       return <SearchListingItem item={item} onPress={() => handleListingDetails(item._id)} />
@@ -91,51 +109,49 @@ export const SearchScreen: FC<SearchScreenProps> = memo(function SearchScreen(pr
   )
 
   return (
-    <Screen
-      preset="fixed"
-      safeAreaEdges={["top"]}
-      style={[styles.container, $bottomContainerInsets]}
-    >
+    <Screen preset="fixed" safeAreaEdges={["top"]} style={[styles.container]}>
       {/* Header bar */}
       <View style={styles.header}>
         <TouchableOpacity onPress={handleGoBack}>
           <Ionicons name={isRTL ? "arrow-forward" : "arrow-back"} size={26} color={colors.text} />
         </TouchableOpacity>
         <Text tx="search:title" style={styles.headerTitle} preset="display" />
-        <TouchableOpacity>
-          <Ionicons name="notifications-outline" size={26} color={colors.text} />
+        <TouchableOpacity
+          style={styles.headerButton}
+          onPress={() => navigation.navigate("Notifications")}
+        >
+          <Ionicons name="notifications-outline" size={26} color={colors.palette.primary} />
+          {!!unreadCount && unreadCount > 0 && <View style={styles.notificationBadge} />}
         </TouchableOpacity>
       </View>
 
       {/* Results loop inside FlatList */}
-      {isLoading ? (
-        <ActivityIndicator size="large" color={colors.palette.primary} style={{ marginTop: 20 }} />
-      ) : (
-        <FlatList
-          data={filteredListings}
-          keyExtractor={(item) => item._id}
-          renderItem={renderListingItem}
-          ListHeaderComponent={
-            <SearchHeader
-              styles={styles}
-              query={query}
-              setQuery={setQuery}
-              selectedCity={selectedCity}
-              onPressLocation={() => setIsProvinceModalVisible(true)}
-              selectedCat={selectedCat}
-              setSelectedCat={setSelectedCat}
-              minPrice={minPrice}
-              setMinPrice={setMinPrice}
-              maxPrice={maxPrice}
-              setMaxPrice={setMaxPrice}
-              resultsCount={filteredListings.length}
-              categories={categories}
-            />
-          }
-          contentContainerStyle={styles.flatListContent}
-          showsVerticalScrollIndicator={false}
-        />
-      )}
+      <FlatList
+        data={filteredListings}
+        keyExtractor={(item) => item._id}
+        renderItem={renderListingItem}
+        ListHeaderComponent={
+          <SearchHeader
+            styles={styles}
+            query={query}
+            setQuery={setQuery}
+            selectedCity={selectedCity}
+            onPressLocation={() => setIsProvinceModalVisible(true)}
+            selectedCat={selectedCat}
+            setSelectedCat={setSelectedCat}
+            minPrice={minPrice}
+            setMinPrice={setMinPrice}
+            maxPrice={maxPrice}
+            setMaxPrice={setMaxPrice}
+            resultsCount={filteredListings.length}
+            categories={categories}
+          />
+        }
+        ListEmptyComponent={renderEmptyState}
+        contentContainerStyle={styles.flatListContent}
+        showsVerticalScrollIndicator={false}
+        style={{ opacity: isLoading ? 0.6 : 1 }}
+      />
 
       {/* Province Selection Modal */}
       <Modal visible={isProvinceModalVisible} animationType="slide" transparent>

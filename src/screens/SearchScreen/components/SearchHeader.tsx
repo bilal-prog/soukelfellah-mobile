@@ -78,7 +78,6 @@ in the search screen the province selecter doesn't open, and the list of the cat
           onPress={onPressLocation}
           style={styles.locationButton}
         >
-          <Ionicons name="chevron-down" size={18} color={colors.palette.onSurfaceVariant} />
           <View style={styles.locationBtnLeft}>
             <Ionicons name="location-outline" size={20} color={colors.palette.secondary} />
             <Text
@@ -87,6 +86,7 @@ in the search screen the province selecter doesn't open, and the list of the cat
               preset="bold"
             />
           </View>
+          <Ionicons name="chevron-down" size={18} color={colors.palette.onSurfaceVariant} />
         </TouchableOpacity>
       </View>
 
@@ -172,10 +172,6 @@ in the search screen the province selecter doesn't open, and the list of the cat
             preset="bold"
           />
         </Text>
-        <TouchableOpacity style={styles.sortButton}>
-          <Ionicons name="funnel-outline" size={16} color={colors.palette.primary} />
-          <Text tx="search:sortBy" size="xs" style={styles.sortText} preset="bold" />
-        </TouchableOpacity>
       </View>
     </View>
   )

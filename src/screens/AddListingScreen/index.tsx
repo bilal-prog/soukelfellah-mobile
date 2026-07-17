@@ -367,7 +367,7 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
 
     createListingMutation.mutate(payload, {
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ["listings"] })
+        queryClient.resetQueries({ queryKey: ["listings"] })
         Alert.alert(translate("addListing:successTitle"), translate("addListing:successMsg"), [
           {
             text: translate("addListing:successOk"),
@@ -821,11 +821,7 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
               </View>
 
               <View style={styles.quantityPriceRow}>
-                <View
-                  style={
-                    priceType === "CONTACT" ? styles.inputWrapperFull : styles.inputWrapperHalf
-                  }
-                >
+                <View style={styles.inputWrapperHalf}>
                   <TextField
                     value={quantity}
                     onChangeText={(val) => {

@@ -1,5 +1,5 @@
 import { memo } from "react"
-import { TouchableOpacity, View, ViewStyle, TextStyle } from "react-native"
+import { TouchableOpacity, View, ViewStyle, TextStyle, Image, ImageStyle } from "react-native"
 
 import { useAppTheme } from "@/theme/context"
 
@@ -7,7 +7,7 @@ import { Text } from "./Text"
 
 export interface CategoryCardProps {
   label: string
-  icon: string // Emoji or material icon name
+  icon: string | { _id: string; url: string } | undefined
   backgroundColor?: string
   onPress?: () => void
   selected?: boolean
@@ -23,10 +23,26 @@ export const CategoryCard = memo(function CategoryCard(props: CategoryCardProps)
     ? { borderColor: colors.palette.primary, borderWidth: 2 }
     : { borderColor: "transparent", borderWidth: 2 }
 
+  const isEmoji = (val: any) => {
+    if (typeof val === "string") {
+      return !val.includes("/") && !val.includes("http")
+    }
+    return false
+  }
+
+  const renderIcon = () => {
+    if (!icon) return null
+    if (isEmoji(icon)) {
+      return <Text text={icon as string} style={$emoji} />
+    }
+    const uri = typeof icon === "object" ? icon.url : (icon as string)
+    return <Image source={{ uri }} style={$image} />
+  }
+
   return (
     <TouchableOpacity activeOpacity={0.9} onPress={onPress} style={[$container, borderStyle]}>
       <View style={[$circle, { backgroundColor: bg }]}>
-        <Text text={icon} style={$emoji} />
+        {renderIcon()}
       </View>
       <Text text={label} size="xxs" preset="bold" numberOfLines={1} style={$label} />
     </TouchableOpacity>
@@ -62,4 +78,10 @@ const $emoji: TextStyle = {
 const $label: TextStyle = {
   textAlign: "center",
   color: "#191c1d",
+}
+
+const $image: ImageStyle = {
+  width: 40,
+  height: 40,
+  resizeMode: "contain",
 }

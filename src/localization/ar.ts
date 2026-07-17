@@ -36,10 +36,12 @@ const ar: Translations = {
     noFavorites: "لا توجد إعلانات في المفضلة بعد",
     noFavoritesDesc: "تصفح الإعلانات وانقر على رمز القلوب لحفظ المنتجات هنا.",
     today: "اليوم",
+    yesterday: "أمس",
     daysAgo: "أيام مضت",
     days: "أيام",
     views: "مشاهدة",
     hoursUnit: "ساعة",
+    noResults: "لم يتم العثور على نتائج",
   },
   welcome: {
     title: "مرحباً بك في سوق الفلاح",
@@ -190,6 +192,10 @@ const ar: Translations = {
     selectProductTypePlaceholder: "اختر نوع المنتج",
     selectUnitPlaceholder: "اختر وحدة القياس",
   },
+  editListing: {
+    title: "تعديل الإعلان",
+    saveBtn: "حفظ التغييرات",
+  },
   myListings: {
     title: "إعلاناتي",
     stats: {
@@ -209,6 +215,7 @@ const ar: Translations = {
     deleteTitle: "حذف الإعلان",
     deleteNotSupported: "الحذف غير مدعوم حالياً في السيرفر.",
     markSoldSuccess: "بصحتك! تم تغيير حالة الإعلان إلى مباع.",
+    updateSuccess: "تم تحديث إعلانك بنجاح!",
   },
   listingDetails: {
     title: "تفاصيل الإعلان",
@@ -275,6 +282,15 @@ const ar: Translations = {
     headUnit: "رأس",
     berkane: "بركان",
     settat: "سطات",
+  },
+  notifications: {
+    title: "الإشعارات",
+    markAllRead: "تحديد الكل كمقروء",
+    emptyTitle: "لا توجد إشعارات بعد",
+    emptyDesc: "عندما تتلقى تحديثات، ستظهر هنا.",
+    deleteTitle: "حذف الإشعار",
+    deleteConfirm: "هل أنت متأكد من أنك تريد إزالة هذا الإشعار؟",
+    deleteAction: "حذف",
   },
 }
 

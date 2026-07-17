@@ -9,6 +9,7 @@ import { LoginScreen } from "@/screens/LoginScreen"
 import { RegisterScreen } from "@/screens/RegisterScreen"
 import { VerifyPhoneScreen } from "@/screens/VerifyPhoneScreen"
 import { WelcomeScreen } from "@/screens/WelcomeScreen"
+import { EditListingScreen } from "@/screens/EditListingScreen"
 import { setAuthToken } from "@/services/api"
 import { useAppTheme } from "@/theme/context"
 
@@ -46,6 +47,7 @@ const AppStack = () => {
           <Stack.Screen name="MainTabs" component={MainTabNavigator} />
           <Stack.Screen name="ListingDetails" component={ListingDetailsScreen} />
           <Stack.Screen name="Notifications" component={NotificationsScreen} />
+          <Stack.Screen name="EditListing" component={EditListingScreen} />
         </>
       ) : (
         <>

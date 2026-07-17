@@ -1,12 +1,16 @@
-import React, { FC, memo, useCallback, useState, useEffect } from "react"
+import React, { FC, memo, useCallback, useState, useMemo } from "react"
 import { View, TouchableOpacity, ActivityIndicator, FlatList } from "react-native"
 import { Ionicons } from "@expo/vector-icons"
+import { useFocusEffect } from "@react-navigation/native"
 
 import { Screen } from "@/components/Screen"
 import { Text } from "@/components/Text"
 import type { MainTabScreenProps } from "@/navigation/navigationTypes"
-import { useCategoriesQuery, useUnreadNotificationsCountQuery } from "@/services/api/hooks"
-import { getListings } from "@/services/api/modules/listings"
+import {
+  useCategoriesQuery,
+  useUnreadNotificationsCountQuery,
+  useInfiniteListingsQuery,
+} from "@/services/api/hooks"
 import { useAppTheme } from "@/theme/context"
 
 import { $styles } from "./styles"
@@ -21,84 +25,64 @@ export const HomeScreen: FC<HomeScreenProps> = memo(function HomeScreen(props) {
   const styles = $styles(theme)
   const { navigation } = props
 
+  // Category filter state
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | undefined>(undefined)
-  const [page, setPage] = useState(1)
-  const [listings, setListings] = useState<any[]>([])
-  const [hasMore, setHasMore] = useState(true)
-  const [isRefreshing, setIsRefreshing] = useState(false)
-  const [isLoadingMore, setIsLoadingMore] = useState(false)
-  const [firstLoad, setFirstLoad] = useState(true)
 
+  // Fetch reference categories and unread notifications count via React Query
   const { data: categories, refetch: refetchCategories } = useCategoriesQuery()
   const { data: unreadCount } = useUnreadNotificationsCountQuery()
 
-  const fetchListings = useCallback(
-    async (pageNum: number, isRefresh: boolean) => {
-      if (pageNum === 1) {
-        setHasMore(true)
-        if (isRefresh) {
-          setIsRefreshing(true)
-        }
-      } else {
-        setIsLoadingMore(true)
-      }
+  // Fetch paginated feed listings using useInfiniteQuery under the hood
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading,
+    refetch: refetchListings,
+  } = useInfiniteListingsQuery({
+    categoryId: selectedCategoryId,
+  })
 
-      try {
-        const res = await getListings({
-          categoryId: selectedCategoryId,
-          page: pageNum,
-          limit: 10,
-        })
+  // Flatten the page queries returned by useInfiniteQuery
+  const listings = useMemo(() => {
+    return data?.pages.flat() || []
+  }, [data])
 
-        if (res.kind === "ok") {
-          const newListings = res.listings || []
-          if (pageNum === 1) {
-            setListings(newListings)
-          } else {
-            setListings((prev) => {
-              const existingIds = new Set(prev.map((item) => item._id))
-              const filtered = newListings.filter((item) => !existingIds.has(item._id))
-              return [...prev, ...filtered]
-            })
-          }
-          setHasMore(newListings.length === 10)
-        } else {
-          setHasMore(false)
-        }
-      } catch (error) {
-        console.error("Error fetching listings:", error)
-        setHasMore(false)
-      } finally {
-        setIsRefreshing(false)
-        setIsLoadingMore(false)
-        setFirstLoad(false)
-      }
-    },
-    [selectedCategoryId],
+  useFocusEffect(
+    useCallback(() => {
+      refetchListings()
+    }, [refetchListings]),
   )
 
-  // Fetch initial page on mount and when category changes
-  useEffect(() => {
-    setPage(1)
-    fetchListings(1, true)
-  }, [selectedCategoryId, fetchListings])
+  // Pull-to-refresh state and handler
+  const [isRefreshing, setIsRefreshing] = useState(false)
 
-  const handleRefresh = useCallback(() => {
-    setPage(1)
-    fetchListings(1, true)
-    refetchCategories()
-  }, [fetchListings, refetchCategories])
-
-  const handleLoadMore = useCallback(() => {
-    if (hasMore && !isLoadingMore && !isRefreshing) {
-      const nextPage = page + 1
-      setPage(nextPage)
-      fetchListings(nextPage, false)
+  const handleRefresh = useCallback(async () => {
+    setIsRefreshing(true)
+    try {
+      // Re-fetch all queries simultaneously
+      await Promise.all([refetchListings(), refetchCategories()])
+    } catch (error) {
+      console.error("Error refreshing home feed data:", error)
+    } finally {
+      setIsRefreshing(false)
     }
-  }, [page, hasMore, isLoadingMore, isRefreshing, fetchListings])
+  }, [refetchListings, refetchCategories])
+
+  // Fetch next page when reaching lists end
+  const handleLoadMore = useCallback(() => {
+    if (hasNextPage && !isFetchingNextPage && !isRefreshing) {
+      fetchNextPage()
+    }
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage, isRefreshing])
 
   const handleAddPress = useCallback(() => {
     navigation.navigate("Add")
+  }, [navigation])
+
+  const handleProfilePress = useCallback(() => {
+    navigation.navigate("MyAccount")
   }, [navigation])
 
   const handleListingDetails = useCallback(
@@ -130,8 +114,8 @@ export const HomeScreen: FC<HomeScreenProps> = memo(function HomeScreen(props) {
     <Screen safeAreaEdges={["top"]} contentContainerStyle={styles.container}>
       {/* Top App Bar */}
       <View style={styles.header}>
-        <TouchableOpacity style={styles.headerButton}>
-          <Ionicons name="menu-outline" size={28} color={colors.palette.primary} />
+        <TouchableOpacity style={styles.headerButton} onPress={handleProfilePress}>
+          <Ionicons name="person-circle-outline" size={28} color={colors.palette.primary} />
         </TouchableOpacity>
         <Text tx="home:title" style={styles.headerTitle} preset="display" />
         <TouchableOpacity
@@ -144,7 +128,7 @@ export const HomeScreen: FC<HomeScreenProps> = memo(function HomeScreen(props) {
       </View>
 
       {/* Main listings feed using FlatList */}
-      {firstLoad && listings.length === 0 ? (
+      {isLoading && listings.length === 0 ? (
         <ActivityIndicator size="large" color={colors.palette.primary} style={{ marginTop: 20 }} />
       ) : (
         <FlatList
@@ -159,7 +143,7 @@ export const HomeScreen: FC<HomeScreenProps> = memo(function HomeScreen(props) {
           onEndReached={handleLoadMore}
           onEndReachedThreshold={0.3}
           ListFooterComponent={() =>
-            isLoadingMore ? (
+            isFetchingNextPage ? (
               <ActivityIndicator
                 size="small"
                 color={colors.palette.primary}

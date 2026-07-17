@@ -54,13 +54,13 @@ export const Text = forwardRef(function Text(props: TextProps, ref: ForwardedRef
 })
 
 const $sizeStyles = {
-  xxl: { fontSize: 30, lineHeight: 40 } satisfies TextStyle, // display-lg
-  xl: { fontSize: 24, lineHeight: 32 } satisfies TextStyle, // headline-md
-  lg: { fontSize: 20, lineHeight: 28 } satisfies TextStyle, // headline-sm
-  md: { fontSize: 18, lineHeight: 26 } satisfies TextStyle, // body-lg
-  sm: { fontSize: 16, lineHeight: 24 } satisfies TextStyle, // body-md
-  xs: { fontSize: 14, lineHeight: 20 } satisfies TextStyle, // label-lg
-  xxs: { fontSize: 12, lineHeight: 16 } satisfies TextStyle, // label-md
+  xxl: { fontSize: 30, lineHeight: 45 } satisfies TextStyle, // display-lg
+  xl: { fontSize: 24, lineHeight: 37 } satisfies TextStyle, // headline-md
+  lg: { fontSize: 20, lineHeight: 32 } satisfies TextStyle, // headline-sm
+  md: { fontSize: 18, lineHeight: 30 } satisfies TextStyle, // body-lg
+  sm: { fontSize: 16, lineHeight: 29 } satisfies TextStyle, // body-md
+  xs: { fontSize: 14, lineHeight: 25 } satisfies TextStyle, // label-lg
+  xxs: { fontSize: 12, lineHeight: 19 } satisfies TextStyle, // label-md
 }
 
 const $fontWeightStyles = Object.entries(typography.primary).reduce((acc, [weight, fontFamily]) => {

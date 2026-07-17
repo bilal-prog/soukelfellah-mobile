@@ -34,10 +34,12 @@ const en = {
     noFavorites: "No favorites yet",
     noFavoritesDesc: "Browse listings and tap the heart icon to save products here.",
     today: "Today",
+    yesterday: "Yesterday",
     daysAgo: "days ago",
     days: "days",
     views: "views",
     hoursUnit: "hours",
+    noResults: "No results found",
   },
   welcome: {
     title: "Welcome to Souk El Fellah",
@@ -188,6 +190,10 @@ const en = {
     selectProductTypePlaceholder: "Select Product Type",
     selectUnitPlaceholder: "Select Measurement Unit",
   },
+  editListing: {
+    title: "Edit Listing",
+    saveBtn: "Save Changes",
+  },
   myListings: {
     title: "My Listings",
     stats: {
@@ -207,6 +213,7 @@ const en = {
     deleteTitle: "Delete Listing",
     deleteNotSupported: "Deleting is not supported yet on the server.",
     markSoldSuccess: "Congratulations! Listing marked as sold.",
+    updateSuccess: "Your listing has been updated successfully!",
   },
   listingDetails: {
     title: "Listing Details",
@@ -274,6 +281,15 @@ const en = {
     headUnit: "head",
     berkane: "Berkane",
     settat: "Settat",
+  },
+  notifications: {
+    title: "Notifications",
+    markAllRead: "Mark all as read",
+    emptyTitle: "No notifications yet",
+    emptyDesc: "When you receive updates, they'll show up here.",
+    deleteTitle: "Delete Notification",
+    deleteConfirm: "Are you sure you want to remove this notification?",
+    deleteAction: "Delete",
   },
 }
 

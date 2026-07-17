@@ -39,3 +39,28 @@ export const formatDate = (date: string, dateFormat?: string, options?: Options)
     return date
   }
 }
+
+export const formatListingDate = (dateStr: string) => {
+  if (!dateStr) return ""
+  try {
+    const { translate } = require("@/localization/translate")
+    const date = parseISO(dateStr)
+    const now = new Date()
+    
+    // Start of today (00:00:00)
+    const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+    // Start of yesterday (00:00:00)
+    const yesterdayStart = new Date(todayStart)
+    yesterdayStart.setDate(yesterdayStart.getDate() - 1)
+    
+    if (date.getTime() >= todayStart.getTime()) {
+      return translate("common:today")
+    } else if (date.getTime() >= yesterdayStart.getTime()) {
+      return translate("common:yesterday")
+    } else {
+      return formatDate(dateStr)
+    }
+  } catch {
+    return dateStr
+  }
+}

@@ -25,6 +25,7 @@ export type AppStackParamList = {
   MainTabs: NavigatorScreenParams<MainTabParamList>
   ListingDetails: { listingId: string }
   Notifications: undefined
+  EditListing: { listingId: string }
 }
 
 export type AppStackScreenProps<T extends keyof AppStackParamList> = NativeStackScreenProps<

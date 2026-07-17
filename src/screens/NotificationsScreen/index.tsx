@@ -1,4 +1,4 @@
-import React, { FC, useMemo, useCallback, memo, useState, useEffect } from "react"
+import React, { FC, useMemo, useCallback, memo } from "react"
 import { View, TouchableOpacity, ActivityIndicator, Alert } from "react-native"
 import { FlashList } from "@shopify/flash-list"
 import { Ionicons } from "@expo/vector-icons"
@@ -6,9 +6,10 @@ import { useQueryClient } from "@tanstack/react-query"
 
 import { Screen } from "@/components/Screen"
 import { Text } from "@/components/Text"
+import { translate } from "@/localization/translate"
 import { AppStackScreenProps } from "@/navigation/navigationTypes"
 import {
-  useNotificationsQuery,
+  useInfiniteNotificationsQuery,
   useMarkNotificationReadMutation,
   useDeleteNotificationMutation,
 } from "@/services/api/hooks"
@@ -17,6 +18,7 @@ import { ApiNotification } from "@/services/api/modules/notifications"
 import { NotificationItem } from "./components/NotificationItem"
 import { $styles } from "./styles"
 import { useAppTheme } from "@/theme/context"
+import { isRTL } from "@/localization"
 
 export const NotificationsScreen: FC<AppStackScreenProps<"Notifications">> = memo(
   function NotificationsScreen({ navigation }) {
@@ -25,28 +27,15 @@ export const NotificationsScreen: FC<AppStackScreenProps<"Notifications">> = mem
     const colors = theme.colors
     const queryClient = useQueryClient()
     const LIMIT = 20
-    const [offset, setOffset] = useState(0)
-    const [hasMore, setHasMore] = useState(true)
-    const [notifications, setNotifications] = useState<ApiNotification[]>([])
 
-    // Fetch user notifications query
-    const { data, isFetching, refetch, isError } = useNotificationsQuery(LIMIT, offset)
-    const loading = isFetching && offset === 0
-    const loadingMore = isFetching && offset > 0
+    // Fetch user notifications query via React Query infinite query
+    const { data, isFetching, refetch, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
+      useInfiniteNotificationsQuery(LIMIT)
 
-    useEffect(() => {
-      if (data?.notifications) {
-        if (offset === 0) {
-          setNotifications(data.notifications)
-        } else {
-          setNotifications((prev) => [...prev, ...data.notifications])
-        }
-
-        const total = data.meta?.total ?? data.notifications.length
-        const currentCount = offset + data.notifications.length
-        setHasMore(currentCount < total && data.notifications.length === LIMIT)
-      }
-    }, [data, offset])
+    // Flat list of notifications computed dynamically
+    const notifications = useMemo(() => {
+      return data?.pages.flatMap((page) => page.notifications) || []
+    }, [data])
 
     const markReadMutation = useMarkNotificationReadMutation()
     const deleteMutation = useDeleteNotificationMutation()
@@ -59,7 +48,7 @@ export const NotificationsScreen: FC<AppStackScreenProps<"Notifications">> = mem
           queryClient.invalidateQueries({ queryKey: ["unreadNotificationsCount"] })
         },
         onError: () => {
-          Alert.alert("Error", "Could not mark notifications as read.")
+          Alert.alert(translate("common:error"), "Could not mark notifications as read.")
         },
       })
     }, [markReadMutation, queryClient])
@@ -87,25 +76,33 @@ export const NotificationsScreen: FC<AppStackScreenProps<"Notifications">> = mem
     // Soft delete confirmation dialog
     const handleDelete = useCallback(
       (id: string) => {
-        Alert.alert("Delete Notification", "Are you sure you want to remove this notification?", [
-          { text: "Cancel", style: "cancel" },
-          {
-            text: "Delete",
-            style: "destructive",
-            onPress: () => {
-              deleteMutation.mutate(id, {
-                onSuccess: () => {
-                  queryClient.invalidateQueries({ queryKey: ["notifications"] })
-                  queryClient.invalidateQueries({ queryKey: ["unreadNotificationsCount"] })
-                },
-              })
+        Alert.alert(
+          translate("notifications:deleteTitle"),
+          translate("notifications:deleteConfirm"),
+          [
+            { text: translate("common:cancel"), style: "cancel" },
+            {
+              text: translate("notifications:deleteAction"),
+              style: "destructive",
+              onPress: () => {
+                deleteMutation.mutate(id, {
+                  onSuccess: () => {
+                    queryClient.invalidateQueries({ queryKey: ["notifications"] })
+                    queryClient.invalidateQueries({ queryKey: ["unreadNotificationsCount"] })
+                  },
+                  onError: () => {
+                    Alert.alert(translate("common:error"), "Could not delete notification.")
+                  },
+                })
+              },
             },
-          },
-        ])
+          ],
+        )
       },
       [deleteMutation, queryClient],
     )
 
+    // Count of unread notifications from local computed array
     const unreadCount = useMemo(
       () => notifications.filter((n) => !n.isRead).length,
       [notifications],
@@ -128,21 +125,27 @@ export const NotificationsScreen: FC<AppStackScreenProps<"Notifications">> = mem
       navigation.goBack()
     }, [navigation])
 
+    const loading = isLoading && notifications.length === 0
+
     return (
       <Screen preset="fixed" safeAreaEdges={["top"]} contentContainerStyle={styles.container}>
         <View style={styles.header}>
           <View style={styles.headerLeft}>
             <TouchableOpacity onPress={handleGoBack} style={styles.backButton}>
-              <Ionicons name="arrow-back" size={24} color={colors.text} />
+              <Ionicons
+                name={isRTL ? "arrow-forward" : "arrow-back"}
+                size={24}
+                color={colors.text}
+              />
             </TouchableOpacity>
-            <Text text="Notifications" style={styles.headerTitle} />
+            <Text tx="notifications:title" style={styles.headerTitle} />
           </View>
           {unreadCount > 0 && (
             <TouchableOpacity onPress={handleMarkAllRead} disabled={markReadMutation.isPending}>
               {markReadMutation.isPending && !markReadMutation.variables ? (
                 <ActivityIndicator size="small" color={colors.tint} />
               ) : (
-                <Text text="Mark all as read" style={styles.headerAction} />
+                <Text tx="notifications:markAllRead" style={styles.headerAction} />
               )}
             </TouchableOpacity>
           )}
@@ -160,11 +163,8 @@ export const NotificationsScreen: FC<AppStackScreenProps<"Notifications">> = mem
               color={colors.textDim}
               style={{ opacity: 0.5 }}
             />
-            <Text text="No notifications yet" style={styles.emptyText} />
-            <Text
-              text="When you receive updates, they'll show up here."
-              style={styles.emptySubText}
-            />
+            <Text tx="notifications:emptyTitle" style={styles.emptyText} />
+            <Text tx="notifications:emptyDesc" style={styles.emptySubText} />
           </View>
         ) : (
           <FlashList
@@ -172,15 +172,12 @@ export const NotificationsScreen: FC<AppStackScreenProps<"Notifications">> = mem
             keyExtractor={(item) => item._id}
             renderItem={renderItem}
             contentContainerStyle={styles.listContent}
-            onRefresh={() => {
-              setOffset(0)
-              setHasMore(true)
-              refetch()
-            }}
-            refreshing={loading}
+            onRefresh={refetch}
+            refreshing={isFetching && !isFetchingNextPage}
             onEndReached={() => {
-              if (!hasMore || isFetching || loadingMore || isError) return
-              setOffset((prev) => prev + LIMIT)
+              if (hasNextPage && !isFetchingNextPage) {
+                fetchNextPage()
+              }
             }}
             onEndReachedThreshold={0.5}
             showsVerticalScrollIndicator={false}

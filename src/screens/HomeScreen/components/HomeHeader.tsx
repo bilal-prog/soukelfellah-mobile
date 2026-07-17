@@ -15,12 +15,12 @@ export interface HomeHeaderProps {
   onSelectCategory?: (id: string | undefined) => void
 }
 
-const defaultMockCategories = [
-  { _id: "mock-cat-1", name: "Produce", slug: "produce" },
-  { _id: "mock-cat-2", name: "Machinery", slug: "machinery" },
-  { _id: "mock-cat-3", name: "Livestock", slug: "livestock" },
-  { _id: "mock-cat-4", name: "Fertilizers", slug: "fertilizers" },
-  { _id: "mock-cat-5", name: "Seeds", slug: "seeds" },
+const defaultMockCategories: ApiCategory[] = [
+  { _id: "mock-cat-1", name: "Produce", slug: "produce", icon: undefined },
+  { _id: "mock-cat-2", name: "Machinery", slug: "machinery", icon: undefined },
+  { _id: "mock-cat-3", name: "Livestock", slug: "livestock", icon: undefined },
+  { _id: "mock-cat-4", name: "Fertilizers", slug: "fertilizers", icon: undefined },
+  { _id: "mock-cat-5", name: "Seeds", slug: "seeds", icon: undefined },
 ]
 
 export const HomeHeader = memo(function HomeHeader({
@@ -46,6 +46,17 @@ export const HomeHeader = memo(function HomeHeader({
     if (lower.includes("fertiliz")) return "💊"
     if (lower.includes("seed")) return "🧺"
     return "🌾"
+  }
+
+  const hasIconFile = (icon: any) => {
+    if (!icon) return false
+    if (typeof icon === "object" && icon.url) return true
+    if (typeof icon === "string") {
+      const isObjectId = /^[0-9a-fA-F]{24}$/.test(icon)
+      const isUrl = icon.startsWith("http") || icon.startsWith("/")
+      return isObjectId || isUrl
+    }
+    return false
   }
 
   const displayCategories = categories && categories.length > 0 ? categories : defaultMockCategories
@@ -74,7 +85,7 @@ export const HomeHeader = memo(function HomeHeader({
               <CategoryCard
                 key={cat._id}
                 label={cat.name}
-                icon={getCategoryEmoji(cat.slug)}
+                icon={hasIconFile(cat.icon) ? cat.icon : getCategoryEmoji(cat.slug)}
                 selected={isSelected}
                 onPress={() => {
                   if (onSelectCategory) {

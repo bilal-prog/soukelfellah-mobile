@@ -1,12 +1,14 @@
-import { useQuery, useMutation } from "@tanstack/react-query"
+import { useQuery, useMutation, useInfiniteQuery } from "@tanstack/react-query"
 
 import {
   login,
+  logout,
   register,
   verifyOtp,
   getListings,
   getListingDetails,
   createListing,
+  updateListing,
   markListingSold,
   uploadListingImage,
   getLocations,
@@ -65,6 +67,16 @@ export const useVerifyOtpMutation = () => {
   })
 }
 
+export const useLogoutMutation = () => {
+  return useMutation({
+    mutationFn: async (refreshToken: string) => {
+      const res = await logout(refreshToken)
+      if (res.kind === "failure") throw new Error(extractErrorMessage(res.error))
+      return res
+    },
+  })
+}
+
 // --- Listings Hooks ---
 
 export const useListingsQuery = (params?: GetListingsParams, options?: { enabled?: boolean }) => {
@@ -74,6 +86,25 @@ export const useListingsQuery = (params?: GetListingsParams, options?: { enabled
       const res = await getListings(params)
       if (res.kind === "failure") throw new Error(extractErrorMessage(res.error))
       return res.listings
+    },
+    ...options,
+  })
+}
+
+export const useInfiniteListingsQuery = (
+  params?: Omit<GetListingsParams, "page">,
+  options?: { enabled?: boolean },
+) => {
+  return useInfiniteQuery({
+    queryKey: ["listings", "infinite", params],
+    queryFn: async ({ pageParam }) => {
+      const res = await getListings({ ...params, page: pageParam as number, limit: 10 })
+      if (res.kind === "failure") throw new Error(extractErrorMessage(res.error))
+      return res.listings
+    },
+    initialPageParam: 1,
+    getNextPageParam: (lastPage, allPages) => {
+      return lastPage && lastPage.length === 10 ? allPages.length + 1 : undefined
     },
     ...options,
   })
@@ -95,6 +126,16 @@ export const useCreateListingMutation = () => {
   return useMutation({
     mutationFn: async (params: CreateListingParams) => {
       const res = await createListing(params)
+      if (res.kind === "failure") throw new Error(extractErrorMessage(res.error))
+      return res.listing
+    },
+  })
+}
+
+export const useUpdateListingMutation = () => {
+  return useMutation({
+    mutationFn: async ({ id, params }: { id: string; params: CreateListingParams }) => {
+      const res = await updateListing(id, params)
       if (res.kind === "failure") throw new Error(extractErrorMessage(res.error))
       return res.listing
     },
@@ -191,6 +232,24 @@ export const useNotificationsQuery = (limit = 20, offset = 0, options?: { enable
       const res = await getNotifications(limit, offset)
       if (res.kind === "failure") throw new Error(extractErrorMessage(res.error))
       return res
+    },
+    ...options,
+  })
+}
+
+export const useInfiniteNotificationsQuery = (limit = 20, options?: { enabled?: boolean }) => {
+  return useInfiniteQuery({
+    queryKey: ["notifications", "infinite", limit],
+    queryFn: async ({ pageParam }) => {
+      const res = await getNotifications(limit, pageParam as number)
+      if (res.kind === "failure") throw new Error(extractErrorMessage(res.error))
+      return res
+    },
+    initialPageParam: 0,
+    getNextPageParam: (lastPage, allPages) => {
+      const currentOffset = allPages.length * limit
+      const total = lastPage.meta?.total ?? 0
+      return currentOffset < total && lastPage.notifications.length === limit ? currentOffset : undefined
     },
     ...options,
   })

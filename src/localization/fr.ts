@@ -37,10 +37,12 @@ const fr: Translations = {
     noFavoritesDesc:
       "Explorez les annonces et cliquez sur le cœur pour enregistrer vos produits ici.",
     today: "Aujourd'hui",
+    yesterday: "Hier",
     daysAgo: "jours",
     days: "jours",
     views: "vues",
     hoursUnit: "heures",
+    noResults: "Aucun résultat trouvé",
   },
   welcome: {
     title: "Bienvenue sur Souk El Fellah",
@@ -154,7 +156,8 @@ const fr: Translations = {
     permissionDeniedTitle: "Permission Refusée",
     permissionDeniedMsg: "L'accès aux photos est requis pour choisir une image.",
     cameraPermissionDeniedTitle: "Permission caméra refusée",
-    cameraPermissionDeniedMsg: "L'accès à l'appareil photo est requis pour prendre des photos de vos articles.",
+    cameraPermissionDeniedMsg:
+      "L'accès à l'appareil photo est requis pour prendre des photos de vos articles.",
     addPhotoSourceTitle: "Ajouter une photo",
     cameraOption: "Prendre une photo",
     galleryOption: "Choisir depuis la galerie",
@@ -191,6 +194,10 @@ const fr: Translations = {
     selectProductTypePlaceholder: "Choisir le Type de Produit",
     selectUnitPlaceholder: "Choisir l'Unité de Mesure",
   },
+  editListing: {
+    title: "Modifier l'annonce",
+    saveBtn: "Enregistrer les modifications",
+  },
   myListings: {
     title: "Mes Annonces",
     stats: {
@@ -210,6 +217,7 @@ const fr: Translations = {
     deleteTitle: "Supprimer l'annonce",
     deleteNotSupported: "La suppression n'est pas encore supportée par le serveur.",
     markSoldSuccess: "Félicitations! L'annonce a été marquée comme vendue.",
+    updateSuccess: "Votre annonce a été mise à jour avec succès !",
   },
   listingDetails: {
     title: "Détails de l'annonce",
@@ -277,6 +285,15 @@ const fr: Translations = {
     headUnit: "tête",
     berkane: "Berkane",
     settat: "Settat",
+  },
+  notifications: {
+    title: "Notifications",
+    markAllRead: "Tout marquer comme lu",
+    emptyTitle: "Aucune notification pour le moment",
+    emptyDesc: "Lorsque vous recevrez des mises à jour, elles s'afficheront ici.",
+    deleteTitle: "Supprimer la notification",
+    deleteConfirm: "Êtes-vous sûr de vouloir supprimer cette notification ?",
+    deleteAction: "Supprimer",
   },
 }
 

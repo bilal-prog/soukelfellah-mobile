@@ -15,6 +15,7 @@ import { useAuth } from "@/context/AuthContext"
 import { isRTL } from "@/localization"
 import { translate } from "@/localization/translate"
 import { useAppTheme } from "@/theme/context"
+import { formatListingDate } from "@/utils/formatDate"
 
 import { Text } from "./Text"
 
@@ -32,6 +33,7 @@ export interface ListingCardProps {
   whatsapp?: string
   isNew?: boolean
   rating?: number
+  createdAt?: string
   onPress?: () => void
 }
 
@@ -50,6 +52,7 @@ export const ListingCard = memo(function ListingCard(props: ListingCardProps) {
     whatsapp,
     isNew,
     rating,
+    createdAt,
     onPress,
   } = props
   const { theme } = useAppTheme()
@@ -89,7 +92,7 @@ export const ListingCard = memo(function ListingCard(props: ListingCardProps) {
     checkAuthAndExecute(() => {
       const waPhone = whatsapp || phone
       const formattedPhone = waPhone.startsWith("0") ? `+212${waPhone.slice(1)}` : waPhone
-      const message = translate("welcome:title")
+      const message = `${translate("common:whatsappMessage")}"${title}"`
       Linking.openURL(`whatsapp://send?phone=${formattedPhone}&text=${encodeURIComponent(message)}`)
     })
   }, [checkAuthAndExecute, phone, whatsapp])
@@ -158,18 +161,56 @@ export const ListingCard = memo(function ListingCard(props: ListingCardProps) {
 
       {/* Info Content */}
       <View style={$infoContent}>
-        <View style={[$row, { alignItems: "center", gap: 4, flexWrap: "wrap", marginBottom: spacing.xxs }]}>
+        <View
+          style={[
+            $row,
+            { alignItems: "center", gap: 4, flexWrap: "wrap", marginBottom: spacing.xxs },
+          ]}
+        >
           {listingDirection === "BUY" ? (
-            <View style={{ backgroundColor: colors.palette.secondary, paddingHorizontal: 6, paddingVertical: 2, borderRadius: 4 }}>
-              <Text text={translate("addListing:directionBuy")} size="xxs" style={{ color: "white", fontWeight: "bold" }} />
+            <View
+              style={{
+                backgroundColor: colors.palette.secondary,
+                paddingHorizontal: 6,
+                paddingVertical: 2,
+                borderRadius: 4,
+              }}
+            >
+              <Text
+                text={translate("addListing:directionBuy")}
+                size="xxs"
+                style={{ color: "white", fontWeight: "bold" }}
+              />
             </View>
           ) : purpose === "RENT" ? (
-            <View style={{ backgroundColor: colors.palette.tertiary, paddingHorizontal: 6, paddingVertical: 2, borderRadius: 4 }}>
-              <Text text={translate("addListing:purposeRent")} size="xxs" style={{ color: "white", fontWeight: "bold" }} />
+            <View
+              style={{
+                backgroundColor: colors.palette.tertiary,
+                paddingHorizontal: 6,
+                paddingVertical: 2,
+                borderRadius: 4,
+              }}
+            >
+              <Text
+                text={translate("addListing:purposeRent")}
+                size="xxs"
+                style={{ color: "white", fontWeight: "bold" }}
+              />
             </View>
           ) : (
-            <View style={{ backgroundColor: colors.palette.primary, paddingHorizontal: 6, paddingVertical: 2, borderRadius: 4 }}>
-              <Text text={translate("addListing:directionSell")} size="xxs" style={{ color: "white", fontWeight: "bold" }} />
+            <View
+              style={{
+                backgroundColor: colors.palette.primary,
+                paddingHorizontal: 6,
+                paddingVertical: 2,
+                borderRadius: 4,
+              }}
+            >
+              <Text
+                text={translate("addListing:directionSell")}
+                size="xxs"
+                style={{ color: "white", fontWeight: "bold" }}
+              />
             </View>
           )}
           <Text
@@ -181,36 +222,55 @@ export const ListingCard = memo(function ListingCard(props: ListingCardProps) {
           />
         </View>
 
-        {/* Location Row */}
-        <View style={[$row, { marginVertical: spacing.xxs }]}>
-          <Ionicons name="location-outline" size={14} color={colors.palette.onSurfaceVariant} />
-          <Text
-            text={locationName}
-            size="xxs"
-            style={{ color: colors.palette.onSurfaceVariant, marginHorizontal: spacing.xxs }}
-          />
+        {/* Location & Time Row */}
+        <View style={[$row, { justifyContent: "space-between", marginVertical: spacing.xxs }]}>
+          <View style={$row}>
+            <Ionicons name="location-outline" size={14} color={colors.palette.onSurfaceVariant} />
+            <Text
+              text={locationName}
+              size="xxs"
+              numberOfLines={1}
+              style={{
+                color: colors.palette.onSurfaceVariant,
+                marginHorizontal: spacing.xxs,
+                width: 160,
+              }}
+            />
+          </View>
+          {!!createdAt && (
+            <View style={$row}>
+              <Ionicons name="time-outline" size={14} color={colors.palette.onSurfaceVariant} />
+              <Text
+                text={formatListingDate(createdAt)}
+                size="xxs"
+                style={{ color: colors.palette.onSurfaceVariant, marginHorizontal: spacing.xxs }}
+              />
+            </View>
+          )}
         </View>
 
         {/* Pricing Row */}
-        <View style={[$row, { justifyContent: "space-between", alignItems: "center" }]}>
-          <Text preset="bold" size="sm" style={{ color: colors.palette.primary }}>
-            {priceType === "CONTACT" ? (
-              translate("addListing:priceTypeContact")
-            ) : (
-              <>
-                {price}{" "}
-                <Text
-                  text={
-                    priceType === "NEGOTIABLE"
-                      ? `${translate("common:currency")}${unit ? `/${unit}` : ""} (${translate("addListing:priceTypeNegotiable")})`
-                      : `${translate("common:currency")}${unit ? `/${unit}` : ""}`
-                  }
-                  size="xxs"
-                />
-              </>
-            )}
-          </Text>
-        </View>
+        {(priceType === "CONTACT" || (price !== undefined && price !== null)) && (
+          <View style={[$row, { justifyContent: "space-between", alignItems: "center" }]}>
+            <Text preset="bold" size="sm" style={{ color: colors.palette.primary }}>
+              {priceType === "CONTACT" ? (
+                translate("addListing:priceTypeContact")
+              ) : (
+                <>
+                  {price}{" "}
+                  <Text
+                    text={
+                      priceType === "NEGOTIABLE"
+                        ? `${translate("common:currency")}${unit ? `/${unit}` : ""} (${translate("addListing:priceTypeNegotiable")})`
+                        : `${translate("common:currency")}${unit ? `/${unit}` : ""}`
+                    }
+                    size="xxs"
+                  />
+                </>
+              )}
+            </Text>
+          </View>
+        )}
 
         {/* Contact Actions */}
         <View style={[$actionRow, { marginTop: spacing.xs }]}>
