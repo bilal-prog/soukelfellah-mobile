@@ -291,7 +291,53 @@ const en = {
     deleteConfirm: "Are you sure you want to remove this notification?",
     deleteAction: "Delete",
   },
+  version: {
+    maintenanceTitle: "App Under Maintenance",
+    maintenanceMessage: "We are currently performing scheduled maintenance to improve our services. Please check back soon.",
+    forceUpdateTitle: "Mandatory Update Required",
+    forceUpdateMessage: "A new version of Souk El Fellah is available. You must update the app to continue using it.",
+    optionalUpdateTitle: "New Update Available",
+    optionalUpdateMessage: "A new version of Souk El Fellah is available. Would you like to update now?",
+    updateNow: "Update Now",
+    later: "Later",
+    releaseNotes: "What's New:",
+    currentVersion: "Current Version",
+    latestVersion: "New Version",
+  },
+  legal: {
+    title: "Terms & Legal Notices",
+    cguTab: "CGU",
+    cgvTab: "CGV",
+    privacyTab: "Privacy Policy",
+    mentionsTab: "Legal Notice",
+    lastUpdated: "Last updated:",
+    registerAcceptancePrefix: "By registering, you accept our ",
+    termsLink: "Terms of Use (CGU)",
+    and: " and ",
+    privacyLink: "Privacy Policy",
+    termsAndPrivacy: "Terms & Privacy",
+    legalNotice: "Legal Notices",
+  },
+  forgotPassword: {
+    title: "Forgot Password?",
+    subtitle: "Enter your phone number to contact our support on WhatsApp and reset your password.",
+    phonePlaceholder: "06 XX XX XX XX",
+    whatsappBtn: "Reset via WhatsApp",
+    callBtn: "Or Call Support Directly",
+    supportNote: "Our team will verify your account and assist you in setting a new password.",
+    deleteAccountTitle: "Delete My Account",
+    deleteAccountConfirm: "Are you sure you want to delete your account permanently? All your active listings and data will be removed. This action cannot be undone.",
+    deleteAccountSuccess: "Account deleted successfully.",
+  },
+  network: {
+    noConnection: "No Internet Connection",
+    noConnectionDesc: "Please check your network settings and try again",
+    restored: "Internet Connection Restored",
+  },
 }
 
+
 export default en
+
+
 export type Translations = typeof en

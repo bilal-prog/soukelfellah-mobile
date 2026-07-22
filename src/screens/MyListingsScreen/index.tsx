@@ -15,6 +15,7 @@ import {
   useUnreadNotificationsCountQuery,
 } from "@/services/api/hooks"
 import { useAppTheme } from "@/theme/context"
+import { deleteAccount } from "@/services/api/modules/auth"
 
 import { MyListingItem } from "./components/MyListingItem"
 import { MyListingsEmptyState } from "./components/MyListingsEmptyState"
@@ -59,8 +60,34 @@ export const MyListingsScreen: FC<MyListingsScreenProps> = memo(function MyListi
   const handleLogout = useCallback(() => {
     Alert.alert(translate("myListings:logoutTitle"), translate("myListings:logoutConfirm"), [
       { text: translate("common:cancel"), style: "cancel" },
-      { text: translate("myListings:logoutAction"), style: "destructive", onPress: () => logout() },
+      {
+        text: translate("common:confirm"),
+        style: "destructive",
+        onPress: () => logout(),
+      },
     ])
+  }, [logout])
+
+  const handleDeleteAccount = useCallback(() => {
+    Alert.alert(
+      translate("forgotPassword:deleteAccountTitle"),
+      translate("forgotPassword:deleteAccountConfirm"),
+      [
+        { text: translate("common:cancel"), style: "cancel" },
+        {
+          text: translate("common:delete"),
+          style: "destructive",
+          onPress: async () => {
+            const res = await deleteAccount()
+            if (res.kind === "ok") {
+              await logout()
+            } else {
+              Alert.alert(translate("common:error"), res.error || "Could not delete account")
+            }
+          },
+        },
+      ],
+    )
   }, [logout])
 
   const handleDelete = useCallback((_id: string) => {
@@ -146,19 +173,36 @@ export const MyListingsScreen: FC<MyListingsScreenProps> = memo(function MyListi
     <Screen preset="fixed" safeAreaEdges={["top"]} style={styles.container}>
       {/* Top App Bar */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={handleLogout}>
-          <Ionicons name="log-out-outline" size={26} color={colors.palette.error} />
-        </TouchableOpacity>
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 14 }}>
+          <TouchableOpacity onPress={handleLogout}>
+            <Ionicons name="log-out-outline" size={26} color={colors.palette.error} />
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={handleDeleteAccount}>
+            <Ionicons name="trash-outline" size={24} color={colors.palette.error} />
+          </TouchableOpacity>
+        </View>
+
         <Text tx="myListings:title" style={styles.headerTitle} preset="bold" />
 
-        <TouchableOpacity
-          style={styles.headerButton}
-          onPress={() => navigation.navigate("Notifications")}
-        >
-          <Ionicons name="notifications-outline" size={26} color={colors.palette.primary} />
-          {!!unreadCount && unreadCount > 0 && <View style={styles.notificationBadge} />}
-        </TouchableOpacity>
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("Legal", { type: "cgu" })}
+            style={styles.headerButton}
+          >
+            <Ionicons name="document-text-outline" size={24} color={colors.palette.primary} />
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.headerButton}
+            onPress={() => navigation.navigate("Notifications")}
+          >
+            <Ionicons name="notifications-outline" size={26} color={colors.palette.primary} />
+            {!!unreadCount && unreadCount > 0 && <View style={styles.notificationBadge} />}
+          </TouchableOpacity>
+        </View>
       </View>
+
 
       {/* Main dashboard list utilizing FlatList */}
       {isLoading ? (

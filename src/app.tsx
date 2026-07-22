@@ -8,9 +8,14 @@ import { initialWindowMetrics, SafeAreaProvider } from "react-native-safe-area-c
 
 import { AuthProvider } from "./context/AuthContext"
 import { NotificationProvider, useNotification } from "./context/NotificationContext"
+import { VersionProvider, useVersion } from "./context/VersionContext"
 import { initI18n } from "./localization"
 import { AppNavigator } from "./navigation/AppNavigator"
+import { MaintenanceScreen } from "./screens/MaintenanceScreen"
+import { UpdateModal } from "./components/UpdateModal"
+import { NetworkBanner } from "./components/NetworkBanner"
 import { ThemeProvider } from "./theme/context"
+
 import { customFontsToLoad } from "./theme/typography"
 import { loadDateFnsLocale } from "./utils/formatDate"
 
@@ -50,9 +55,11 @@ export function App() {
         <QueryClientProvider client={queryClient}>
           <AuthProvider>
             <ThemeProvider>
-              <NotificationProvider>
-                <AppContent />
-              </NotificationProvider>
+              <VersionProvider>
+                <NotificationProvider>
+                  <AppContent />
+                </NotificationProvider>
+              </VersionProvider>
             </ThemeProvider>
           </AuthProvider>
         </QueryClientProvider>
@@ -63,6 +70,15 @@ export function App() {
 
 function AppContent() {
   const { setNotification } = useNotification()
+  const {
+    isMaintenance,
+    isForceUpdate,
+    isOptionalUpdate,
+    latestVersion,
+    dismissOptionalUpdate,
+    checkVersion,
+    isChecking,
+  } = useVersion()
 
   useEffect(() => {
     // 1. Request push notification permissions on startup
@@ -95,6 +111,21 @@ function AppContent() {
     }
   }, [setNotification])
 
-  return <AppNavigator />
+  if (isMaintenance) {
+    return <MaintenanceScreen onRetry={checkVersion} isChecking={isChecking} />
+  }
+
+  return (
+    <>
+      <NetworkBanner />
+      <AppNavigator />
+      <UpdateModal
+        visible={isForceUpdate || isOptionalUpdate}
+        isForceUpdate={isForceUpdate}
+        latestVersion={latestVersion}
+        onDismiss={dismissOptionalUpdate}
+      />
+    </>
+  )
 }
 export default App

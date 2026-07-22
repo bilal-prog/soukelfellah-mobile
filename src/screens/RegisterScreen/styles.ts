@@ -86,4 +86,26 @@ export const $styles = (theme: Theme) => ({
   loginLinkWrapper: {
     marginHorizontal: 4,
   } as ViewStyle,
+
+  legalDisclaimerContainer: {
+    marginTop: 6,
+    marginBottom: 4,
+    paddingHorizontal: 4,
+  } as ViewStyle,
+
+  legalDisclaimerText: {
+    fontSize: 12,
+    lineHeight: 18,
+    color: theme.colors.palette.onSurfaceVariant,
+    textAlign: "center",
+  } as TextStyle,
+
+  legalLink: {
+    fontSize: 12,
+    lineHeight: 18,
+    color: theme.colors.palette.primary,
+    fontWeight: "bold",
+    textDecorationLine: "underline",
+  } as TextStyle,
 })
+

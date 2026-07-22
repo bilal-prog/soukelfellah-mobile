@@ -86,3 +86,13 @@ export const verifyOtp = async (phone: string, otp: string) => {
   }
   return { kind: "ok", data: response.data!.data } as const
 }
+
+export const deleteAccount = async () => {
+  const response = await apiClient.delete<{ success: boolean; message: string }>("/api/users/me")
+  if (!response.ok) {
+    const errorData = response.data as any
+    return { kind: "failure", error: errorData?.message || response.problem } as const
+  }
+  return { kind: "ok", data: response.data } as const
+}
+

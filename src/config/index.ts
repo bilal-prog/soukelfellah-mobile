@@ -1,11 +1,14 @@
 
-const API_URL_DEV = "https://illusion-chubby-backtalk.ngrok-free.dev"
+const API_URL_PROD = "https://soukelfellah-backend.fly.dev"
 
 const Config = {
-  // We can swap this with an ngrok url or environment variable when testing on a physical device.
-  API_URL: API_URL_DEV,
+  // Production Fly.io URL or custom env variable
+  API_URL: process.env.EXPO_PUBLIC_API_URL || API_URL_PROD,
+  SUPPORT_WHATSAPP: process.env.EXPO_PUBLIC_SUPPORT_WHATSAPP || "212722957826",
+  SUPPORT_PHONE: process.env.EXPO_PUBLIC_SUPPORT_PHONE || "+212722957826",
   catchErrors: "always" as const,
   exitRoutes: ["Welcome"],
 }
 
 export default Config
+

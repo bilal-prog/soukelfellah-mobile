@@ -10,6 +10,8 @@ import { RegisterScreen } from "@/screens/RegisterScreen"
 import { VerifyPhoneScreen } from "@/screens/VerifyPhoneScreen"
 import { WelcomeScreen } from "@/screens/WelcomeScreen"
 import { EditListingScreen } from "@/screens/EditListingScreen"
+import { LegalScreen } from "@/screens/LegalScreen"
+import { ForgotPasswordScreen } from "@/screens/ForgotPasswordScreen"
 import { setAuthToken } from "@/services/api"
 import { useAppTheme } from "@/theme/context"
 
@@ -57,9 +59,13 @@ const AppStack = () => {
           <Stack.Screen name="VerifyPhone" component={VerifyPhoneScreen} />
         </>
       )}
+      <Stack.Screen name="Legal" component={LegalScreen} />
+      <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
     </Stack.Navigator>
   )
 }
+
+
 
 export const AppNavigator = (props: NavigationProps) => {
   const { navigationTheme } = useAppTheme()

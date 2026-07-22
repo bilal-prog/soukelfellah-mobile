@@ -221,8 +221,30 @@ export const RegisterScreen: FC<RegisterScreenProps> = memo(function RegisterScr
             containerStyle={styles.inputGroup}
           />
 
+          {/* Legal Acceptance Disclaimer */}
+          <View style={styles.legalDisclaimerContainer}>
+            <Text style={styles.legalDisclaimerText} size="xs">
+              <Text tx="legal:registerAcceptancePrefix" style={styles.legalDisclaimerText} size="xs" />
+              <Text
+                tx="legal:termsLink"
+                style={styles.legalLink}
+                size="xs"
+                onPress={() => navigation.navigate("Legal", { type: "cgu" })}
+              />
+              <Text tx="legal:and" style={styles.legalDisclaimerText} size="xs" />
+              <Text
+                tx="legal:privacyLink"
+                style={styles.legalLink}
+                size="xs"
+                onPress={() => navigation.navigate("Legal", { type: "privacy" })}
+              />
+              .
+            </Text>
+          </View>
+
           {/* Submit Action */}
           <Button
+
             preset="primary"
             style={styles.registerBtn}
             onPress={handleRegister}

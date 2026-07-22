@@ -3,4 +3,5 @@ export * from "./listings"
 export * from "./locations"
 export * from "./notifications"
 export * from "./reports"
+export * from "./appVersions"
 

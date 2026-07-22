@@ -178,7 +178,7 @@ export const LoginScreen: FC<LoginScreenProps> = memo(function LoginScreen(props
             />
 
             <View style={styles.forgotRow}>
-              <TouchableOpacity onPress={() => {}}>
+              <TouchableOpacity onPress={() => navigation.navigate("ForgotPassword", { phone })}>
                 <Text
                   tx="login:forgotPassword"
                   style={styles.forgotPassword}
@@ -187,6 +187,7 @@ export const LoginScreen: FC<LoginScreenProps> = memo(function LoginScreen(props
                 />
               </TouchableOpacity>
             </View>
+
           </View>
 
           {/* Submit Action */}

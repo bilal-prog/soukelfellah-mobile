@@ -133,3 +133,23 @@ EXPO_PUBLIC_API_URL=https://your-ngrok-url.ngrok-free.app
 3.  **Conditional Price Elements**: Price labels and currency descriptors are hidden if a listing doesn't specify a price (e.g. negotiable rentals), avoiding `undefined` displays.
 4.  **Relative Listing Age Indicator**: Renders date descriptors like `Today` or `Yesterday` for listings created after 00:00, falling back to full date formatting for older items.
 5.  **TanStack Query Cache Reset**: Replaced infinite query invalidations with `resetQueries` to clear page arrays and reset back to page 1 upon updates, saving network resources.
+
+---
+
+## 📜 Compliance & Google Play Store Submission URLs
+
+To publish **Souk El Fellah** on the **Google Play Store**, the following public compliance URLs are required by Google Play Console policies:
+
+### 1. Privacy Policy URL
+* **Production URL**: `https://admin.soukelfellah.ma/privacy` (or `https://soukelfellah.ma/privacy`)
+* **Local Test URL**: `http://localhost:3000/privacy`
+* **Google Play Console Placement**: Go to **Policy and Programs $\rightarrow$ App Content $\rightarrow$ Privacy Policy**.
+
+### 2. Web Account Deletion Request URL
+* **Production URL**: `https://admin.soukelfellah.ma/delete-account` (or `https://soukelfellah.ma/delete-account`)
+* **Local Test URL**: `http://localhost:3000/delete-account`
+* **Google Play Console Placement**: Go to **Policy and Programs $\rightarrow$ App Content $\rightarrow$ Data Safety $\rightarrow$ Account Deletion URL**.
+
+### 3. Support Contacts
+* **WhatsApp & Phone Support**: `+212 7 22 95 78 26`
+

@@ -26,7 +26,11 @@ export type AppStackParamList = {
   ListingDetails: { listingId: string }
   Notifications: undefined
   EditListing: { listingId: string }
+  Legal: { type?: "cgu" | "cgv" | "privacy" | "mentions" } | undefined
+  ForgotPassword: { phone?: string } | undefined
 }
+
+
 
 export type AppStackScreenProps<T extends keyof AppStackParamList> = NativeStackScreenProps<
   AppStackParamList,
