@@ -334,6 +334,17 @@ const en = {
     noConnectionDesc: "Please check your network settings and try again",
     restored: "Internet Connection Restored",
   },
+  changePassword: {
+    title: "Change Password",
+    currentPassword: "Current Password",
+    newPassword: "New Password",
+    confirmPassword: "Confirm New Password",
+    submit: "Update Password",
+    success: "Password updated successfully",
+    mismatch: "New passwords do not match",
+    minLength: "New password must be at least 6 characters",
+    currentRequired: "Please enter your current password",
+  },
 }
 
 

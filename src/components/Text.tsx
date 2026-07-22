@@ -4,9 +4,11 @@ import { TOptions } from "i18next"
 
 import { isRTL, TxKeyPath } from "@/localization"
 import { translate } from "@/localization/translate"
+import { fontSizes } from "@/theme/fontSizes"
 import { useAppTheme } from "@/theme/context"
 import type { ThemedStyle, ThemedStyleArray } from "@/theme/types"
 import { typography } from "@/theme/typography"
+import { vs } from "@/utils/scaling"
 
 type Sizes = keyof typeof $sizeStyles
 type Weights = keyof typeof typography.primary
@@ -54,13 +56,13 @@ export const Text = forwardRef(function Text(props: TextProps, ref: ForwardedRef
 })
 
 const $sizeStyles = {
-  xxl: { fontSize: 30, lineHeight: 45 } satisfies TextStyle, // display-lg
-  xl: { fontSize: 24, lineHeight: 37 } satisfies TextStyle, // headline-md
-  lg: { fontSize: 20, lineHeight: 32 } satisfies TextStyle, // headline-sm
-  md: { fontSize: 18, lineHeight: 30 } satisfies TextStyle, // body-lg
-  sm: { fontSize: 16, lineHeight: 29 } satisfies TextStyle, // body-md
-  xs: { fontSize: 14, lineHeight: 25 } satisfies TextStyle, // label-lg
-  xxs: { fontSize: 12, lineHeight: 19 } satisfies TextStyle, // label-md
+  xxl: { fontSize: fontSizes.fs30, lineHeight: vs(45) } satisfies TextStyle, // display-lg
+  xl: { fontSize: fontSizes.fs24, lineHeight: vs(37) } satisfies TextStyle, // headline-md
+  lg: { fontSize: fontSizes.fs20, lineHeight: vs(35) } satisfies TextStyle, // headline-sm
+  md: { fontSize: fontSizes.fs18, lineHeight: vs(30) } satisfies TextStyle, // body-lg
+  sm: { fontSize: fontSizes.fs16, lineHeight: vs(29) } satisfies TextStyle, // body-md
+  xs: { fontSize: fontSizes.fs14, lineHeight: vs(25) } satisfies TextStyle, // label-lg
+  xxs: { fontSize: fontSizes.fs12, lineHeight: vs(19) } satisfies TextStyle, // label-md
 }
 
 const $fontWeightStyles = Object.entries(typography.primary).reduce((acc, [weight, fontFamily]) => {

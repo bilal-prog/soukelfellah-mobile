@@ -1,6 +1,8 @@
 import { ViewStyle, TextStyle, ImageStyle } from "react-native"
 
+import { fontSizes } from "@/theme/fontSizes"
 import type { Theme } from "@/theme/types"
+import { s, vs } from "@/utils/scaling"
 
 export const $styles = (theme: Theme) => ({
   container: {
@@ -12,49 +14,49 @@ export const $styles = (theme: Theme) => ({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingHorizontal: theme.spacing.marginMobile,
-    height: theme.spacing.touchTargetMin,
+    paddingHorizontal: s(theme.spacing.marginMobile),
+    height: vs(theme.spacing.touchTargetMin),
     backgroundColor: theme.colors.palette.surface,
   } as ViewStyle,
 
   headerTitle: {
-    fontSize: 22,
-    lineHeight: 34,
+    fontSize: fontSizes.fs22,
+    lineHeight: vs(34),
     color: theme.colors.palette.primary,
   } as TextStyle,
 
   headerButton: {
-    padding: 4,
+    padding: s(4),
     position: "relative",
   } as ViewStyle,
 
   notificationBadge: {
     position: "absolute",
-    top: 4,
-    right: 4,
-    width: 8,
-    height: 8,
-    borderRadius: 4,
+    top: vs(4),
+    right: s(4),
+    width: s(8),
+    height: vs(8),
+    borderRadius: s(4),
     backgroundColor: theme.colors.palette.error,
   } as ViewStyle,
 
   profileCard: {
     flexDirection: "row",
     alignItems: "center",
-    padding: 16,
-    marginHorizontal: theme.spacing.marginMobile,
-    marginTop: 16,
+    padding: s(16),
+    marginHorizontal: s(theme.spacing.marginMobile),
+    marginTop: vs(16),
     backgroundColor: "white",
-    borderRadius: 12,
+    borderRadius: s(12),
     borderWidth: 1,
     borderColor: theme.colors.palette.outlineVariant,
-    gap: 16,
+    gap: s(16),
   } as ViewStyle,
 
   profileAvatar: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
+    width: s(60),
+    height: vs(60),
+    borderRadius: s(30),
     backgroundColor: theme.colors.palette.primaryFixed,
     justifyContent: "center",
     alignItems: "center",
@@ -62,7 +64,7 @@ export const $styles = (theme: Theme) => ({
 
   profileDetails: {
     flex: 1,
-    gap: 4,
+    gap: s(4),
   } as ViewStyle,
 
   profilePhone: {
@@ -70,25 +72,25 @@ export const $styles = (theme: Theme) => ({
   } as TextStyle,
 
   statsSection: {
-    paddingHorizontal: 16,
-    marginTop: 16,
+    paddingHorizontal: s(16),
+    marginTop: vs(16),
   } as ViewStyle,
 
   statsContainer: {
     flexDirection: "row",
-    gap: 12,
-    marginBottom: 24,
+    gap: s(12),
+    marginBottom: vs(24),
   } as ViewStyle,
 
   statBox: {
     flex: 1,
     backgroundColor: "white",
-    borderRadius: 12,
-    padding: 12,
+    borderRadius: s(12),
+    padding: s(12),
     borderWidth: 1,
     borderColor: theme.colors.palette.outlineVariant,
     alignItems: "center",
-    gap: 4,
+    gap: s(4),
     elevation: 2,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 1 },
@@ -116,12 +118,12 @@ export const $styles = (theme: Theme) => ({
     flexDirection: "row",
     borderBottomWidth: 1,
     borderColor: theme.colors.palette.outlineVariant,
-    marginBottom: 16,
+    marginBottom: vs(16),
   } as ViewStyle,
 
   tabButton: {
     flex: 1,
-    paddingVertical: 14,
+    paddingVertical: vs(14),
     alignItems: "center",
     position: "relative",
   } as ViewStyle,
@@ -139,69 +141,69 @@ export const $styles = (theme: Theme) => ({
     bottom: 0,
     left: 0,
     right: 0,
-    height: 3,
+    height: vs(3),
     backgroundColor: theme.colors.palette.primary,
-    borderTopLeftRadius: 3,
-    borderTopRightRadius: 3,
+    borderTopLeftRadius: s(3),
+    borderTopRightRadius: s(3),
   } as ViewStyle,
 
   flatListContent: {
-    paddingHorizontal: theme.spacing.marginMobile,
-    paddingTop: 16,
-    paddingBottom: 40,
+    paddingHorizontal: s(theme.spacing.marginMobile),
+    paddingTop: vs(16),
+    paddingBottom: vs(40),
   } as ViewStyle,
 
   emptyStateContainer: {
     alignItems: "center",
-    marginTop: 40,
+    marginTop: vs(40),
   } as ViewStyle,
 
   emptyStateText: {
     color: theme.colors.palette.onSurfaceVariant,
-    marginTop: 12,
+    marginTop: vs(12),
   } as TextStyle,
 
   listingCardWrapper: {
-    marginBottom: 16,
+    marginBottom: vs(16),
   } as ViewStyle,
 
   listingRow: {
     flexDirection: "row",
     backgroundColor: "white",
-    borderRadius: 12,
+    borderRadius: s(12),
     borderWidth: 1,
     borderColor: theme.colors.palette.outlineVariant,
     overflow: "hidden",
-    height: 110,
+    height: vs(110),
   } as ViewStyle,
 
   listingImage: {
-    width: 100,
+    width: s(100),
     height: "100%",
   } as ImageStyle,
 
   listingInfo: {
     flex: 1,
-    padding: 12,
+    padding: s(12),
     justifyContent: "space-between",
   } as ViewStyle,
 
   listingPriceText: {
     color: theme.colors.palette.primary,
-    marginTop: 4,
+    marginTop: vs(4),
   } as TextStyle,
 
   listingMeta: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 12,
-    marginBottom: 10,
+    gap: s(12),
+    marginBottom: vs(10),
   } as ViewStyle,
 
   metaItem: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 2,
+    gap: s(2),
   } as ViewStyle,
 
   metaText: {
@@ -213,19 +215,19 @@ export const $styles = (theme: Theme) => ({
     borderTopWidth: 1,
     borderColor: theme.colors.palette.outlineVariant,
     backgroundColor: "white",
-    borderRadius: 12,
+    borderRadius: s(12),
     borderWidth: 1,
-    marginTop: -16,
-    marginBottom: 20,
+    marginTop: vs(-16),
+    marginBottom: vs(20),
   } as ViewStyle,
 
   actionBtn: {
     flex: 1,
-    paddingVertical: 12,
+    paddingVertical: vs(12),
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "row",
-    gap: 6,
+    gap: s(6),
     borderRightWidth: 1,
     borderColor: theme.colors.palette.outlineVariant,
   } as ViewStyle,
@@ -241,7 +243,7 @@ export const $styles = (theme: Theme) => ({
   } as TextStyle,
 
   deleteBtn: {
-    width: 50,
+    width: s(50),
     alignItems: "center",
     justifyContent: "center",
   } as ViewStyle,

@@ -8,7 +8,9 @@ import { Text } from "@/components/Text"
 import { isRTL } from "@/localization"
 import { getLegalContent, LegalTabType } from "@/localization/legalContent"
 import { AppStackScreenProps } from "@/navigation/navigationTypes"
+import { fontSizes } from "@/theme/fontSizes"
 import { useAppTheme } from "@/theme/context"
+import { s, vs } from "@/utils/scaling"
 
 interface LegalScreenProps extends AppStackScreenProps<"Legal"> {}
 
@@ -149,48 +151,48 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingHorizontal: s(16),
+    paddingVertical: vs(12),
     borderBottomWidth: 1,
     borderBottomColor: "rgba(0, 0, 0, 0.08)",
   },
   backButton: {
-    padding: 6,
+    padding: s(6),
   },
   headerTitle: {
-    fontSize: 18,
+    fontSize: fontSizes.fs18,
   },
   headerRightPlaceholder: {
-    width: 36,
+    width: s(36),
   },
   tabContainer: {
-    paddingVertical: 10,
+    paddingVertical: vs(10),
     borderBottomWidth: 1,
     borderBottomColor: "rgba(0, 0, 0, 0.05)",
   },
   tabScroll: {
-    paddingHorizontal: 16,
-    gap: 8,
+    paddingHorizontal: s(16),
+    gap: s(8),
   },
   tabItem: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 20,
+    paddingHorizontal: s(16),
+    paddingVertical: vs(8),
+    borderRadius: s(20),
     backgroundColor: "rgba(0,0,0,0.05)",
   },
   tabText: {
-    fontSize: 13,
+    fontSize: fontSizes.fs13,
   },
   contentContainer: {
-    padding: 20,
-    paddingBottom: 40,
+    padding: s(20),
+    paddingBottom: vs(40),
   },
   docHeader: {
-    marginBottom: 20,
+    marginBottom: vs(20),
   },
   docTitle: {
-    fontSize: 20,
-    marginBottom: 6,
+    fontSize: fontSizes.fs20,
+    marginBottom: vs(6),
   },
   dateRow: {
     flexDirection: "row",
@@ -204,17 +206,17 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   sectionCard: {
-    borderRadius: 14,
-    padding: 16,
-    marginBottom: 14,
+    borderRadius: s(14),
+    padding: s(16),
+    marginBottom: vs(14),
   },
   sectionTitle: {
-    fontSize: 15,
-    marginBottom: 8,
+    fontSize: fontSizes.fs15,
+    marginBottom: vs(8),
   },
   sectionContent: {
-    fontSize: 14,
-    lineHeight: 22,
+    fontSize: fontSizes.fs14,
+    lineHeight: vs(22),
     opacity: 0.9,
   },
 })

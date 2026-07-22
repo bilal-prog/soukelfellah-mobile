@@ -5,6 +5,7 @@ import { Ionicons } from "@expo/vector-icons"
 import { Text } from "@/components/Text"
 import { translate } from "@/localization/translate"
 import { formatListingDate } from "@/utils/formatDate"
+import { s } from "@/utils/scaling"
 
 interface MyListingItemProps {
   item: any
@@ -73,7 +74,7 @@ export const MyListingItem = memo(function MyListingItem({
 
           <View style={styles.listingMeta}>
             <View style={styles.metaItem}>
-              <Ionicons name="eye-outline" size={14} color={styles.metaText.color} />
+              <Ionicons name="eye-outline" size={s(14)} color={styles.metaText.color} />
               <Text
                 text={`${item.viewsCount || 0} ${translate("common:views")}`}
                 size="xxs"
@@ -81,7 +82,7 @@ export const MyListingItem = memo(function MyListingItem({
               />
             </View>
             <View style={styles.metaItem}>
-              <Ionicons name="time-outline" size={14} color={styles.metaText.color} />
+              <Ionicons name="time-outline" size={s(14)} color={styles.metaText.color} />
               <Text text={getCreatedDateText()} size="xxs" style={styles.metaText} />
             </View>
           </View>
@@ -92,21 +93,21 @@ export const MyListingItem = memo(function MyListingItem({
       {activeTab === "active" && (
         <View style={styles.listingActions}>
           <TouchableOpacity onPress={() => onEdit(item._id)} style={styles.actionBtn}>
-            <Ionicons name="create-outline" size={16} color={styles.actionTextEdit.color} />
+            <Ionicons name="create-outline" size={s(16)} color={styles.actionTextEdit.color} />
             <Text tx="common:edit" size="xxs" style={styles.actionTextEdit} />
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => onMarkSold(item._id)} style={styles.actionBtn}>
             <Ionicons
               name="checkmark-circle-outline"
-              size={16}
+              size={s(16)}
               color={styles.actionTextSold.color}
             />
             <Text tx="common:sold" size="xxs" style={styles.actionTextSold} />
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => onDelete(item._id)} style={styles.deleteBtn}>
-            <Ionicons name="trash-outline" size={18} color={styles.deleteBtn.color || "#ff3b30"} />
+            <Ionicons name="trash-outline" size={s(18)} color={styles.deleteBtn.color || "#ff3b30"} />
           </TouchableOpacity>
         </View>
       )}

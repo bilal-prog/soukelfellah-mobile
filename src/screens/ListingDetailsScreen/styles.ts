@@ -1,7 +1,9 @@
 import { ViewStyle, TextStyle, ImageStyle } from "react-native"
 
+import { fontSizes } from "@/theme/fontSizes"
 import type { Theme } from "@/theme/types"
 import { isRTL } from "@/localization"
+import { s, vs } from "@/utils/scaling"
 
 export const $styles = (theme: Theme) => ({
   container: {
@@ -20,23 +22,23 @@ export const $styles = (theme: Theme) => ({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingHorizontal: theme.spacing.marginMobile,
-    height: theme.spacing.touchTargetMin,
+    paddingHorizontal: s(theme.spacing.marginMobile),
+    height: vs(theme.spacing.touchTargetMin),
     backgroundColor: theme.colors.palette.surface,
   } as ViewStyle,
 
   headerTitle: {
-    fontSize: 18,
+    fontSize: fontSizes.fs18,
     color: theme.colors.text,
   } as TextStyle,
 
   headerRight: {
     flexDirection: "row",
-    gap: 12,
+    gap: s(12),
   } as ViewStyle,
 
   headerRightSpacer: {
-    width: 26,
+    width: s(26),
   } as ViewStyle,
 
   galleryContainer: {
@@ -53,39 +55,39 @@ export const $styles = (theme: Theme) => ({
 
   indicators: {
     position: "absolute",
-    bottom: 12,
+    bottom: vs(12),
     alignSelf: "center",
     flexDirection: "row",
-    gap: 6,
+    gap: s(6),
     backgroundColor: "rgba(0,0,0,0.25)",
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 20,
+    paddingHorizontal: s(12),
+    paddingVertical: vs(6),
+    borderRadius: s(20),
   } as ViewStyle,
 
   dot: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
+    width: s(6),
+    height: vs(6),
+    borderRadius: s(3),
     backgroundColor: "rgba(255, 255, 255, 0.5)",
   } as ViewStyle,
 
   activeDot: {
-    width: 16,
+    width: s(16),
     backgroundColor: "white",
   } as ViewStyle,
 
   scrollContent: {
-    paddingBottom: 100, // Leave padding for fixed bottom actions
+    paddingBottom: vs(100), // Leave padding for fixed bottom actions
   } as ViewStyle,
 
   infoContainer: {
-    padding: theme.spacing.marginMobile,
-    gap: 20,
+    padding: s(theme.spacing.marginMobile),
+    gap: s(20),
   } as ViewStyle,
 
   priceTitleSection: {
-    gap: 8,
+    gap: s(8),
   } as ViewStyle,
 
   priceRow: {
@@ -96,15 +98,15 @@ export const $styles = (theme: Theme) => ({
 
   priceText: {
     color: theme.colors.palette.primary,
-    fontSize: 28,
-    lineHeight: 44,
+    fontSize: fontSizes.fs28,
+    lineHeight: vs(44),
   } as TextStyle,
 
   negotiationBadge: {
     backgroundColor: "rgba(15, 82, 56, 0.1)",
-    paddingHorizontal: 12,
-    paddingVertical: 4,
-    borderRadius: 8,
+    paddingHorizontal: s(12),
+    paddingVertical: vs(4),
+    borderRadius: s(8),
   } as ViewStyle,
 
   titleText: {
@@ -114,7 +116,7 @@ export const $styles = (theme: Theme) => ({
   locationRow: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 4,
+    gap: s(4),
   } as ViewStyle,
 
   locationText: {
@@ -128,31 +130,31 @@ export const $styles = (theme: Theme) => ({
     backgroundColor: theme.colors.palette.surfaceContainerLow,
     borderWidth: 1,
     borderColor: theme.colors.palette.outlineVariant,
-    padding: 16,
-    borderRadius: 12,
+    padding: s(16),
+    borderRadius: s(12),
   } as ViewStyle,
 
   sellerLeft: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 12,
+    gap: s(12),
   } as ViewStyle,
 
   sellerAvatar: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
+    width: s(48),
+    height: vs(48),
+    borderRadius: s(24),
     backgroundColor: theme.colors.palette.secondaryContainer,
     justifyContent: "center",
     alignItems: "center",
   } as ViewStyle,
 
   sellerChevronBtn: {
-    padding: 4,
+    padding: s(4),
   } as ViewStyle,
 
   descSection: {
-    gap: 8,
+    gap: s(8),
   } as ViewStyle,
 
   descTitle: {
@@ -161,28 +163,28 @@ export const $styles = (theme: Theme) => ({
 
   descBox: {
     backgroundColor: "white",
-    borderRadius: 12,
+    borderRadius: s(12),
     borderWidth: 1,
     borderColor: theme.colors.palette.outlineVariant,
-    padding: 16,
+    padding: s(16),
   } as ViewStyle,
 
   descText: {
     color: theme.colors.palette.onSurfaceVariant,
-    lineHeight: 24,
+    lineHeight: vs(24),
   } as TextStyle,
 
   specsGrid: {
     flexDirection: "row",
-    gap: 12,
+    gap: s(12),
   } as ViewStyle,
 
   specBox: {
     flex: 1,
     backgroundColor: theme.colors.palette.surfaceContainer,
-    padding: 12,
-    borderRadius: 12,
-    gap: 4,
+    padding: s(12),
+    borderRadius: s(12),
+    gap: s(4),
   } as ViewStyle,
 
   fixedBottomActions: {
@@ -193,9 +195,9 @@ export const $styles = (theme: Theme) => ({
     backgroundColor: "white",
     borderTopWidth: 1,
     borderColor: theme.colors.palette.outlineVariant,
-    padding: 16,
+    padding: s(16),
     flexDirection: isRTL ? "row-reverse" : "row",
-    gap: 12,
+    gap: s(12),
     shadowColor: "#000",
     shadowOffset: { width: 0, height: -4 },
     shadowOpacity: 0.05,
@@ -205,22 +207,22 @@ export const $styles = (theme: Theme) => ({
 
   ctaBtn: {
     flex: 1,
-    height: 50,
-    borderRadius: 12,
+    height: vs(50),
+    borderRadius: s(12),
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    gap: 8,
+    gap: s(8),
   } as ViewStyle,
 
   ctaTextCall: {
     color: "white",
-    fontSize: 16,
+    fontSize: fontSizes.fs16,
   } as TextStyle,
 
   ctaTextWa: {
     color: theme.colors.palette.secondary,
-    fontSize: 16,
+    fontSize: fontSizes.fs16,
   } as TextStyle,
 
   modalOverlay: {
@@ -228,14 +230,14 @@ export const $styles = (theme: Theme) => ({
     backgroundColor: "rgba(0, 0, 0, 0.5)",
     justifyContent: "center",
     alignItems: "center",
-    padding: theme.spacing.md,
+    padding: s(theme.spacing.md),
   } as ViewStyle,
 
   modalContent: {
     width: "100%",
     backgroundColor: theme.colors.palette.surface,
-    borderRadius: 16,
-    padding: 20,
+    borderRadius: s(16),
+    padding: s(20),
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.15,
@@ -247,27 +249,27 @@ export const $styles = (theme: Theme) => ({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 16,
+    marginBottom: vs(16),
   } as ViewStyle,
 
   modalTitle: {
-    fontSize: 18,
+    fontSize: fontSizes.fs18,
     color: theme.colors.text,
   } as TextStyle,
 
   reasonsContainer: {
-    gap: 8,
-    marginBottom: 16,
+    gap: s(8),
+    marginBottom: vs(16),
   } as ViewStyle,
 
   reasonOption: {
     flexDirection: "row",
     alignItems: "center",
-    padding: 12,
+    padding: s(12),
     borderWidth: 1,
     borderColor: theme.colors.palette.outlineVariant,
-    borderRadius: 8,
-    gap: 10,
+    borderRadius: s(8),
+    gap: s(10),
   } as ViewStyle,
 
   reasonOptionSelected: {
@@ -276,7 +278,7 @@ export const $styles = (theme: Theme) => ({
   } as ViewStyle,
 
   reasonText: {
-    fontSize: 14,
+    fontSize: fontSizes.fs14,
     color: theme.colors.text,
   } as TextStyle,
 
@@ -285,30 +287,30 @@ export const $styles = (theme: Theme) => ({
   } as TextStyle,
 
   descriptionInput: {
-    height: 80,
+    height: vs(80),
     borderWidth: 1,
     borderColor: theme.colors.palette.outlineVariant,
-    borderRadius: 8,
-    padding: 10,
+    borderRadius: s(8),
+    padding: s(10),
     textAlignVertical: "top",
-    marginBottom: 20,
+    marginBottom: vs(20),
     color: theme.colors.text,
-    fontSize: 14,
+    fontSize: fontSizes.fs14,
   } as TextStyle,
 
   modalActions: {
     flexDirection: "row",
-    gap: 12,
+    gap: s(12),
     justifyContent: "flex-end",
   } as ViewStyle,
 
   modalBtn: {
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    borderRadius: 8,
+    paddingHorizontal: s(16),
+    paddingVertical: vs(10),
+    borderRadius: s(8),
     justifyContent: "center",
     alignItems: "center",
-    minWidth: 80,
+    minWidth: s(80),
   } as ViewStyle,
 
   modalBtnCancel: {
@@ -323,12 +325,12 @@ export const $styles = (theme: Theme) => ({
 
   modalBtnTextCancel: {
     color: theme.colors.text,
-    fontSize: 14,
+    fontSize: fontSizes.fs14,
   } as TextStyle,
 
   modalBtnTextSubmit: {
     color: "white",
-    fontSize: 14,
+    fontSize: fontSizes.fs14,
   } as TextStyle,
 
   negotiableColor: {
@@ -337,31 +339,31 @@ export const $styles = (theme: Theme) => ({
 
   badgesRow: {
     flexDirection: "row",
-    gap: 8,
+    gap: s(8),
     alignItems: "center",
     flexWrap: "wrap",
-    marginVertical: 4,
+    marginVertical: vs(4),
   } as ViewStyle,
 
   badgeBuy: {
     backgroundColor: theme.colors.palette.secondary,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 6,
+    paddingHorizontal: s(8),
+    paddingVertical: vs(4),
+    borderRadius: s(6),
   } as ViewStyle,
 
   badgeRent: {
     backgroundColor: theme.colors.palette.tertiary,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 6,
+    paddingHorizontal: s(8),
+    paddingVertical: vs(4),
+    borderRadius: s(6),
   } as ViewStyle,
 
   badgeSell: {
     backgroundColor: theme.colors.palette.primary,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 6,
+    paddingHorizontal: s(8),
+    paddingVertical: vs(4),
+    borderRadius: s(6),
   } as ViewStyle,
 
   badgeText: {
@@ -377,8 +379,8 @@ export const $styles = (theme: Theme) => ({
 
   modalSubtitle: {
     color: theme.colors.palette.onSurfaceVariant,
-    fontSize: 12,
-    marginBottom: 12,
+    fontSize: fontSizes.fs12,
+    marginBottom: vs(12),
   } as TextStyle,
 
   imageViewerBackground: {
@@ -391,11 +393,11 @@ export const $styles = (theme: Theme) => ({
 
   imageViewerCloseBtn: {
     position: "absolute",
-    top: 50,
-    right: 20,
+    top: vs(50),
+    right: s(20),
     zIndex: 10,
-    padding: 10,
+    padding: s(10),
     backgroundColor: "rgba(0, 0, 0, 0.4)",
-    borderRadius: 25,
+    borderRadius: s(25),
   } as ViewStyle,
 })

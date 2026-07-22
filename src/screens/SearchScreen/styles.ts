@@ -1,7 +1,9 @@
 import { ViewStyle, TextStyle } from "react-native"
 
+import { fontSizes } from "@/theme/fontSizes"
 import type { Theme } from "@/theme/types"
 import { isRTL } from "@/localization"
+import { s, vs } from "@/utils/scaling"
 
 export const $styles = (theme: Theme) => ({
   container: {
@@ -12,60 +14,60 @@ export const $styles = (theme: Theme) => ({
   header: {
     flexDirection: "row",
     alignItems: "center",
-    paddingHorizontal: theme.spacing.marginMobile,
-    height: theme.spacing.touchTargetMin,
+    paddingHorizontal: s(theme.spacing.marginMobile),
+    height: vs(theme.spacing.touchTargetMin),
     backgroundColor: theme.colors.palette.surface,
-    gap: 16,
+    gap: s(16),
   } as ViewStyle,
 
   headerTitle: {
-    fontSize: 22,
-    lineHeight: 34,
+    fontSize: fontSizes.fs22,
+    lineHeight: vs(34),
     color: theme.colors.palette.primary,
     flex: 1,
     textAlign: "left",
   } as TextStyle,
 
   headerButton: {
-    padding: 4,
+    padding: s(4),
     position: "relative",
   } as ViewStyle,
 
   notificationBadge: {
     position: "absolute",
-    top: 4,
-    right: 4,
-    width: 8,
-    height: 8,
-    borderRadius: 4,
+    top: vs(4),
+    right: s(4),
+    width: s(8),
+    height: vs(8),
+    borderRadius: s(4),
     backgroundColor: theme.colors.palette.error,
   } as ViewStyle,
 
   flatListContent: {
-    paddingHorizontal: theme.spacing.marginMobile,
-    paddingTop: 16,
-    paddingBottom: 40,
+    paddingHorizontal: s(theme.spacing.marginMobile),
+    paddingTop: vs(16),
+    paddingBottom: vs(40),
   } as ViewStyle,
 
   searchContainer: {
-    gap: 12,
-    marginBottom: 20,
+    gap: s(12),
+    marginBottom: vs(20),
   } as ViewStyle,
 
   searchBar: {
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: theme.colors.palette.surfaceContainerLow,
-    borderRadius: 12,
-    paddingHorizontal: 16,
-    height: 56,
+    borderRadius: s(12),
+    paddingHorizontal: s(16),
+    height: vs(56),
     borderWidth: 1,
     borderColor: theme.colors.palette.outlineVariant,
   } as ViewStyle,
 
   searchInput: {
     flex: 1,
-    fontSize: 16,
+    fontSize: fontSizes.fs16,
     color: theme.colors.text,
     textAlign: "left",
     height: "100%",
@@ -76,25 +78,25 @@ export const $styles = (theme: Theme) => ({
     alignItems: "center",
     justifyContent: "space-between",
     backgroundColor: "white",
-    borderRadius: 12,
+    borderRadius: s(12),
     borderWidth: 1,
     borderColor: theme.colors.palette.outlineVariant,
-    paddingHorizontal: 16,
-    height: 56,
+    paddingHorizontal: s(16),
+    height: vs(56),
   } as ViewStyle,
 
   locationBtnLeft: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 8,
+    gap: s(8),
   } as ViewStyle,
 
   categoriesContainer: {
-    marginBottom: 20,
+    marginBottom: vs(20),
   } as ViewStyle,
 
   sectionTitle: {
-    marginBottom: 12,
+    marginBottom: vs(12),
     textAlign: "left",
   } as TextStyle,
 
@@ -103,10 +105,10 @@ export const $styles = (theme: Theme) => ({
   } as ViewStyle,
 
   chipItem: {
-    paddingHorizontal: 20,
-    paddingVertical: 8,
-    borderRadius: 20,
-    marginHorizontal: 4,
+    paddingHorizontal: s(20),
+    paddingVertical: vs(8),
+    borderRadius: s(20),
+    marginHorizontal: s(4),
   } as ViewStyle,
 
   chipActive: {
@@ -128,34 +130,34 @@ export const $styles = (theme: Theme) => ({
   } as TextStyle,
 
   priceRangeContainer: {
-    marginBottom: 20,
+    marginBottom: vs(20),
   } as ViewStyle,
 
   priceInputsRow: {
     flexDirection: isRTL ? "row-reverse" : "row",
-    gap: 12,
+    gap: s(12),
   } as ViewStyle,
 
   priceInputWrapper: {
     flex: 1,
-    gap: 4,
+    gap: s(4),
   } as ViewStyle,
 
   priceLabel: {
     textTransform: "uppercase",
     color: theme.colors.palette.onSurfaceVariant,
-    paddingHorizontal: 4,
+    paddingHorizontal: s(4),
   } as TextStyle,
 
   priceInput: {
-    height: 48,
+    height: vs(48),
     backgroundColor: "white",
-    borderRadius: 8,
+    borderRadius: s(8),
     borderWidth: 1,
     borderColor: theme.colors.palette.outlineVariant,
-    paddingHorizontal: 12,
+    paddingHorizontal: s(12),
     textAlign: "center",
-    fontSize: 16,
+    fontSize: fontSizes.fs16,
     color: theme.colors.text,
   } as TextStyle,
 
@@ -163,14 +165,14 @@ export const $styles = (theme: Theme) => ({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 16,
-    marginTop: 8,
+    marginBottom: vs(16),
+    marginTop: vs(8),
   } as ViewStyle,
 
   sortButton: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 4,
+    gap: s(4),
   } as ViewStyle,
 
   sortText: {
@@ -185,24 +187,24 @@ export const $styles = (theme: Theme) => ({
 
   modalContent: {
     backgroundColor: theme.colors.background,
-    borderTopLeftRadius: 16,
-    borderTopRightRadius: 16,
+    borderTopLeftRadius: s(16),
+    borderTopRightRadius: s(16),
     maxHeight: "70%",
-    padding: 16,
+    padding: s(16),
   } as ViewStyle,
 
   modalHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 16,
+    marginBottom: vs(16),
     borderBottomWidth: 1,
     borderBottomColor: theme.colors.palette.outlineVariant,
-    paddingBottom: 12,
+    paddingBottom: vs(12),
   } as ViewStyle,
 
   modalItem: {
-    paddingVertical: 16,
+    paddingVertical: vs(16),
     borderBottomWidth: 1,
     borderBottomColor: theme.colors.palette.outlineVariant,
   } as ViewStyle,

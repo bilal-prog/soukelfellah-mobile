@@ -7,6 +7,8 @@ import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { Text } from "./Text"
 import { useAppTheme } from "@/theme/context"
 
+import { s, vs } from "@/utils/scaling"
+
 export function NetworkBanner() {
   const netInfo = useNetInfo()
   const insets = useSafeAreaInsets()
@@ -77,7 +79,7 @@ export function NetworkBanner() {
       style={[
         styles.container,
         {
-          paddingTop: Math.max(insets.top, 8) + 4,
+          paddingTop: Math.max(insets.top, vs(8)) + vs(4),
           backgroundColor,
           transform: [{ translateY }],
         },
@@ -86,7 +88,7 @@ export function NetworkBanner() {
       <View style={styles.content}>
         <Ionicons
           name={iconName}
-          size={18}
+          size={s(18)}
           color="white"
           style={styles.icon}
         />
@@ -109,8 +111,8 @@ const styles = StyleSheet.create({
     right: 0,
     zIndex: 99999,
     elevation: 10,
-    paddingBottom: 8,
-    paddingHorizontal: 16,
+    paddingBottom: vs(8),
+    paddingHorizontal: s(16),
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
@@ -120,7 +122,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    gap: 8,
+    gap: s(8),
   },
   icon: {
     textAlign: "center",

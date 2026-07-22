@@ -1,6 +1,8 @@
 import { ViewStyle, TextStyle, ImageStyle } from "react-native"
 
+import { fontSizes } from "@/theme/fontSizes"
 import type { Theme } from "@/theme/types"
+import { s, vs } from "@/utils/scaling"
 
 export const $styles = (theme: Theme) => ({
   container: {
@@ -12,33 +14,33 @@ export const $styles = (theme: Theme) => ({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingHorizontal: theme.spacing.marginMobile,
-    height: theme.spacing.touchTargetMin,
+    paddingHorizontal: s(theme.spacing.marginMobile),
+    height: vs(theme.spacing.touchTargetMin),
     backgroundColor: theme.colors.palette.surface,
   } as ViewStyle,
 
   headerLeft: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 8,
+    gap: s(8),
   } as ViewStyle,
 
   headerTitle: {
-    fontSize: 20,
-    lineHeight: 30,
+    fontSize: fontSizes.fs20,
+    lineHeight: vs(30),
     color: theme.colors.palette.primary,
   } as TextStyle,
 
   stepIndicators: {
     flexDirection: "row",
-    gap: 6,
+    gap: s(6),
     alignItems: "center",
   } as ViewStyle,
 
   stepDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
+    width: s(8),
+    height: vs(8),
+    borderRadius: s(4),
   } as ViewStyle,
 
   stepDotActive: {
@@ -50,14 +52,14 @@ export const $styles = (theme: Theme) => ({
   } as ViewStyle,
 
   scrollContent: {
-    paddingHorizontal: theme.spacing.marginMobile,
-    paddingTop: 20,
-    paddingBottom: 40,
+    paddingHorizontal: s(theme.spacing.marginMobile),
+    paddingTop: vs(20),
+    paddingBottom: vs(40),
   } as ViewStyle,
 
   section: {
-    marginBottom: 24,
-    gap: 12,
+    marginBottom: vs(24),
+    gap: s(12),
   } as ViewStyle,
 
   sectionTitle: {
@@ -66,7 +68,7 @@ export const $styles = (theme: Theme) => ({
 
   categoryGrid: {
     flexDirection: "row",
-    gap: 16,
+    gap: s(16),
   } as ViewStyle,
 
   categoryBtn: {
@@ -74,20 +76,20 @@ export const $styles = (theme: Theme) => ({
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
-    padding: 20,
+    padding: s(20),
     backgroundColor: "white",
     borderWidth: 2,
-    borderRadius: 12,
+    borderRadius: s(12),
     borderColor: theme.colors.palette.outlineVariant,
   } as ViewStyle,
 
   categoryIconCircle: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
+    width: s(60),
+    height: vs(60),
+    borderRadius: s(30),
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: 12,
+    marginBottom: vs(12),
   } as ViewStyle,
 
   categoryIconProduce: {
@@ -99,7 +101,7 @@ export const $styles = (theme: Theme) => ({
   } as ViewStyle,
 
   uploadSection: {
-    gap: 8,
+    gap: s(8),
   } as ViewStyle,
 
   uploadHeader: {
@@ -115,11 +117,11 @@ export const $styles = (theme: Theme) => ({
   uploadBox: {
     borderWidth: 2,
     borderStyle: "dashed",
-    borderRadius: 12,
+    borderRadius: s(12),
     aspectRatio: 1.77, // 16:9 aspect
     justifyContent: "center",
     alignItems: "center",
-    gap: 8,
+    gap: s(8),
     borderColor: theme.colors.palette.outlineVariant,
     backgroundColor: theme.colors.palette.surfaceContainerLow,
   } as ViewStyle,
@@ -127,14 +129,14 @@ export const $styles = (theme: Theme) => ({
   previewGrid: {
     flexDirection: "row",
     flexWrap: "wrap",
-    gap: 8,
-    marginTop: 12,
+    gap: s(8),
+    marginTop: vs(12),
   } as ViewStyle,
 
   previewWrapper: {
-    width: 72,
-    height: 72,
-    borderRadius: 8,
+    width: s(72),
+    height: vs(72),
+    borderRadius: s(8),
     overflow: "hidden",
     position: "relative",
   } as ViewStyle,
@@ -146,18 +148,18 @@ export const $styles = (theme: Theme) => ({
 
   deletePreviewBtn: {
     position: "absolute",
-    top: 2,
-    right: 2,
+    top: vs(2),
+    right: s(2),
     backgroundColor: theme.colors.palette.error,
-    borderRadius: 10,
-    width: 20,
-    height: 20,
+    borderRadius: s(10),
+    width: s(20),
+    height: vs(20),
     justifyContent: "center",
     alignItems: "center",
   } as ViewStyle,
 
   formGroup: {
-    gap: 16,
+    gap: s(16),
   } as ViewStyle,
 
   inputField: {
@@ -166,7 +168,7 @@ export const $styles = (theme: Theme) => ({
 
   quantityPriceRow: {
     flexDirection: "row",
-    gap: 12,
+    gap: s(12),
   } as ViewStyle,
 
   inputWrapperHalf: {
@@ -174,40 +176,40 @@ export const $styles = (theme: Theme) => ({
   } as ViewStyle,
 
   submitBtn: {
-    height: 56,
-    borderRadius: 28,
+    height: vs(56),
+    borderRadius: s(28),
     backgroundColor: theme.colors.palette.primary,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 20,
+    marginTop: vs(20),
   } as ViewStyle,
 
   submitBtnContent: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 8,
+    gap: s(8),
   } as ViewStyle,
 
   submitBtnText: {
     color: "white",
-    fontSize: 18,
+    fontSize: fontSizes.fs18,
   } as TextStyle,
 
   selectTrigger: {
     borderWidth: 1,
-    borderRadius: 4,
+    borderRadius: s(4),
     borderColor: theme.colors.palette.outline,
     backgroundColor: theme.colors.palette.surface,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    minHeight: 56,
+    paddingHorizontal: s(12),
+    paddingVertical: vs(8),
+    minHeight: vs(56),
     justifyContent: "center",
   } as ViewStyle,
 
   selectLabel: {
     color: theme.colors.palette.onSurfaceVariant,
     textAlign: "left",
-    marginBottom: 4,
+    marginBottom: vs(4),
   } as TextStyle,
 
   selectContent: {
@@ -228,24 +230,24 @@ export const $styles = (theme: Theme) => ({
 
   modalContent: {
     backgroundColor: theme.colors.background,
-    borderTopLeftRadius: 16,
-    borderTopRightRadius: 16,
+    borderTopLeftRadius: s(16),
+    borderTopRightRadius: s(16),
     maxHeight: "70%",
-    padding: 16,
+    padding: s(16),
   } as ViewStyle,
 
   modalHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 16,
+    marginBottom: vs(16),
     borderBottomWidth: 1,
     borderBottomColor: theme.colors.palette.outlineVariant,
-    paddingBottom: 12,
+    paddingBottom: vs(12),
   } as ViewStyle,
 
   modalItem: {
-    paddingVertical: 16,
+    paddingVertical: vs(16),
     borderBottomWidth: 1,
     borderBottomColor: theme.colors.palette.outlineVariant,
   } as ViewStyle,
@@ -256,15 +258,15 @@ export const $styles = (theme: Theme) => ({
 
   segmentRow: {
     flexDirection: "row",
-    gap: 8,
-    marginTop: 4,
-    marginBottom: 8,
+    gap: s(8),
+    marginTop: vs(4),
+    marginBottom: vs(8),
   } as ViewStyle,
 
   segmentButton: {
     flex: 1,
-    height: 48,
-    borderRadius: 8,
+    height: vs(48),
+    borderRadius: s(8),
     borderWidth: 1,
     borderColor: theme.colors.palette.outlineVariant,
     justifyContent: "center",
@@ -279,7 +281,7 @@ export const $styles = (theme: Theme) => ({
 
   segmentText: {
     color: theme.colors.palette.onSurfaceVariant,
-    fontSize: 13,
+    fontSize: fontSizes.fs13,
     fontWeight: "500",
   } as TextStyle,
 

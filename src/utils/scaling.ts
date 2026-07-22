@@ -3,8 +3,8 @@ import { Dimensions } from "react-native"
 const { width, height } = Dimensions.get("window")
 const [shortDimension, longDimension] = width < height ? [width, height] : [height, width]
 
-const guidelineBaseWidth = 412
-const guidelineBaseHeight = 917
+const guidelineBaseWidth = 390
+const guidelineBaseHeight = 884
 
 export const scale = (size: number) => (shortDimension / guidelineBaseWidth) * size
 export const verticalScale = (size: number) => (longDimension / guidelineBaseHeight) * size

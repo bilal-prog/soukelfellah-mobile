@@ -1,7 +1,9 @@
 import { memo } from "react"
 import { TouchableOpacity, View, ViewStyle, TextStyle, Image, ImageStyle } from "react-native"
 
+import { fontSizes } from "@/theme/fontSizes"
 import { useAppTheme } from "@/theme/context"
+import { s, vs } from "@/utils/scaling"
 
 import { Text } from "./Text"
 
@@ -51,18 +53,18 @@ export const CategoryCard = memo(function CategoryCard(props: CategoryCardProps)
 
 const $container: ViewStyle = {
   alignItems: "center",
-  marginHorizontal: 6,
-  borderRadius: 16,
-  padding: 6,
+  marginHorizontal: s(6),
+  borderRadius: s(16),
+  padding: s(6),
 }
 
 const $circle: ViewStyle = {
-  width: 60,
-  height: 60,
-  borderRadius: 30,
+  width: s(60),
+  height: vs(60),
+  borderRadius: s(30),
   justifyContent: "center",
   alignItems: "center",
-  marginBottom: 8,
+  marginBottom: vs(8),
   elevation: 2,
   shadowColor: "#000",
   shadowOffset: { width: 0, height: 1 },
@@ -71,8 +73,8 @@ const $circle: ViewStyle = {
 }
 
 const $emoji: TextStyle = {
-  fontSize: 28,
-  lineHeight: 28,
+  fontSize: fontSizes.fs28,
+  lineHeight: vs(28),
 }
 
 const $label: TextStyle = {
@@ -81,7 +83,7 @@ const $label: TextStyle = {
 }
 
 const $image: ImageStyle = {
-  width: 40,
-  height: 40,
+  width: s(40),
+  height: vs(40),
   resizeMode: "contain",
 }

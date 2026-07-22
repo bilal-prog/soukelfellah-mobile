@@ -5,6 +5,7 @@ import { Ionicons } from "@expo/vector-icons"
 import { Text } from "@/components/Text"
 import { translate } from "@/localization/translate"
 import { useAppTheme } from "@/theme/context"
+import { s } from "@/utils/scaling"
 
 export interface MyListingsHeaderProps {
   styles: any
@@ -36,7 +37,7 @@ export const MyListingsHeader = memo(function MyListingsHeader(props: MyListings
       {/* Profile Header Info */}
       <View style={styles.profileCard}>
         <View style={styles.profileAvatar}>
-          <Ionicons name="person" size={32} color={colors.palette.primary} />
+          <Ionicons name="person" size={s(32)} color={colors.palette.primary} />
         </View>
         <View style={styles.profileDetails}>
           <Text text={userName || translate("common:farmer")} preset="bold" size="md" />

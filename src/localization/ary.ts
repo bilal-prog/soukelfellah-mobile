@@ -337,6 +337,17 @@ const ary: Translations = {
     noConnectionDesc: "تأكد من الريزو والويفي ديالك وعاود حاول",
     restored: "ترجع الاتصال بالأنترنيت بنجاح",
   },
+  changePassword: {
+    title: "بدل المودباس",
+    currentPassword: "المودباس القديم",
+    newPassword: "المودباس الجديد",
+    confirmPassword: "أكد المودباس الجديد",
+    submit: "تأكيد التغيير",
+    success: "تم تغيير المودباس بنجاح",
+    mismatch: "المودباسات ماشي بحال بحال",
+    minLength: "المودباس خاص يكون فيه على الأقل 6 د الحروف",
+    currentRequired: "دخل المودباس القديم الأول",
+  },
 }
 
 export default ary

@@ -1,5 +1,8 @@
 import { ViewStyle, TextStyle } from "react-native"
+
+import { fontSizes } from "../../theme/fontSizes"
 import type { Theme } from "../../theme/types"
+import { s, vs } from "../../utils/scaling"
 
 export const $styles = (theme: Theme) => ({
   container: {
@@ -11,12 +14,12 @@ export const $styles = (theme: Theme) => ({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingBottom: 12,
+    paddingBottom: vs(12),
     backgroundColor: theme.isDark ? theme.colors.palette.surfaceContainer : theme.colors.palette.surfaceContainerLowest,
     borderBottomWidth: 1,
     borderBottomColor: theme.colors.separator,
-    paddingHorizontal: 24,
-    paddingVertical: 16,
+    paddingHorizontal: s(24),
+    paddingVertical: vs(16),
   } as ViewStyle,
 
   headerLeft: {
@@ -25,17 +28,17 @@ export const $styles = (theme: Theme) => ({
   } as ViewStyle,
 
   backButton: {
-    marginRight: 16,
+    marginRight: s(16),
   } as ViewStyle,
 
   headerTitle: {
-    fontSize: 24,
+    fontSize: fontSizes.fs24,
     fontWeight: "800",
     color: theme.colors.text,
   } as TextStyle,
 
   headerAction: {
-    fontSize: 14,
+    fontSize: fontSizes.fs14,
     fontWeight: "600",
     color: theme.colors.tint,
   } as TextStyle,
@@ -44,33 +47,33 @@ export const $styles = (theme: Theme) => ({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    padding: 24,
+    padding: s(24),
   } as ViewStyle,
 
   emptyText: {
-    marginTop: 16,
-    fontSize: 18,
+    marginTop: vs(16),
+    fontSize: fontSizes.fs18,
     fontWeight: "700",
     color: theme.colors.textDim,
   } as TextStyle,
 
   emptySubText: {
-    marginTop: 8,
-    fontSize: 14,
+    marginTop: vs(8),
+    fontSize: fontSizes.fs14,
     color: theme.colors.textDim,
     textAlign: "center",
-    lineHeight: 20,
+    lineHeight: vs(20),
     opacity: 0.7,
   } as TextStyle,
 
   listContent: {
-    paddingVertical: 8,
+    paddingVertical: vs(8),
   } as ViewStyle,
 
   notificationCard: {
     flexDirection: "row",
-    paddingHorizontal: 24,
-    paddingVertical: 16,
+    paddingHorizontal: s(24),
+    paddingVertical: vs(16),
     backgroundColor: theme.colors.background,
     borderBottomWidth: 1,
     borderBottomColor: theme.colors.separator,
@@ -81,13 +84,13 @@ export const $styles = (theme: Theme) => ({
   } as ViewStyle,
 
   iconContainer: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
+    width: s(48),
+    height: vs(48),
+    borderRadius: s(24),
     backgroundColor: theme.colors.separator,
     justifyContent: "center",
     alignItems: "center",
-    marginRight: 16,
+    marginRight: s(16),
   } as ViewStyle,
 
   iconContainerUnread: {
@@ -103,15 +106,15 @@ export const $styles = (theme: Theme) => ({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 4,
+    marginBottom: vs(4),
   } as ViewStyle,
 
   title: {
     flex: 1,
-    fontSize: 16,
+    fontSize: fontSizes.fs16,
     fontWeight: "600",
     color: theme.colors.text,
-    marginRight: 8,
+    marginRight: s(8),
   } as TextStyle,
 
   titleUnread: {
@@ -119,17 +122,17 @@ export const $styles = (theme: Theme) => ({
   } as TextStyle,
 
   unreadDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
+    width: s(8),
+    height: vs(8),
+    borderRadius: s(4),
     backgroundColor: theme.colors.error,
   } as ViewStyle,
 
   message: {
-    fontSize: 14,
+    fontSize: fontSizes.fs14,
     color: theme.colors.textDim,
-    lineHeight: 20,
-    marginBottom: 6,
+    lineHeight: vs(20),
+    marginBottom: vs(6),
   } as TextStyle,
 
   messageUnread: {
@@ -138,7 +141,7 @@ export const $styles = (theme: Theme) => ({
   } as TextStyle,
 
   time: {
-    fontSize: 12,
+    fontSize: fontSizes.fs12,
     color: theme.colors.textDim,
     opacity: 0.6,
   } as TextStyle,

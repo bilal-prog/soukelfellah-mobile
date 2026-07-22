@@ -2,8 +2,10 @@ import { useEffect, useRef, useCallback } from "react"
 import { Animated, Pressable, ViewStyle, TextStyle, Image, ImageStyle, View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
+import { fontSizes } from "@/theme/fontSizes"
 import { useAppTheme } from "@/theme/context"
 import type { ThemedStyle } from "@/theme/types"
+import { s, vs } from "@/utils/scaling"
 
 import { Text, TextProps } from "./Text"
 
@@ -122,10 +124,10 @@ export function InAppBanner(props: InAppBannerProps) {
 
 const $container: ThemedStyle<ViewStyle> = (theme) => ({
   position: "absolute",
-  left: theme.spacing.md,
-  right: theme.spacing.md,
+  left: s(theme.spacing.md),
+  right: s(theme.spacing.md),
   zIndex: 9999,
-  borderRadius: theme.spacing.sm,
+  borderRadius: s(theme.spacing.sm),
   backgroundColor: theme.colors.palette.inverseSurface,
   shadowColor: "#000000",
   shadowOffset: { width: 0, height: 4 },
@@ -137,29 +139,29 @@ const $container: ThemedStyle<ViewStyle> = (theme) => ({
 const $inner: ThemedStyle<ViewStyle> = (theme) => ({
   flexDirection: "row",
   alignItems: "center",
-  padding: 14,
-  gap: theme.spacing.sm,
+  padding: s(14),
+  gap: s(theme.spacing.sm),
 })
 
 const $image: ThemedStyle<ImageStyle> = (theme) => ({
-  width: 44,
-  height: 44,
-  borderRadius: theme.spacing.xs,
+  width: s(44),
+  height: vs(44),
+  borderRadius: s(theme.spacing.xs),
   backgroundColor: theme.colors.palette.outlineVariant,
 })
 
 const $textContainer: ThemedStyle<ViewStyle> = (theme) => ({
   flex: 1,
-  gap: theme.spacing.xxxs,
+  gap: vs(theme.spacing.xxxs),
 })
 
 const $title: ThemedStyle<TextStyle> = (theme) => ({
   color: theme.colors.palette.inverseOnSurface,
-  fontSize: 14,
+  fontSize: fontSizes.fs14,
 })
 
 const $body: ThemedStyle<TextStyle> = (theme) => ({
   color: theme.colors.palette.inverseOnSurface,
   opacity: 0.8,
-  fontSize: 13,
+  fontSize: fontSizes.fs13,
 })

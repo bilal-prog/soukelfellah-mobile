@@ -5,7 +5,9 @@ import { Ionicons } from "@expo/vector-icons"
 import { Button } from "@/components/Button"
 import { Screen } from "@/components/Screen"
 import { Text } from "@/components/Text"
+import { fontSizes } from "@/theme/fontSizes"
 import { useAppTheme } from "@/theme/context"
+import { s, vs } from "@/utils/scaling"
 
 interface MaintenanceScreenProps {
   onRetry?: () => void
@@ -74,8 +76,8 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingHorizontal: 24,
-    paddingVertical: 24,
+    paddingHorizontal: s(24),
+    paddingVertical: vs(24),
   },
   mainInfo: {
     flex: 1,
@@ -84,12 +86,12 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   iconCircle: {
-    width: 130,
-    height: 130,
-    borderRadius: 65,
+    width: s(130),
+    height: vs(130),
+    borderRadius: s(65),
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: 28,
+    marginBottom: vs(28),
   },
   iconStyle: {
     textAlign: "center",
@@ -97,25 +99,25 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    fontSize: 24,
+    fontSize: fontSizes.fs24,
     textAlign: "center",
-    marginBottom: 12,
+    marginBottom: vs(12),
   },
   message: {
-    fontSize: 15,
+    fontSize: fontSizes.fs15,
     textAlign: "center",
-    lineHeight: 22,
+    lineHeight: vs(22),
     opacity: 0.8,
-    paddingHorizontal: 12,
+    paddingHorizontal: s(12),
   },
   actionContainer: {
     width: "100%",
-    paddingTop: 16,
+    paddingTop: vs(16),
   },
   retryBtn: {
     width: "100%",
-    height: 52,
-    borderRadius: 26,
+    height: vs(52),
+    borderRadius: s(26),
   },
 })
 

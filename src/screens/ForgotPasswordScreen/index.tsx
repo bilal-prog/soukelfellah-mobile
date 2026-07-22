@@ -10,7 +10,9 @@ import Config from "@/config"
 import { isRTL } from "@/localization"
 import { translate } from "@/localization/translate"
 import type { AppStackScreenProps } from "@/navigation/navigationTypes"
+import { fontSizes } from "@/theme/fontSizes"
 import { useAppTheme } from "@/theme/context"
+import { s, vs } from "@/utils/scaling"
 
 import { CallIcon } from "../LoginScreen/components/CallIcon"
 
@@ -149,62 +151,62 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   backButton: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
+    width: s(44),
+    height: vs(44),
+    borderRadius: s(22),
     justifyContent: "center",
     alignItems: "flex-start",
-    marginTop: 10,
-    marginLeft: 16,
+    marginTop: vs(10),
+    marginLeft: s(16),
   },
   content: {
-    paddingHorizontal: 24,
-    paddingBottom: 24,
+    paddingHorizontal: s(24),
+    paddingBottom: vs(24),
   },
   headerSection: {
     alignItems: "center",
-    marginBottom: 28,
-    marginTop: 10,
+    marginBottom: vs(28),
+    marginTop: vs(10),
   },
   iconCircle: {
-    width: 90,
-    height: 90,
-    borderRadius: 45,
+    width: s(90),
+    height: vs(90),
+    borderRadius: s(45),
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: 16,
+    marginBottom: vs(16),
   },
   whatsappIcon: {
     textAlign: "center",
     writingDirection: "ltr",
   },
   title: {
-    fontSize: 24,
-    marginBottom: 8,
+    fontSize: fontSizes.fs24,
+    marginBottom: vs(8),
     textAlign: "center",
   },
   subtitle: {
-    fontSize: 14,
+    fontSize: fontSizes.fs14,
     textAlign: "center",
-    lineHeight: 21,
+    lineHeight: vs(21),
     opacity: 0.8,
-    paddingHorizontal: 8,
+    paddingHorizontal: s(8),
   },
   form: {
-    gap: 16,
-    marginBottom: 24,
+    gap: s(16),
+    marginBottom: vs(24),
   },
   inputGroup: {
-    marginBottom: 4,
+    marginBottom: vs(4),
   },
   whatsappBtn: {
-    height: 54,
-    borderRadius: 27,
+    height: vs(54),
+    borderRadius: s(27),
     backgroundColor: "#25D366",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    gap: 10,
+    gap: s(10),
     elevation: 2,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
@@ -213,23 +215,23 @@ const styles = StyleSheet.create({
   },
   whatsappBtnText: {
     color: "white",
-    fontSize: 16,
+    fontSize: fontSizes.fs16,
   },
   callBtn: {
-    height: 52,
-    borderRadius: 26,
-    marginTop: 4,
+    height: vs(52),
+    borderRadius: s(26),
+    marginTop: vs(4),
   },
   noteCard: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 10,
-    padding: 14,
-    borderRadius: 12,
+    gap: s(10),
+    padding: s(14),
+    borderRadius: s(12),
   },
   noteText: {
     flex: 1,
-    lineHeight: 18,
+    lineHeight: vs(18),
     opacity: 0.85,
   },
 })

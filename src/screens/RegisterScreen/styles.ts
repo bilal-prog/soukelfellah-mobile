@@ -1,50 +1,52 @@
 import { ViewStyle, TextStyle } from "react-native"
 
+import { fontSizes } from "@/theme/fontSizes"
 import type { Theme } from "@/theme/types"
+import { s, vs } from "@/utils/scaling"
 
 export const $styles = (theme: Theme) => ({
   container: {
     flexGrow: 1,
-    paddingHorizontal: 24,
-    paddingBottom: 24,
+    paddingHorizontal: s(24),
+    paddingBottom: vs(24),
   } as ViewStyle,
 
   backButton: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
+    width: s(44),
+    height: vs(44),
+    borderRadius: s(22),
     justifyContent: "center",
     alignItems: "flex-start",
-    marginTop: 10,
+    marginTop: vs(10),
   } as ViewStyle,
 
   content: {
     justifyContent: "center",
-    paddingBottom: 20,
+    paddingBottom: vs(20),
   } as ViewStyle,
 
   headerSection: {
-    marginBottom: 24,
+    marginBottom: vs(24),
     alignItems: "center",
   } as ViewStyle,
 
   title: {
-    fontSize: 26,
-    lineHeight: 40,
+    fontSize: fontSizes.fs26,
+    lineHeight: vs(45),
     color: theme.colors.palette.primary,
-    marginBottom: 8,
+    marginBottom: vs(8),
   } as TextStyle,
 
   subtitle: {
-    fontSize: 15,
+    fontSize: fontSizes.fs15,
     color: theme.colors.palette.onSurfaceVariant,
     textAlign: "center",
-    lineHeight: 22,
+    lineHeight: vs(22),
   } as TextStyle,
 
   form: {
-    marginBottom: 24,
-    gap: 16,
+    marginBottom: vs(24),
+    gap: s(16),
   } as ViewStyle,
 
   inputGroup: {
@@ -52,60 +54,59 @@ export const $styles = (theme: Theme) => ({
   } as ViewStyle,
 
   registerBtn: {
-    height: 56,
-    borderRadius: 28,
+    height: vs(56),
+    borderRadius: s(28),
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 10,
+    marginTop: vs(10),
     backgroundColor: theme.colors.palette.primary,
   } as ViewStyle,
 
   registerBtnText: {
     color: "white",
-    fontSize: 18,
+    fontSize: fontSizes.fs18,
   } as TextStyle,
 
   footer: {
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 10,
+    marginTop: vs(10),
   } as ViewStyle,
 
   footerText: {
-    fontSize: 15,
+    fontSize: fontSizes.fs15,
     color: theme.colors.palette.onSurfaceVariant,
   } as TextStyle,
 
   loginLink: {
-    fontSize: 15,
+    fontSize: fontSizes.fs15,
     color: theme.colors.palette.primary,
     fontWeight: "bold",
   } as TextStyle,
 
   loginLinkWrapper: {
-    marginHorizontal: 4,
+    marginHorizontal: s(4),
   } as ViewStyle,
 
   legalDisclaimerContainer: {
-    marginTop: 6,
-    marginBottom: 4,
-    paddingHorizontal: 4,
+    marginTop: vs(6),
+    marginBottom: vs(4),
+    paddingHorizontal: s(4),
   } as ViewStyle,
 
   legalDisclaimerText: {
-    fontSize: 12,
-    lineHeight: 18,
+    fontSize: fontSizes.fs12,
+    lineHeight: vs(25),
     color: theme.colors.palette.onSurfaceVariant,
     textAlign: "center",
   } as TextStyle,
 
   legalLink: {
-    fontSize: 12,
-    lineHeight: 18,
+    fontSize: fontSizes.fs12,
+    lineHeight: vs(18),
     color: theme.colors.palette.primary,
     fontWeight: "bold",
     textDecorationLine: "underline",
   } as TextStyle,
 })
-

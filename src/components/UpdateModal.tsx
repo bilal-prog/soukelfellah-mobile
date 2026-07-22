@@ -5,7 +5,9 @@ import { Ionicons } from "@expo/vector-icons"
 import { Button } from "./Button"
 import { Text } from "./Text"
 import { AppVersion } from "@/services/api/modules/appVersions"
+import { fontSizes } from "@/theme/fontSizes"
 import { useAppTheme } from "@/theme/context"
+import { s, vs } from "@/utils/scaling"
 import { getCurrentAppInfo } from "@/utils/versionCheck"
 
 interface UpdateModalProps {
@@ -131,12 +133,12 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.65)",
     alignItems: "center",
     justifyContent: "center",
-    paddingHorizontal: 24,
+    paddingHorizontal: s(24),
   },
   card: {
     width: "100%",
-    borderRadius: 20,
-    padding: 24,
+    borderRadius: s(20),
+    padding: s(24),
     alignItems: "center",
     elevation: 8,
     shadowColor: "#000",
@@ -145,20 +147,20 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
   },
   headerIconContainer: {
-    marginBottom: 16,
+    marginBottom: vs(16),
   },
   iconCircle: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
+    width: s(80),
+    height: vs(80),
+    borderRadius: s(40),
     alignItems: "center",
     justifyContent: "center",
     overflow: "visible",
   },
   iconStyle: {
-    width: 60,
-    height: 60,
-    lineHeight: 60,
+    width: s(60),
+    height: vs(60),
+    lineHeight: vs(60),
     textAlign: "center",
     textAlignVertical: "center",
     includeFontPadding: false,
@@ -166,47 +168,46 @@ const styles = StyleSheet.create({
     writingDirection: "ltr",
   },
 
-
   title: {
-    fontSize: 20,
+    fontSize: fontSizes.fs20,
     textAlign: "center",
-    marginBottom: 8,
+    marginBottom: vs(8),
   },
   message: {
-    fontSize: 14,
+    fontSize: fontSizes.fs14,
     textAlign: "center",
-    lineHeight: 20,
+    lineHeight: vs(20),
     opacity: 0.8,
-    marginBottom: 14,
+    marginBottom: vs(14),
   },
   versionBadge: {
-    paddingHorizontal: 14,
-    paddingVertical: 6,
-    borderRadius: 16,
-    marginBottom: 16,
+    paddingHorizontal: s(14),
+    paddingVertical: vs(6),
+    borderRadius: s(16),
+    marginBottom: vs(16),
   },
   versionBadgeText: {
-    fontSize: 13,
+    fontSize: fontSizes.fs13,
     fontWeight: "600",
   },
   notesContainer: {
     width: "100%",
-    maxHeight: 120,
+    maxHeight: vs(120),
     backgroundColor: "rgba(0, 0, 0, 0.03)",
-    borderRadius: 12,
-    padding: 12,
-    marginBottom: 20,
+    borderRadius: s(12),
+    padding: s(12),
+    marginBottom: vs(20),
   },
   notesHeader: {
-    fontSize: 13,
-    marginBottom: 4,
+    fontSize: fontSizes.fs13,
+    marginBottom: vs(4),
   },
   notesScroll: {
-    maxHeight: 80,
+    maxHeight: vs(80),
   },
   notesText: {
-    fontSize: 13,
-    lineHeight: 18,
+    fontSize: fontSizes.fs13,
+    lineHeight: vs(18),
     opacity: 0.85,
   },
   actions: {
@@ -215,15 +216,15 @@ const styles = StyleSheet.create({
   },
   updateBtn: {
     width: "100%",
-    borderRadius: 12,
+    borderRadius: s(12),
   },
   laterBtn: {
-    marginTop: 14,
-    paddingVertical: 8,
-    paddingHorizontal: 16,
+    marginTop: vs(14),
+    paddingVertical: vs(8),
+    paddingHorizontal: s(16),
   },
   laterText: {
-    fontSize: 14,
+    fontSize: fontSizes.fs14,
     opacity: 0.7,
   },
 })

@@ -338,6 +338,17 @@ const fr: Translations = {
     noConnectionDesc: "Veuillez vérifier votre réseau et réessayer",
     restored: "Connexion Internet rétablie",
   },
+  changePassword: {
+    title: "Changer le mot de passe",
+    currentPassword: "Mot de passe actuel",
+    newPassword: "Nouveau mot de passe",
+    confirmPassword: "Confirmer le nouveau mot de passe",
+    submit: "Mettre à jour",
+    success: "Mot de passe mis à jour avec succès",
+    mismatch: "Les mots de passe ne correspondent pas",
+    minLength: "Le mot de passe doit comporter au moins 6 caractères",
+    currentRequired: "Veuillez saisir votre mot de passe actuel",
+  },
 }
 
 

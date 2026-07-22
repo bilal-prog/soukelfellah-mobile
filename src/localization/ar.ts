@@ -335,6 +335,17 @@ const ar: Translations = {
     noConnectionDesc: "يرجى التحقق من اتصالك بالشبكة وإعادة المحاولة",
     restored: "تم استعادة الاتصال بالإنترنت",
   },
+  changePassword: {
+    title: "تغيير كلمة السر",
+    currentPassword: "كلمة السر الحالية",
+    newPassword: "كلمة السر الجديدة",
+    confirmPassword: "تأكيد كلمة السر الجديدة",
+    submit: "تأكيد التغيير",
+    success: "تم تغيير كلمة السر بنجاح",
+    mismatch: "كلمات السر غير متطابقة",
+    minLength: "يجب أن تتكون كلمة السر من 6 أحرف على الأقل",
+    currentRequired: "يرجى إدخال كلمة السر الحالية",
+  },
 }
 
 export default ar

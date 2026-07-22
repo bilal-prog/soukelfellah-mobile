@@ -1,12 +1,13 @@
 import { ViewStyle, TextStyle, ImageStyle } from "react-native"
 
 import type { Theme } from "@/theme/types"
+import { ms, s, vs } from "@/utils/scaling"
 
 export const $styles = (theme: Theme) => ({
   container: {
     flexGrow: 1,
-    paddingHorizontal: 20,
-    paddingBottom: 30,
+    paddingHorizontal: s(20),
+    paddingBottom: vs(30),
     justifyContent: "space-between",
   } as ViewStyle,
 
@@ -14,13 +15,13 @@ export const $styles = (theme: Theme) => ({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 40,
-    gap: 8,
+    marginTop: vs(40),
+    gap: s(8),
   } as ViewStyle,
 
   logoText: {
-    fontSize: 26,
-    lineHeight: 40,
+    fontSize: theme.fontSizes.fs26,
+    lineHeight: vs(45),
     color: theme.colors.palette.primary,
   } as TextStyle,
 
@@ -28,13 +29,13 @@ export const $styles = (theme: Theme) => ({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginVertical: 30,
+    marginVertical: vs(30),
   } as ViewStyle,
 
   heroCircle: {
-    width: 140,
-    height: 140,
-    borderRadius: 70,
+    width: s(140),
+    height: vs(140),
+    borderRadius: ms(70),
     backgroundColor: theme.colors.palette.primaryFixed,
     justifyContent: "center",
     alignItems: "center",
@@ -42,71 +43,74 @@ export const $styles = (theme: Theme) => ({
 
   heroImage: {
     width: "100%",
-    height: 240,
-    borderRadius: 16,
+    height: vs(240),
+    borderRadius: ms(16),
   } as ImageStyle,
 
   introSection: {
     alignItems: "center",
-    marginBottom: 40,
-    paddingHorizontal: 10,
+    marginBottom: vs(40),
+    paddingHorizontal: s(10),
   } as ViewStyle,
 
   title: {
-    fontSize: 28,
-    lineHeight: 44,
+    fontSize: theme.fontSizes.fs25,
+    lineHeight: vs(44),
     color: theme.colors.palette.primary,
-    marginBottom: 12,
+    marginBottom: vs(12),
     textAlign: "center",
   } as TextStyle,
 
   subtitle: {
-    fontSize: 16,
+    fontSize: theme.fontSizes.fs18,
     color: theme.colors.palette.onSurfaceVariant,
     textAlign: "center",
-    lineHeight: 24,
+    lineHeight: vs(34),
   } as TextStyle,
 
   actionContainer: {
-    gap: 16,
+    gap: s(16),
     width: "100%",
   } as ViewStyle,
 
   btnPrimary: {
     backgroundColor: theme.colors.palette.primary,
-    height: 56,
-    borderRadius: 28,
+    height: vs(56),
+    borderRadius: ms(28),
     justifyContent: "center",
     alignItems: "center",
   } as ViewStyle,
 
   btnSecondary: {
     borderColor: theme.colors.palette.secondary,
-    borderWidth: 2,
-    height: 56,
-    borderRadius: 28,
+    borderWidth: ms(2),
+    height: vs(56),
+    borderRadius: ms(28),
     justifyContent: "center",
     alignItems: "center",
   } as ViewStyle,
 
   btnTextPrimary: {
     color: "white",
-    fontSize: 18,
+    fontSize: theme.fontSizes.fs16,
+    lineHeight: vs(24),
   } as TextStyle,
 
   btnTextSecondary: {
     color: theme.colors.palette.secondary,
-    fontSize: 18,
+    fontSize: theme.fontSizes.fs16,
+    lineHeight: vs(24),
   } as TextStyle,
 
   guestButton: {
-    marginTop: 16,
+    marginTop: vs(16),
     alignItems: "center",
   } as ViewStyle,
 
   guestButtonText: {
     color: theme.colors.palette.primary,
-    fontSize: 16,
+    fontSize: theme.fontSizes.fs16,
+    lineHeight: vs(24),
     textDecorationLine: "underline",
   } as TextStyle,
 })

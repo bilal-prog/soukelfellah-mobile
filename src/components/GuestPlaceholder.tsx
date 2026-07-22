@@ -4,7 +4,9 @@ import { Ionicons } from "@expo/vector-icons"
 
 import { useAuth } from "@/context/AuthContext"
 import { TxKeyPath } from "@/localization"
+import { fontSizes } from "@/theme/fontSizes"
 import { useAppTheme } from "@/theme/context"
+import { s, vs } from "@/utils/scaling"
 
 import { Button } from "./Button"
 import { Screen } from "./Screen"
@@ -33,7 +35,7 @@ export const GuestPlaceholder: FC<GuestPlaceholderProps> = ({ icon, titleTx, des
     >
       <View style={styles.content}>
         <View style={[styles.iconCircle, { backgroundColor: colors.palette.primaryContainer }]}>
-          <Ionicons name={icon} size={64} color={colors.palette.primary} />
+          <Ionicons name={icon} size={s(64)} color={colors.palette.primary} />
         </View>
 
         <Text tx={titleTx} preset="bold" size="lg" style={[styles.title, { color: colors.text }]} />
@@ -58,14 +60,14 @@ export const GuestPlaceholder: FC<GuestPlaceholderProps> = ({ icon, titleTx, des
 const styles = StyleSheet.create({
   btn: {
     width: "100%",
-    height: 56,
-    borderRadius: 28,
+    height: vs(56),
+    borderRadius: s(28),
     justifyContent: "center",
     alignItems: "center",
   } as ViewStyle,
   btnText: {
     color: "white",
-    fontSize: 16,
+    fontSize: fontSizes.fs16,
     fontWeight: "bold",
   } as TextStyle,
   container: {
@@ -76,23 +78,23 @@ const styles = StyleSheet.create({
   content: {
     alignItems: "center",
     width: "100%",
-    paddingHorizontal: 24,
+    paddingHorizontal: s(24),
   } as ViewStyle,
   description: {
     textAlign: "center",
-    lineHeight: 22,
-    marginBottom: 32,
+    lineHeight: vs(22),
+    marginBottom: vs(32),
   } as TextStyle,
   iconCircle: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
+    width: s(120),
+    height: vs(120),
+    borderRadius: s(60),
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: 24,
+    marginBottom: vs(24),
   } as ViewStyle,
   title: {
-    marginBottom: 12,
+    marginBottom: vs(12),
     textAlign: "center",
   } as TextStyle,
 })

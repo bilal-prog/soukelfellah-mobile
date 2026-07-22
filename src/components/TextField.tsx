@@ -12,9 +12,11 @@ import {
 
 import { isRTL } from "@/localization"
 import { translate } from "@/localization/translate"
+import { fontSizes } from "@/theme/fontSizes"
 import { useAppTheme } from "@/theme/context"
 import { $styles } from "@/theme/styles"
 import type { ThemedStyle, ThemedStyleArray } from "@/theme/types"
+import { s, vs } from "@/utils/scaling"
 
 import { Text, TextProps } from "./Text"
 
@@ -89,7 +91,7 @@ export const TextField = forwardRef(function TextField(props: TextFieldProps, re
     $inputWrapperStyle,
     isFocused && { borderColor: colors.palette.primary, borderWidth: 1.5 },
     status === "error" && { borderColor: colors.error },
-    TextInputProps.multiline && { minHeight: 112, alignItems: "flex-start" as const },
+    TextInputProps.multiline && { minHeight: vs(112), alignItems: "flex-start" as const },
     !TextInputProps.multiline && { alignItems: "center" as const },
     LeftAccessory && { paddingStart: 0 },
     RightAccessory && { paddingEnd: 0 },
@@ -189,17 +191,15 @@ export const TextField = forwardRef(function TextField(props: TextFieldProps, re
 })
 
 const $labelStyle: ThemedStyle<TextStyle> = ({ spacing, colors }) => ({
-  marginBottom: spacing.xs,
+  marginBottom: vs(spacing.xs),
   color: colors.palette.onSurfaceVariant,
   textAlign: "left",
-  // alignSelf: "flex-start",
-  // backgroundColor: "red",
 })
 
 const $inputWrapperStyle: ThemedStyle<ViewStyle> = ({ colors }) => ({
   alignItems: "flex-start",
   borderWidth: 1,
-  borderRadius: 8, // 0.5rem from DESIGN.md
+  borderRadius: s(8), // 0.5rem from DESIGN.md
   backgroundColor: colors.palette.surfaceContainerLow,
   borderColor: colors.palette.outlineVariant,
   overflow: "hidden",
@@ -210,31 +210,30 @@ const $inputStyle: ThemedStyle<TextStyle> = ({ colors, typography, spacing }) =>
   alignSelf: "stretch",
   fontFamily: typography.primary.normal,
   color: colors.text,
-  fontSize: 16,
-  height: 24,
+  fontSize: fontSizes.fs16,
+  height: vs(34),
   paddingVertical: 0,
   paddingHorizontal: 0,
-  marginVertical: spacing.sm,
-  marginHorizontal: spacing.sm,
-  // backgroundColor: "red",
+  marginVertical: vs(spacing.sm),
+  marginHorizontal: s(spacing.sm),
 })
 
 const $helperStyle: ThemedStyle<TextStyle> = ({ spacing }) => ({
-  marginTop: spacing.xs,
+  marginTop: vs(spacing.xs),
   textAlign: "left",
   alignSelf: "stretch",
 })
 
 const $rightAccessoryStyle: ThemedStyle<ViewStyle> = ({ spacing }) => ({
-  marginEnd: spacing.xs,
-  height: 40,
+  marginEnd: s(spacing.xs),
+  height: vs(40),
   justifyContent: "center",
   alignItems: "center",
 })
 
 const $leftAccessoryStyle: ThemedStyle<ViewStyle> = ({ spacing }) => ({
-  marginLeft: spacing.sm,
-  height: 40,
+  marginLeft: s(spacing.sm),
+  height: vs(40),
   justifyContent: "center",
   alignItems: "center",
 })

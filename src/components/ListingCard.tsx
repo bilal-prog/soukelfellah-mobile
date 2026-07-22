@@ -16,6 +16,7 @@ import { isRTL } from "@/localization"
 import { translate } from "@/localization/translate"
 import { useAppTheme } from "@/theme/context"
 import { formatListingDate } from "@/utils/formatDate"
+import { s, scale, vs } from "@/utils/scaling"
 
 import { Text } from "./Text"
 
@@ -171,8 +172,8 @@ export const ListingCard = memo(function ListingCard(props: ListingCardProps) {
             <View
               style={{
                 backgroundColor: colors.palette.secondary,
-                paddingHorizontal: 6,
-                paddingVertical: 2,
+                paddingHorizontal: scale(6),
+                paddingVertical: scale(4),
                 borderRadius: 4,
               }}
             >
@@ -186,8 +187,8 @@ export const ListingCard = memo(function ListingCard(props: ListingCardProps) {
             <View
               style={{
                 backgroundColor: colors.palette.tertiary,
-                paddingHorizontal: 6,
-                paddingVertical: 2,
+                paddingHorizontal: scale(6),
+                paddingVertical: scale(4),
                 borderRadius: 4,
               }}
             >
@@ -201,8 +202,8 @@ export const ListingCard = memo(function ListingCard(props: ListingCardProps) {
             <View
               style={{
                 backgroundColor: colors.palette.primary,
-                paddingHorizontal: 6,
-                paddingVertical: 2,
+                paddingHorizontal: scale(6),
+                paddingVertical: scale(4),
                 borderRadius: 4,
               }}
             >
@@ -281,18 +282,18 @@ export const ListingCard = memo(function ListingCard(props: ListingCardProps) {
               { backgroundColor: colors.palette.primary, marginRight: spacing.xxs },
             ]}
           >
-            <Ionicons name="call" size={14} color="white" />
-            <Text tx="common:call" size="xxs" style={$actionBtnText} />
+            <Ionicons name="call" size={scale(18)} color="white" />
+            <Text tx="common:call" size="xs" style={$actionBtnText} />
           </TouchableOpacity>
 
           <TouchableOpacity
             onPress={handleWhatsapp}
             style={[$actionButton, $waButton, { borderColor: colors.palette.secondary }]}
           >
-            <Ionicons name="logo-whatsapp" size={14} color={colors.palette.secondary} />
+            <Ionicons name="logo-whatsapp" size={scale(18)} color={colors.palette.secondary} />
             <Text
               tx="common:whatsapp"
-              size="xxs"
+              size="xs"
               style={[$actionBtnText, { color: colors.palette.secondary }]}
             />
           </TouchableOpacity>
@@ -303,10 +304,10 @@ export const ListingCard = memo(function ListingCard(props: ListingCardProps) {
 })
 
 const $cardContainer: ViewStyle = {
-  borderRadius: 12,
+  borderRadius: s(12),
   borderWidth: 1,
   overflow: "hidden",
-  marginBottom: 16,
+  marginBottom: vs(16),
   elevation: 1,
   shadowColor: "#000",
   shadowOffset: { width: 0, height: 1 },
@@ -332,19 +333,19 @@ const $imagePlaceholder: ViewStyle = {
 
 const $badge: ViewStyle = {
   position: "absolute",
-  top: 8,
-  paddingHorizontal: 8,
-  paddingVertical: 2,
-  borderRadius: 12,
+  top: vs(8),
+  paddingHorizontal: s(8),
+  paddingVertical: vs(2),
+  borderRadius: s(12),
   zIndex: 2,
 }
 
 const $ratingBadge: ViewStyle = {
   position: "absolute",
-  top: 8,
-  paddingHorizontal: 6,
-  paddingVertical: 2,
-  borderRadius: 8,
+  top: vs(8),
+  paddingHorizontal: s(6),
+  paddingVertical: vs(2),
+  borderRadius: s(8),
   flexDirection: "row",
   alignItems: "center",
   zIndex: 2,
@@ -352,18 +353,18 @@ const $ratingBadge: ViewStyle = {
 
 const $favButton: ViewStyle = {
   position: "absolute",
-  top: 8,
-  right: 8,
-  width: 28,
-  height: 28,
-  borderRadius: 14,
+  top: vs(8),
+  right: s(8),
+  width: s(28),
+  height: vs(28),
+  borderRadius: s(14),
   justifyContent: "center",
   alignItems: "center",
   zIndex: 3,
 }
 
 const $infoContent: ViewStyle = {
-  padding: 12,
+  padding: s(12),
 }
 
 const $row: ViewStyle = {
@@ -374,13 +375,13 @@ const $row: ViewStyle = {
 const $actionRow: ViewStyle = {
   flexDirection: isRTL ? "row-reverse" : "row",
   justifyContent: "space-between",
-  gap: 20,
+  gap: s(20),
 }
 
 const $actionButton: ViewStyle = {
   flex: 1,
-  height: 36,
-  borderRadius: 8,
+  height: vs(45),
+  borderRadius: s(8),
   flexDirection: isRTL ? "row-reverse" : "row",
   justifyContent: "center",
   alignItems: "center",
@@ -394,5 +395,5 @@ const $waButton: ViewStyle = {
 const $actionBtnText: TextStyle = {
   color: "white",
   fontWeight: "bold",
-  marginHorizontal: 4,
+  marginHorizontal: s(4),
 }

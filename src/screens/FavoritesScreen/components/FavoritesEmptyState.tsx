@@ -23,11 +23,7 @@ export const FavoritesEmptyState = memo(function FavoritesEmptyState({
         preset="subheading"
         style={{ color: colors.palette.onSurface }}
       />
-      <Text
-        tx="common:noFavoritesDesc"
-        style={styles.emptyText}
-        size="xs"
-      />
+      <Text tx="common:noFavoritesDesc" style={styles.emptyText} size="xs" />
     </View>
   )
 })

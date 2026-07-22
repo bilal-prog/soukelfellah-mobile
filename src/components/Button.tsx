@@ -8,9 +8,11 @@ import {
   ViewStyle,
 } from "react-native"
 
+import { fontSizes } from "@/theme/fontSizes"
 import { useAppTheme } from "@/theme/context"
 import { $styles } from "@/theme/styles"
 import type { ThemedStyle, ThemedStyleArray } from "@/theme/types"
+import { s, vs } from "@/utils/scaling"
 
 import { Text, TextProps } from "./Text"
 
@@ -111,17 +113,17 @@ export function Button(props: ButtonProps) {
 }
 
 const $baseViewStyle: ThemedStyle<ViewStyle> = ({ spacing }) => ({
-  minHeight: 56,
-  borderRadius: 16, // 1rem from DESIGN.md
+  minHeight: vs(56),
+  borderRadius: s(16), // 1rem from DESIGN.md
   justifyContent: "center",
   alignItems: "center",
-  paddingHorizontal: spacing.sm,
+  paddingHorizontal: s(spacing.sm),
   overflow: "hidden",
 })
 
 const $baseTextStyle: ThemedStyle<TextStyle> = ({ typography }) => ({
-  fontSize: 16,
-  lineHeight: 20,
+  fontSize: fontSizes.fs16,
+  lineHeight: vs(20),
   fontFamily: typography.primary.bold,
   textAlign: "center",
   flexShrink: 1,
@@ -130,11 +132,11 @@ const $baseTextStyle: ThemedStyle<TextStyle> = ({ typography }) => ({
 })
 
 const $rightAccessoryStyle: ThemedStyle<ViewStyle> = ({ spacing }) => ({
-  marginLeft: spacing.xs,
+  marginLeft: s(spacing.xs),
   zIndex: 1,
 })
 const $leftAccessoryStyle: ThemedStyle<ViewStyle> = ({ spacing }) => ({
-  marginRight: spacing.xs,
+  marginRight: s(spacing.xs),
   zIndex: 1,
 })
 

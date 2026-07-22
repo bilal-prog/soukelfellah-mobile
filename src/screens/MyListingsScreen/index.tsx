@@ -3,6 +3,7 @@ import { View, TouchableOpacity, Alert, FlatList, ActivityIndicator } from "reac
 import { Ionicons } from "@expo/vector-icons"
 import { useFocusEffect } from "@react-navigation/native"
 
+import { ChangePasswordModal } from "@/components/ChangePasswordModal"
 import { GuestPlaceholder } from "@/components/GuestPlaceholder"
 import { Screen } from "@/components/Screen"
 import { Text } from "@/components/Text"
@@ -35,6 +36,7 @@ export const MyListingsScreen: FC<MyListingsScreenProps> = memo(function MyListi
   const { userId, userName, userPhone, logout, isAuthenticated } = useAuth()
 
   const [activeTab, setActiveTab] = useState<"active" | "paused" | "sold">("active")
+  const [isChangePasswordVisible, setIsChangePasswordVisible] = useState(false)
 
   // Query database listings belonging to this seller matching the selected tab status
   const {
@@ -178,6 +180,10 @@ export const MyListingsScreen: FC<MyListingsScreenProps> = memo(function MyListi
             <Ionicons name="log-out-outline" size={26} color={colors.palette.error} />
           </TouchableOpacity>
 
+          <TouchableOpacity onPress={() => setIsChangePasswordVisible(true)}>
+            <Ionicons name="key-outline" size={24} color={colors.palette.primary} />
+          </TouchableOpacity>
+
           <TouchableOpacity onPress={handleDeleteAccount}>
             <Ionicons name="trash-outline" size={24} color={colors.palette.error} />
           </TouchableOpacity>
@@ -218,6 +224,12 @@ export const MyListingsScreen: FC<MyListingsScreenProps> = memo(function MyListi
           showsVerticalScrollIndicator={false}
         />
       )}
+
+      {/* Change Password Modal */}
+      <ChangePasswordModal
+        visible={isChangePasswordVisible}
+        onClose={() => setIsChangePasswordVisible(false)}
+      />
     </Screen>
   )
 })
