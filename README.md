@@ -25,6 +25,7 @@ graph TD
 ```
 
 ### Core Technologies
+
 1. **Core Framework**: React Native + Expo (SDK 51) for fast compilation, easy native module access, and smooth performance.
 2. **State Management & Caching**: TanStack React Query (v5) for handling asynchronous cache keys, query invalidations, pagination state, and caching strategies.
 3. **Navigation**: React Navigation (Native Stack) for native-feeling transitions and gestures.
@@ -76,11 +77,13 @@ soukelfellah-mobile/
 ---
 
 ## 🇲🇦 Moroccan Darija & Multi-Language Translation
+
 The application provides full support for Moroccan users through four translation dictionaries located in `src/localization/`:
-*   **Moroccan Darija (ary)**: Local Arabic dialect spoken by farmers.
-*   **Standard Arabic (ar)**: Formal language layout.
-*   **French (fr)**: Widely used for business and agriculture in Morocco.
-*   **English (en)**: Global standard.
+
+- **Moroccan Darija (ary)**: Local Arabic dialect spoken by farmers.
+- **Standard Arabic (ar)**: Formal language layout.
+- **French (fr)**: Widely used for business and agriculture in Morocco.
+- **English (en)**: Global standard.
 
 System coordinates dynamically switch layouts to support Right-to-Left (RTL) reading patterns when Arabic/Darija is selected.
 
@@ -89,40 +92,43 @@ System coordinates dynamically switch layouts to support Right-to-Left (RTL) rea
 ## 🛠️ Developer Setup & Launch Guide
 
 ### 1. Prerequisite Installations
-*   Ensure Node.js v20+ is installed on your computer.
-*   Install package manager `pnpm` globally:
-    ```bash
-    npm install -g pnpm
-    ```
+
+- Ensure Node.js v20+ is installed on your computer.
+- Install package manager `pnpm` globally:
+  ```bash
+  npm install -g pnpm
+  ```
 
 ### 2. Environment Configuration
+
 Create a `.env.local` or edit app configuration parameters to point to your backend API. In local development with ngrok, you can use:
+
 ```env
 EXPO_PUBLIC_API_URL=https://your-ngrok-url.ngrok-free.app
 ```
 
 ### 3. Run Development Commands
 
-*   **Install Dependencies**:
-    ```bash
-    pnpm install
-    ```
-*   **Start Metro Bundler**:
-    ```bash
-    pnpm start
-    ```
-*   **Run on Android**:
-    ```bash
-    pnpm android
-    ```
-*   **Run on iOS**:
-    ```bash
-    pnpm ios
-    ```
-*   **Check TypeScript Compilation**:
-    ```bash
-    pnpm compile
-    ```
+- **Install Dependencies**:
+  ```bash
+  pnpm install
+  ```
+- **Start Metro Bundler**:
+  ```bash
+  pnpm start
+  ```
+- **Run on Android**:
+  ```bash
+  pnpm android
+  ```
+- **Run on iOS**:
+  ```bash
+  pnpm ios
+  ```
+- **Check TypeScript Compilation**:
+  ```bash
+  pnpm compile
+  ```
 
 ---
 
@@ -141,15 +147,17 @@ EXPO_PUBLIC_API_URL=https://your-ngrok-url.ngrok-free.app
 To publish **Souk El Fellah** on the **Google Play Store**, the following public compliance URLs are required by Google Play Console policies:
 
 ### 1. Privacy Policy URL
-* **Production URL**: `https://admin.soukelfellah.ma/privacy` (or `https://soukelfellah.ma/privacy`)
-* **Local Test URL**: `http://localhost:3000/privacy`
-* **Google Play Console Placement**: Go to **Policy and Programs $\rightarrow$ App Content $\rightarrow$ Privacy Policy**.
+
+- **Production URL**: `https://soukelfellah-backoffice.vercel.app/privacy`
+- **Local Test URL**: `http://localhost:3000/privacy`
+- **Google Play Console Placement**: Go to **Policy and Programs $\rightarrow$ App Content $\rightarrow$ Privacy Policy**.
 
 ### 2. Web Account Deletion Request URL
-* **Production URL**: `https://admin.soukelfellah.ma/delete-account` (or `https://soukelfellah.ma/delete-account`)
-* **Local Test URL**: `http://localhost:3000/delete-account`
-* **Google Play Console Placement**: Go to **Policy and Programs $\rightarrow$ App Content $\rightarrow$ Data Safety $\rightarrow$ Account Deletion URL**.
+
+- **Production URL**: `https://soukelfellah-backoffice.vercel.app/delete-account`
+- **Local Test URL**: `http://localhost:3000/delete-account`
+- **Google Play Console Placement**: Go to **Policy and Programs $\rightarrow$ App Content $\rightarrow$ Data Safety $\rightarrow$ Account Deletion URL**.
 
 ### 3. Support Contacts
-* **WhatsApp & Phone Support**: `+212 7 22 95 78 26`
 
+- **WhatsApp & Phone Support**: `+212 7 22 95 78 26`
