@@ -1023,7 +1023,7 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
             ) : (
               <FlatList
                 data={dbRegions || []}
-                keyExtractor={(item: any) => item._id}
+                keyExtractor={(item: any) => item?._id}
                 renderItem={({ item }: any) => (
                   <TouchableOpacity
                     style={styles.modalItem}
@@ -1066,7 +1066,7 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
             ) : (
               <FlatList
                 data={dbProvinces || []}
-                keyExtractor={(item: any) => item._id}
+                keyExtractor={(item: any) => item?._id}
                 renderItem={({ item }: any) => (
                   <TouchableOpacity
                     style={styles.modalItem}
@@ -1101,7 +1101,7 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
             </View>
             <FlatList
               data={productCategories}
-              keyExtractor={(item: any) => item._id}
+              keyExtractor={(item: any) => item?._id}
               renderItem={({ item }: any) => (
                 <TouchableOpacity
                   style={styles.modalItem}
@@ -1138,7 +1138,7 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
             </View>
             <FlatList
               data={filteredProductTypes}
-              keyExtractor={(item: any) => item._id}
+              keyExtractor={(item: any) => item?._id}
               renderItem={({ item }: any) => (
                 <TouchableOpacity
                   style={styles.modalItem}
@@ -1191,7 +1191,7 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
             </View>
             <FlatList
               data={mappedAllowedUnits}
-              keyExtractor={(item: any) => item._id}
+              keyExtractor={(item: any) => item?._id}
               renderItem={({ item }: any) => (
                 <TouchableOpacity
                   style={styles.modalItem}

@@ -16,6 +16,7 @@ import { useAppTheme } from "@/theme/context"
 import { $styles } from "./styles"
 import { HomeListingItem } from "./components/HomeListingItem"
 import { HomeHeader } from "./components/HomeHeader"
+import { s } from "@/utils/scaling"
 
 interface HomeScreenProps extends MainTabScreenProps<"Home"> {}
 
@@ -94,7 +95,7 @@ export const HomeScreen: FC<HomeScreenProps> = memo(function HomeScreen(props) {
 
   const renderListingCard = useCallback(
     ({ item }: { item: any }) => {
-      return <HomeListingItem item={item} onPress={() => handleListingDetails(item._id)} />
+      return <HomeListingItem item={item} onPress={() => handleListingDetails(item?._id)} />
     },
     [handleListingDetails],
   )
@@ -133,7 +134,7 @@ export const HomeScreen: FC<HomeScreenProps> = memo(function HomeScreen(props) {
       ) : (
         <FlatList
           data={listings}
-          keyExtractor={(item) => item._id}
+          keyExtractor={(item) => item?._id}
           renderItem={renderListingCard}
           ListHeaderComponent={renderHomeHeader}
           contentContainerStyle={styles.flatListContent}
@@ -156,7 +157,7 @@ export const HomeScreen: FC<HomeScreenProps> = memo(function HomeScreen(props) {
 
       {/* Floating Action Button (FAB) */}
       <TouchableOpacity activeOpacity={0.9} onPress={handleAddPress} style={styles.fab}>
-        <Ionicons name="add" size={32} color="white" />
+        <Ionicons name="add" size={s(32)} color="white" />
       </TouchableOpacity>
     </Screen>
   )

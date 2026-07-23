@@ -14,7 +14,7 @@ export const SearchListingItem = memo(function SearchListingItem({
 }: SearchListingItemProps) {
   return (
     <ListingCard
-      id={item._id}
+      id={item?._id}
       title={item.title}
       price={item.price}
       priceType={item.priceType}

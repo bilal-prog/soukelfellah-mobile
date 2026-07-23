@@ -99,7 +99,7 @@ export const $styles = (theme: Theme) => ({
     bottom: vs(24),
     right: s(20),
     width: s(56),
-    height: vs(56),
+    height: s(56),
     borderRadius: s(28),
     backgroundColor: theme.colors.palette.primary,
     justifyContent: "center",

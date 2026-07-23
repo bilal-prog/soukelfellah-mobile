@@ -92,12 +92,12 @@ export const MyListingItem = memo(function MyListingItem({
       {/* Sub row action buttons */}
       {activeTab === "active" && (
         <View style={styles.listingActions}>
-          <TouchableOpacity onPress={() => onEdit(item._id)} style={styles.actionBtn}>
+          <TouchableOpacity onPress={() => onEdit(item?._id)} style={styles.actionBtn}>
             <Ionicons name="create-outline" size={s(16)} color={styles.actionTextEdit.color} />
             <Text tx="common:edit" size="xxs" style={styles.actionTextEdit} />
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => onMarkSold(item._id)} style={styles.actionBtn}>
+          <TouchableOpacity onPress={() => onMarkSold(item?._id)} style={styles.actionBtn}>
             <Ionicons
               name="checkmark-circle-outline"
               size={s(16)}
@@ -106,8 +106,12 @@ export const MyListingItem = memo(function MyListingItem({
             <Text tx="common:sold" size="xxs" style={styles.actionTextSold} />
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => onDelete(item._id)} style={styles.deleteBtn}>
-            <Ionicons name="trash-outline" size={s(18)} color={styles.deleteBtn.color || "#ff3b30"} />
+          <TouchableOpacity onPress={() => onDelete(item?._id)} style={styles.deleteBtn}>
+            <Ionicons
+              name="trash-outline"
+              size={s(18)}
+              color={styles.deleteBtn.color || "#ff3b30"}
+            />
           </TouchableOpacity>
         </View>
       )}

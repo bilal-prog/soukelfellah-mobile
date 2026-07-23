@@ -39,7 +39,7 @@ export const NotificationItem = memo(function NotificationItem({
   const isUnread = !item.isRead
 
   const handlePress = () => onPress(item)
-  const handleLongPress = () => onLongPress(item._id)
+  const handleLongPress = () => onLongPress(item?._id)
 
   const { theme } = useAppTheme()
   const colors = theme.colors

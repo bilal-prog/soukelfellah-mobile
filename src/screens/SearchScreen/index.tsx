@@ -82,11 +82,7 @@ export const SearchScreen: FC<SearchScreenProps> = memo(function SearchScreen(pr
   const renderEmptyState = useCallback(() => {
     if (isLoading) {
       return (
-        <ActivityIndicator
-          size="large"
-          color={colors.palette.primary}
-          style={{ marginTop: 40 }}
-        />
+        <ActivityIndicator size="large" color={colors.palette.primary} style={{ marginTop: 40 }} />
       )
     }
     return (
@@ -103,7 +99,7 @@ export const SearchScreen: FC<SearchScreenProps> = memo(function SearchScreen(pr
 
   const renderListingItem = useCallback(
     ({ item }: { item: any }) => {
-      return <SearchListingItem item={item} onPress={() => handleListingDetails(item._id)} />
+      return <SearchListingItem item={item} onPress={() => handleListingDetails(item?._id)} />
     },
     [handleListingDetails],
   )
@@ -128,7 +124,7 @@ export const SearchScreen: FC<SearchScreenProps> = memo(function SearchScreen(pr
       {/* Results loop inside FlatList */}
       <FlatList
         data={filteredListings}
-        keyExtractor={(item) => item._id}
+        keyExtractor={(item) => item?._id}
         renderItem={renderListingItem}
         ListHeaderComponent={
           <SearchHeader
@@ -170,17 +166,17 @@ export const SearchScreen: FC<SearchScreenProps> = memo(function SearchScreen(pr
             </View>
             <FlatList
               data={[{ _id: "all", name: "all" }, ...(dbProvinces || [])]}
-              keyExtractor={(item: any) => item._id}
+              keyExtractor={(item: any) => item?._id}
               renderItem={({ item }: any) => (
                 <TouchableOpacity
                   style={styles.modalItem}
                   onPress={() => {
-                    setSelectedCity(item._id === "all" ? "all" : item.name)
+                    setSelectedCity(item?._id === "all" ? "all" : item.name)
                     setIsProvinceModalVisible(false)
                   }}
                 >
                   <Text
-                    text={item._id === "all" ? translate("common:all") : item.name}
+                    text={item?._id === "all" ? translate("common:all") : item.name}
                     style={{ textAlign: "left", width: "100%" }}
                   />
                 </TouchableOpacity>

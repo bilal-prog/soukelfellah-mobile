@@ -169,7 +169,7 @@ export const NotificationsScreen: FC<AppStackScreenProps<"Notifications">> = mem
         ) : (
           <FlashList
             data={notifications}
-            keyExtractor={(item) => item._id}
+            keyExtractor={(item) => item?._id}
             renderItem={renderItem}
             contentContainerStyle={styles.listContent}
             onRefresh={refetch}

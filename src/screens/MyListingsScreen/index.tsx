@@ -209,14 +209,13 @@ export const MyListingsScreen: FC<MyListingsScreenProps> = memo(function MyListi
         </View>
       </View>
 
-
       {/* Main dashboard list utilizing FlatList */}
       {isLoading ? (
         <ActivityIndicator size="large" color={colors.palette.primary} style={{ marginTop: 20 }} />
       ) : (
         <FlatList
           data={visibleListings}
-          keyExtractor={(item) => item._id}
+          keyExtractor={(item) => item?._id}
           renderItem={renderMyListingCard}
           ListHeaderComponent={renderMyListingsHeader}
           ListEmptyComponent={renderMyListingsEmptyState}

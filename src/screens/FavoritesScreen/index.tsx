@@ -58,7 +58,7 @@ export const FavoritesScreen: FC<FavoritesScreenProps> = memo(function Favorites
 
   const renderFavoriteItem = useCallback(
     ({ item }: { item: any }) => {
-      return <FavoritesListingItem item={item} onPress={() => handleListingDetails(item._id)} />
+      return <FavoritesListingItem item={item} onPress={() => handleListingDetails(item?._id)} />
     },
     [handleListingDetails],
   )
@@ -94,7 +94,7 @@ export const FavoritesScreen: FC<FavoritesScreenProps> = memo(function Favorites
       ) : (
         <FlatList
           data={favoritedListings}
-          keyExtractor={(item) => item._id}
+          keyExtractor={(item) => item?._id}
           renderItem={renderFavoriteItem}
           ListEmptyComponent={renderFavoritesEmptyState}
           contentContainerStyle={styles.flatListContent}
