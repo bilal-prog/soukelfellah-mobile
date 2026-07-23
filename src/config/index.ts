@@ -1,5 +1,5 @@
 
-const API_URL_PROD = "https://soukelfellah-backend.fly.dev"
+const API_URL_PROD = "https://soukelfellah-backend-git-17880232745.europe-west1.run.app"
 
 const Config = {
   // Production Fly.io URL or custom env variable
