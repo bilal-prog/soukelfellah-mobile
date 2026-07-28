@@ -20,6 +20,7 @@ export const SearchListingItem = memo(function SearchListingItem({
       priceType={item.priceType}
       purpose={item.purpose}
       listingDirection={item.listingDirection}
+      quantity={item.quantity}
       unit={
         item.listingType !== "EQUIPMENT"
           ? typeof item.unitId === "object"

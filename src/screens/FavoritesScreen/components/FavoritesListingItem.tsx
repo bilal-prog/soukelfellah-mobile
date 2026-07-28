@@ -20,6 +20,7 @@ export const FavoritesListingItem = memo(function FavoritesListingItem({
       priceType={item.priceType}
       purpose={item.purpose}
       listingDirection={item.listingDirection}
+      quantity={item.quantity}
       unit={
         item.listingType !== "EQUIPMENT"
           ? typeof item.unitId === "object"

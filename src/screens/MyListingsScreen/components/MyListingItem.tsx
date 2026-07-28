@@ -26,12 +26,17 @@ export const MyListingItem = memo(function MyListingItem({
 }: MyListingItemProps) {
   const imageUri =
     typeof item.images?.[0] === "object" ? item.images[0]?.url : item.images?.[0] || item.image
-  const unitText =
+  const unitName =
     item.listingType !== "EQUIPMENT"
       ? typeof item.unitId === "object"
         ? item.unitId?.name
         : item.unit || ""
       : ""
+  const unitText = unitName
+    ? item.quantity && item.quantity > 1
+      ? `${item.quantity} ${unitName}`
+      : unitName
+    : ""
 
   const getCreatedDateText = () => {
     if (!item.createdAt) {

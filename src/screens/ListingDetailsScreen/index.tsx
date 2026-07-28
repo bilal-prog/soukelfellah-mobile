@@ -300,7 +300,20 @@ export const ListingDetailsScreen: FC<ListingDetailsScreenProps> = memo(
                 ) : (
                   <>
                     <Text
-                      text={`${listing.price} ${translate("common:currency")}`}
+                      text={(() => {
+                        const unitName =
+                          listing.listingType !== "EQUIPMENT"
+                            ? typeof listing.unitId === "object"
+                              ? listing.unitId?.name
+                              : listing.unit || ""
+                            : ""
+                        const unitDisplay = unitName
+                          ? listing.quantity && listing.quantity > 1
+                            ? ` / ${listing.quantity} ${unitName}`
+                            : ` / ${unitName}`
+                          : ""
+                        return `${listing.price} ${translate("common:currency")}${unitDisplay}`
+                      })()}
                       preset="display"
                       style={styles.priceText}
                     />
@@ -387,7 +400,7 @@ export const ListingDetailsScreen: FC<ListingDetailsScreenProps> = memo(
             </View>
 
             {/* Specs Bento Grid */}
-            {listing.listingType === "EQUIPMENT" && (
+            {listing.listingType === "EQUIPMENT" ? (
               <View style={styles.specsGrid}>
                 <View style={styles.specBox}>
                   <Ionicons name="calendar-outline" size={20} color={colors.palette.primary} />
@@ -433,7 +446,24 @@ export const ListingDetailsScreen: FC<ListingDetailsScreenProps> = memo(
                   </View>
                 )}
               </View>
-            )}
+            ) : (() => {
+              const uName =
+                typeof listing.unitId === "object" ? listing.unitId?.name : listing.unit || ""
+              if (!listing.quantity && !uName) return null
+              return (
+                <View style={styles.specsGrid}>
+                  <View style={styles.specBox}>
+                    <Ionicons name="cube-outline" size={20} color={colors.palette.primary} />
+                    <Text tx="addListing:quantityLabel" size="xxs" style={styles.locationText} />
+                    <Text
+                      text={`${listing.quantity || ""} ${uName}`.trim()}
+                      preset="bold"
+                      size="xs"
+                    />
+                  </View>
+                </View>
+              )
+            })()}
 
             {/* Description Section */}
             <View style={styles.descSection}>

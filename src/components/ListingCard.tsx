@@ -27,6 +27,7 @@ export interface ListingCardProps {
   priceType?: "FIXED" | "NEGOTIABLE" | "CONTACT"
   purpose?: "SELL" | "RENT"
   listingDirection?: "SELL" | "BUY"
+  quantity?: number
   unit?: string
   locationName: string
   imageUri?: string
@@ -46,6 +47,7 @@ export const ListingCard = memo(function ListingCard(props: ListingCardProps) {
     priceType = "FIXED",
     purpose = "SELL",
     listingDirection = "SELL",
+    quantity,
     unit,
     locationName,
     imageUri,
@@ -260,11 +262,16 @@ export const ListingCard = memo(function ListingCard(props: ListingCardProps) {
                 <>
                   {price}{" "}
                   <Text
-                    text={
-                      priceType === "NEGOTIABLE"
-                        ? `${translate("common:currency")}${unit ? `/${unit}` : ""} (${translate("addListing:priceTypeNegotiable")})`
-                        : `${translate("common:currency")}${unit ? `/${unit}` : ""}`
-                    }
+                    text={(() => {
+                      const unitStr = unit
+                        ? quantity && quantity > 1
+                          ? ` / ${quantity} ${unit}`
+                          : ` / ${unit}`
+                        : ""
+                      return priceType === "NEGOTIABLE"
+                        ? `${translate("common:currency")}${unitStr} (${translate("addListing:priceTypeNegotiable")})`
+                        : `${translate("common:currency")}${unitStr}`
+                    })()}
                     size="xxs"
                   />
                 </>
