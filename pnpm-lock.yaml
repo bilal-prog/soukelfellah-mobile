@@ -20,6 +20,9 @@ importers:
       '@expo-google-fonts/noto-sans-arabic':
         specifier: ^0.4.0
         version: 0.4.3
+      '@expo-google-fonts/readex-pro':
+        specifier: ^0.4.1
+        version: 0.4.1
       '@expo/metro-runtime':
         specifier: ~55.0.6
         version: 55.0.11(@expo/dom-webview@55.0.6)(expo@55.0.5)(react-dom@19.2.0(react@19.2.0))(react-native@0.83.2(@babel/core@7.29.0)(@types/react@19.2.15)(react@19.2.0))(react@19.2.0)
@@ -1275,6 +1278,9 @@ packages:
 
   '@expo-google-fonts/noto-sans-arabic@0.4.3':
     resolution: {integrity: sha512-YvtxyuegxPegu2g5urXJ+gQxRp8i798nQswTmEjwXOWR/fqy0Gvey6h5IoNRBrc43SxRxPezqCiR9ivpfPAXSg==}
+
+  '@expo-google-fonts/readex-pro@0.4.1':
+    resolution: {integrity: sha512-BADsKySd3E/KIHvm5rHNvaRGTM2WmJ6EgnLAaj3ksgV+wyBbRaOSvqik2gYh00vb74AUSZGmvei/YeAv3Korsw==}
 
   '@expo/cli@55.0.15':
     resolution: {integrity: sha512-Qd4aF2+wT9LtdV7G/gULbx/t8FJ/OVtwuNkLcZt1XlosQ5XX/C/3ywZXYl+/bYcHUmuO1TBD3Fg05bNlmL6vrw==}
@@ -6888,6 +6894,8 @@ snapshots:
   '@expo-google-fonts/cairo@0.4.2': {}
 
   '@expo-google-fonts/noto-sans-arabic@0.4.3': {}
+
+  '@expo-google-fonts/readex-pro@0.4.1': {}
 
   '@expo/cli@55.0.15(@expo/dom-webview@55.0.6)(@expo/metro-runtime@55.0.11)(expo-constants@55.0.16(expo@55.0.5)(react-native@0.83.2(@babel/core@7.29.0)(@types/react@19.2.15)(react@19.2.0)))(expo-font@55.0.8(expo@55.0.5)(react-native@0.83.2(@babel/core@7.29.0)(@types/react@19.2.15)(react@19.2.0))(react@19.2.0))(expo@55.0.5)(react-dom@19.2.0(react@19.2.0))(react-native@0.83.2(@babel/core@7.29.0)(@types/react@19.2.15)(react@19.2.0))(react@19.2.0)(typescript@5.9.3)':
     dependencies:

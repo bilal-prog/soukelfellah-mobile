@@ -13,6 +13,13 @@ import {
   NotoSansArabic_600SemiBold as notoSemiBold,
   NotoSansArabic_700Bold as notoBold,
 } from "@expo-google-fonts/noto-sans-arabic"
+import {
+  ReadexPro_300Light as readexLight,
+  ReadexPro_400Regular as readexRegular,
+  ReadexPro_500Medium as readexMedium,
+  ReadexPro_600SemiBold as readexSemiBold,
+  ReadexPro_700Bold as readexBold,
+} from "@expo-google-fonts/readex-pro"
 
 export const customFontsToLoad = {
   cairoLight,
@@ -25,9 +32,21 @@ export const customFontsToLoad = {
   notoMedium,
   notoSemiBold,
   notoBold,
+  readexLight,
+  readexRegular,
+  readexMedium,
+  readexSemiBold,
+  readexBold,
 }
 
 const fonts = {
+  readexPro: {
+    light: "readexLight",
+    normal: "readexRegular",
+    medium: "readexMedium",
+    semiBold: "readexSemiBold",
+    bold: "readexBold",
+  },
   cairo: {
     light: "cairoLight",
     normal: "cairoRegular",
@@ -46,7 +65,7 @@ const fonts = {
 
 export const typography = {
   fonts,
-  primary: fonts.notoSansArabic,
+  primary: fonts.readexPro,
   secondary: fonts.cairo,
   code: Platform.select({ ios: "Courier", android: "monospace" }),
 }
