@@ -78,6 +78,8 @@ const ar: Translations = {
     hasAccount: "لديك حساب بالفعل؟",
     loginNow: "سجل الدخول",
     nameRequired: "الاسم الكامل مطلوب",
+    regionRequired: "الجهة مطلوبة",
+    provinceRequired: "الإقليم مطلوب",
     addressRequired: "العنوان مطلوب لتحديد موقع السلع",
     registerFailedTitle: "فشل التسجيل",
     registerFailedMsg: "حدث خطأ أثناء فتح الحساب",

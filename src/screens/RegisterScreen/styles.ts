@@ -109,4 +109,61 @@ export const $styles = (theme: Theme) => ({
     fontWeight: "bold",
     textDecorationLine: "underline",
   } as TextStyle,
+
+  selectTrigger: {
+    borderWidth: 1,
+    borderRadius: s(4),
+    borderColor: theme.colors.palette.outline,
+    backgroundColor: theme.colors.palette.surface,
+    paddingHorizontal: s(12),
+    paddingVertical: vs(8),
+    minHeight: vs(56),
+    justifyContent: "center",
+  } as ViewStyle,
+
+  selectLabel: {
+    color: theme.colors.palette.onSurfaceVariant,
+    textAlign: "left",
+    marginBottom: vs(4),
+  } as TextStyle,
+
+  selectContent: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  } as ViewStyle,
+
+  selectValueText: {
+    color: theme.colors.text,
+  } as TextStyle,
+
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    justifyContent: "flex-end",
+  } as ViewStyle,
+
+  modalContent: {
+    backgroundColor: theme.colors.background,
+    borderTopLeftRadius: s(16),
+    borderTopRightRadius: s(16),
+    maxHeight: "70%",
+    padding: s(16),
+  } as ViewStyle,
+
+  modalHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: vs(16),
+    borderBottomWidth: 1,
+    borderBottomColor: theme.colors.palette.outlineVariant,
+    paddingBottom: vs(12),
+  } as ViewStyle,
+
+  modalItem: {
+    paddingVertical: vs(16),
+    borderBottomWidth: 1,
+    borderBottomColor: theme.colors.palette.outlineVariant,
+  } as ViewStyle,
 })

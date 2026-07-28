@@ -1,4 +1,4 @@
-import React, { FC, useState, memo, useCallback, useMemo } from "react"
+import React, { FC, useState, memo, useCallback, useMemo, useEffect } from "react"
 import { useQueryClient } from "@tanstack/react-query"
 import {
   View,
@@ -45,7 +45,7 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
   const { navigation } = props
   const queryClient = useQueryClient()
 
-  const { isAuthenticated } = useAuth()
+  const { isAuthenticated, userLocation } = useAuth()
 
   const [step, setStep] = useState(1) // Step 1: Category, Step 2: Details & Media
   const [selectedCat, setSelectedCat] = useState<"PRODUCT" | "EQUIPMENT" | null>(null)
@@ -55,7 +55,7 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
   const [description, setDescription] = useState("")
   const [price, setPrice] = useState("")
   const [quantity, setQuantity] = useState("")
-  const [address, setAddress] = useState("")
+  const [address, setAddress] = useState(userLocation?.address || "")
   const [images, setImages] = useState<string[]>([])
   const [imageIds, setImageIds] = useState<string[]>([])
 
@@ -104,6 +104,35 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
     selectedRegion ? { type: "province", parentId: selectedRegion._id } : undefined,
     { enabled: !!selectedRegion },
   )
+
+  // Auto-prefill location fields from authenticated user's location profile
+  useEffect(() => {
+    if (userLocation?.address && !address) {
+      setAddress(userLocation.address)
+    }
+  }, [userLocation?.address])
+
+  useEffect(() => {
+    if (userLocation?.region && dbRegions && !selectedRegion) {
+      const matchReg = dbRegions.find(
+        (r: any) => r.name?.toLowerCase().trim() === userLocation.region?.toLowerCase().trim(),
+      )
+      if (matchReg) {
+        setSelectedRegion(matchReg)
+      }
+    }
+  }, [userLocation?.region, dbRegions, selectedRegion])
+
+  useEffect(() => {
+    if (userLocation?.province && dbProvinces && !selectedProvince) {
+      const matchProv = dbProvinces.find(
+        (p: any) => p.name?.toLowerCase().trim() === userLocation.province?.toLowerCase().trim(),
+      )
+      if (matchProv) {
+        setSelectedProvince(matchProv)
+      }
+    }
+  }, [userLocation?.province, dbProvinces, selectedProvince])
 
   const productCategories = useMemo(() => {
     return (

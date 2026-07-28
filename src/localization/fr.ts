@@ -79,6 +79,8 @@ const fr: Translations = {
     hasAccount: "Vous avez déjà un compte ?",
     loginNow: "Se connecter",
     nameRequired: "Nom complet requis",
+    regionRequired: "La région est requise",
+    provinceRequired: "La province est requise",
     addressRequired: "L'adresse est requise pour localiser les annonces",
     registerFailedTitle: "Échec de l'inscription",
     registerFailedMsg: "Une erreur est survenue lors de la création du compte",

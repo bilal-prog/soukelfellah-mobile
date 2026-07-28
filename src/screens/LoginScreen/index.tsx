@@ -75,6 +75,7 @@ export const LoginScreen: FC<LoginScreenProps> = memo(function LoginScreen(props
             name: `${user.firstName || ""} ${user.lastName || ""}`.trim() || translate("common:farmer"),
             phone: user.phone,
             role: user.role,
+            location: user.location,
           })
         },
         onError: (error: any) => {

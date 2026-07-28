@@ -13,6 +13,7 @@ import { useQueryClient } from "@tanstack/react-query"
 
 import { socketClient } from "@/services/socket/socketClient"
 import { useLogoutMutation } from "@/services/api/hooks"
+import { UserLocation } from "@/services/api/modules"
 
 export type AuthContextType = {
   isAuthenticated: boolean
@@ -22,15 +23,16 @@ export type AuthContextType = {
   userName?: string
   userPhone?: string
   userRole?: string
+  userLocation?: UserLocation
   favorites: string[] // Array of listingIds
   isGuest: boolean
   setGuestMode: (val: boolean) => void
   setAuthSession: (
     accessToken?: string,
     refreshToken?: string,
-    user?: { id: string; name: string; phone: string; role?: string },
+    user?: { id: string; name: string; phone: string; role?: string; location?: UserLocation },
   ) => void
-  updateProfileState: (name?: string, phone?: string) => void
+  updateProfileState: (name?: string, phone?: string, location?: UserLocation) => void
   toggleFavorite: (listingId: string) => void
   isFavorite: (listingId: string) => boolean
   logout: () => void
@@ -47,6 +49,7 @@ export const AuthProvider: FC<PropsWithChildren<AuthProviderProps>> = ({ childre
   const [userName, setUserName] = useMMKVString("AuthProvider.userName")
   const [userPhone, setUserPhone] = useMMKVString("AuthProvider.userPhone")
   const [userRole, setUserRole] = useMMKVString("AuthProvider.userRole")
+  const [userLocationStr, setUserLocationStr] = useMMKVString("AuthProvider.userLocation")
   const [favoritesStr, setFavoritesStr] = useMMKVString("AuthProvider.favorites")
   const [isGuestStr, setIsGuestStr] = useMMKVString("AuthProvider.isGuest")
 
@@ -54,6 +57,14 @@ export const AuthProvider: FC<PropsWithChildren<AuthProviderProps>> = ({ childre
   const logoutMutation = useLogoutMutation()
 
   const isGuest = useMemo(() => isGuestStr === "true", [isGuestStr])
+
+  const userLocation = useMemo<UserLocation | undefined>(() => {
+    try {
+      return userLocationStr ? JSON.parse(userLocationStr) : undefined
+    } catch {
+      return undefined
+    }
+  }, [userLocationStr])
 
   // Manage socket connection lifecycle
   useEffect(() => {
@@ -84,7 +95,7 @@ export const AuthProvider: FC<PropsWithChildren<AuthProviderProps>> = ({ childre
     (
       accessToken?: string,
       refreshToken?: string,
-      user?: { id: string; name: string; phone: string; role?: string },
+      user?: { id: string; name: string; phone: string; role?: string; location?: UserLocation },
     ) => {
       if (user?.id && userId && user.id !== userId) {
         setFavoritesStr(JSON.stringify([]))
@@ -95,6 +106,11 @@ export const AuthProvider: FC<PropsWithChildren<AuthProviderProps>> = ({ childre
       setUserName(user?.name)
       setUserPhone(user?.phone)
       setUserRole(user?.role)
+      if (user?.location !== undefined) {
+        setUserLocationStr(JSON.stringify(user.location))
+      } else if (user === undefined) {
+        setUserLocationStr(undefined)
+      }
       setIsGuestStr("false")
 
       // Register session with OneSignal
@@ -110,17 +126,19 @@ export const AuthProvider: FC<PropsWithChildren<AuthProviderProps>> = ({ childre
       setUserId,
       setUserName,
       setUserRole,
+      setUserLocationStr,
       userId,
       setIsGuestStr,
     ],
   )
 
   const updateProfileState = useCallback(
-    (name?: string, phone?: string) => {
+    (name?: string, phone?: string, location?: UserLocation) => {
       if (name !== undefined) setUserName(name)
       if (phone !== undefined) setUserPhone(phone)
+      if (location !== undefined) setUserLocationStr(JSON.stringify(location))
     },
-    [setUserName, setUserPhone],
+    [setUserName, setUserPhone, setUserLocationStr],
   )
 
   const logout = useCallback(async () => {
@@ -137,6 +155,7 @@ export const AuthProvider: FC<PropsWithChildren<AuthProviderProps>> = ({ childre
     setUserName(undefined)
     setUserPhone(undefined)
     setUserRole(undefined)
+    setUserLocationStr(undefined)
     setFavoritesStr(JSON.stringify([]))
     setIsGuestStr("false")
     
@@ -153,6 +172,7 @@ export const AuthProvider: FC<PropsWithChildren<AuthProviderProps>> = ({ childre
     setUserId,
     setUserName,
     setUserRole,
+    setUserLocationStr,
     refreshToken,
     setIsGuestStr,
     queryClient,
@@ -186,6 +206,7 @@ export const AuthProvider: FC<PropsWithChildren<AuthProviderProps>> = ({ childre
     userName,
     userPhone,
     userRole,
+    userLocation,
     favorites,
     setAuthSession,
     updateProfileState,

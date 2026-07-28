@@ -100,7 +100,7 @@ export const HomeScreen: FC<HomeScreenProps> = memo(function HomeScreen(props) {
     [handleListingDetails],
   )
 
-  const renderHomeHeader = useCallback(() => {
+  const renderHomeHeader = useMemo(() => {
     return (
       <HomeHeader
         styles={styles}
@@ -110,6 +110,24 @@ export const HomeScreen: FC<HomeScreenProps> = memo(function HomeScreen(props) {
       />
     )
   }, [styles, categories, selectedCategoryId])
+
+  const renderEmptyState = useCallback(() => {
+    if (isLoading) {
+      return (
+        <ActivityIndicator size="large" color={colors.palette.primary} style={{ marginTop: 40 }} />
+      )
+    }
+    return (
+      <View style={{ alignItems: "center", marginTop: 40 }}>
+        <Ionicons name="search-outline" size={48} color={colors.palette.outline} />
+        <Text
+          tx="common:noResults"
+          preset="bold"
+          style={{ color: colors.palette.onSurfaceVariant, marginTop: 12 }}
+        />
+      </View>
+    )
+  }, [isLoading, colors])
 
   return (
     <Screen safeAreaEdges={["top"]} contentContainerStyle={styles.container}>
@@ -129,31 +147,28 @@ export const HomeScreen: FC<HomeScreenProps> = memo(function HomeScreen(props) {
       </View>
 
       {/* Main listings feed using FlatList */}
-      {isLoading && listings.length === 0 ? (
-        <ActivityIndicator size="large" color={colors.palette.primary} style={{ marginTop: 20 }} />
-      ) : (
-        <FlatList
-          data={listings}
-          keyExtractor={(item) => item?._id}
-          renderItem={renderListingCard}
-          ListHeaderComponent={renderHomeHeader}
-          contentContainerStyle={styles.flatListContent}
-          showsVerticalScrollIndicator={false}
-          refreshing={isRefreshing}
-          onRefresh={handleRefresh}
-          onEndReached={handleLoadMore}
-          onEndReachedThreshold={0.3}
-          ListFooterComponent={() =>
-            isFetchingNextPage ? (
-              <ActivityIndicator
-                size="small"
-                color={colors.palette.primary}
-                style={{ paddingVertical: 16 }}
-              />
-            ) : null
-          }
-        />
-      )}
+      <FlatList
+        data={listings}
+        keyExtractor={(item) => item?._id}
+        renderItem={renderListingCard}
+        ListHeaderComponent={renderHomeHeader}
+        ListEmptyComponent={renderEmptyState}
+        contentContainerStyle={styles.flatListContent}
+        showsVerticalScrollIndicator={false}
+        refreshing={isRefreshing}
+        onRefresh={handleRefresh}
+        onEndReached={handleLoadMore}
+        onEndReachedThreshold={0.3}
+        ListFooterComponent={() =>
+          isFetchingNextPage ? (
+            <ActivityIndicator
+              size="small"
+              color={colors.palette.primary}
+              style={{ paddingVertical: 16 }}
+            />
+          ) : null
+        }
+      />
 
       {/* Floating Action Button (FAB) */}
       <TouchableOpacity activeOpacity={0.9} onPress={handleAddPress} style={styles.fab}>

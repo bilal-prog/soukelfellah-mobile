@@ -13,6 +13,14 @@ export interface RegisterParams {
   }
 }
 
+export interface UserLocation {
+  address?: string
+  region?: string
+  province?: string
+  commune?: string
+  village?: string
+}
+
 export interface ApiUser {
   id: string
   firstName: string
@@ -21,6 +29,7 @@ export interface ApiUser {
   role: string
   whatsappNumber?: string
   avatarFileId?: string
+  location?: UserLocation
 }
 
 export interface AuthResponse {

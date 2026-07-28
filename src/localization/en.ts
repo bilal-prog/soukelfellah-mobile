@@ -76,6 +76,8 @@ const en = {
     hasAccount: "Already have an account?",
     loginNow: "Log in",
     nameRequired: "Full name is required",
+    regionRequired: "Region is required",
+    provinceRequired: "Province is required",
     addressRequired: "Address is required to locate listings",
     registerFailedTitle: "Registration Failed",
     registerFailedMsg: "An error occurred during registration",

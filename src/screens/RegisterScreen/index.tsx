@@ -1,5 +1,5 @@
 import React, { FC, useState, memo, useCallback } from "react"
-import { View, TouchableOpacity, Alert, ActivityIndicator } from "react-native"
+import { View, TouchableOpacity, Alert, ActivityIndicator, Modal, FlatList } from "react-native"
 import { Ionicons } from "@expo/vector-icons"
 
 import { Button } from "@/components/Button"
@@ -9,9 +9,10 @@ import { TextField } from "@/components/TextField"
 import { isRTL } from "@/localization"
 import { translate } from "@/localization/translate"
 import type { AppStackScreenProps } from "@/navigation/navigationTypes"
-import { useRegisterMutation } from "@/services/api/hooks"
+import { useRegisterMutation, useLocationsQuery } from "@/services/api/hooks"
 import { useAppTheme } from "@/theme/context"
 import { useAuth } from "@/context/AuthContext"
+import { useSafeAreaInsetsStyle } from "@/utils/useSafeAreaInsetsStyle"
 
 import { CallIcon } from "./components/CallIcon"
 import { LocationIcon } from "./components/LocationIcon"
@@ -25,6 +26,7 @@ export const RegisterScreen: FC<RegisterScreenProps> = memo(function RegisterScr
   const { theme } = useAppTheme()
   const colors = theme.colors
   const styles = $styles(theme)
+  const $bottomContainerInsets = useSafeAreaInsetsStyle(["bottom"])
   const { navigation } = props
   const { setAuthSession } = useAuth()
 
@@ -34,13 +36,26 @@ export const RegisterScreen: FC<RegisterScreenProps> = memo(function RegisterScr
   const [fullName, setFullName] = useState("")
   const [phone, setPhone] = useState("")
   const [password, setPassword] = useState("")
+  const [selectedRegion, setSelectedRegion] = useState<any>(null)
+  const [selectedProvince, setSelectedProvince] = useState<any>(null)
   const [address, setAddress] = useState("")
   const [isPasswordVisible, setIsPasswordVisible] = useState(false)
+
+  const [isRegionModalVisible, setIsRegionModalVisible] = useState(false)
+  const [isProvinceModalVisible, setIsProvinceModalVisible] = useState(false)
 
   const [nameError, setNameError] = useState("")
   const [phoneError, setPhoneError] = useState("")
   const [passwordError, setPasswordError] = useState("")
+  const [regionError, setRegionError] = useState("")
+  const [provinceError, setProvinceError] = useState("")
   const [addressError, setAddressError] = useState("")
+
+  const { data: dbRegions, isFetching: isFetchingRegions } = useLocationsQuery({ type: "region" })
+  const { data: dbProvinces, isFetching: isFetchingProvinces } = useLocationsQuery(
+    selectedRegion ? { type: "province", parentId: selectedRegion._id } : undefined,
+    { enabled: !!selectedRegion },
+  )
 
   const validate = useCallback(() => {
     let isValid = true
@@ -71,6 +86,20 @@ export const RegisterScreen: FC<RegisterScreenProps> = memo(function RegisterScr
       setPasswordError("")
     }
 
+    if (!selectedRegion) {
+      setRegionError(translate("register:regionRequired"))
+      isValid = false
+    } else {
+      setRegionError("")
+    }
+
+    if (!selectedProvince) {
+      setProvinceError(translate("register:provinceRequired"))
+      isValid = false
+    } else {
+      setProvinceError("")
+    }
+
     if (!address) {
       setAddressError(translate("register:addressRequired"))
       isValid = false
@@ -79,7 +108,7 @@ export const RegisterScreen: FC<RegisterScreenProps> = memo(function RegisterScr
     }
 
     return isValid
-  }, [fullName, phone, password, address])
+  }, [fullName, phone, password, selectedRegion, selectedProvince, address])
 
   const handleRegister = useCallback(() => {
     if (!validate()) return
@@ -96,8 +125,8 @@ export const RegisterScreen: FC<RegisterScreenProps> = memo(function RegisterScr
       whatsappNumber: phone.trim(),
       location: {
         address: address.trim(),
-        region: "Casablanca-Settat",
-        province: "Sidi Bennour",
+        region: selectedRegion?.name || "",
+        province: selectedProvince?.name || "",
       },
     }
 
@@ -108,6 +137,7 @@ export const RegisterScreen: FC<RegisterScreenProps> = memo(function RegisterScr
           name: `${data.user.firstName} ${data.user.lastName}`,
           phone: data.user.phone,
           role: data.user.role,
+          location: data.user.location || registrationParams.location,
         })
       },
       onError: (error: any) => {
@@ -115,7 +145,7 @@ export const RegisterScreen: FC<RegisterScreenProps> = memo(function RegisterScr
         Alert.alert(translate("register:registerFailedTitle"), errMsg)
       },
     })
-  }, [validate, fullName, phone, password, address, registerMutation, setAuthSession])
+  }, [validate, fullName, phone, password, address, selectedRegion, selectedProvince, registerMutation, setAuthSession])
 
   const handleGoBack = useCallback(() => {
     navigation.navigate("Welcome")
@@ -207,6 +237,73 @@ export const RegisterScreen: FC<RegisterScreenProps> = memo(function RegisterScr
             containerStyle={styles.inputGroup}
           />
 
+          {/* Region Selector */}
+          <View style={styles.inputGroup}>
+            <TouchableOpacity
+              onPress={() => setIsRegionModalVisible(true)}
+              style={[
+                styles.selectTrigger,
+                regionError ? { borderColor: colors.palette.error } : undefined,
+              ]}
+            >
+              <Text size="xxs" style={styles.selectLabel}>
+                {translate("addListing:regionLabel")}
+              </Text>
+              <View style={styles.selectContent}>
+                <Text
+                  text={
+                    selectedRegion
+                      ? selectedRegion.name
+                      : translate("addListing:selectRegionPlaceholder")
+                  }
+                  style={styles.selectValueText}
+                />
+                <Ionicons name="chevron-down" size={20} color={colors.palette.onSurfaceVariant} />
+              </View>
+            </TouchableOpacity>
+            {regionError ? (
+              <Text text={regionError} size="xxs" style={{ color: colors.palette.error, marginTop: 4 }} />
+            ) : null}
+          </View>
+
+          {/* Province Selector */}
+          <View style={styles.inputGroup}>
+            <TouchableOpacity
+              onPress={() => {
+                if (!selectedRegion) {
+                  Alert.alert(
+                    translate("addListing:regionWarningTitle"),
+                    translate("addListing:regionWarningMsg"),
+                  )
+                  return
+                }
+                setIsProvinceModalVisible(true)
+              }}
+              style={[
+                styles.selectTrigger,
+                provinceError ? { borderColor: colors.palette.error } : undefined,
+              ]}
+            >
+              <Text size="xxs" style={styles.selectLabel}>
+                {translate("addListing:provinceLabel")}
+              </Text>
+              <View style={styles.selectContent}>
+                <Text
+                  text={
+                    selectedProvince
+                      ? selectedProvince.name
+                      : translate("addListing:selectProvincePlaceholder")
+                  }
+                  style={styles.selectValueText}
+                />
+                <Ionicons name="chevron-down" size={20} color={colors.palette.onSurfaceVariant} />
+              </View>
+            </TouchableOpacity>
+            {provinceError ? (
+              <Text text={provinceError} size="xxs" style={{ color: colors.palette.error, marginTop: 4 }} />
+            ) : null}
+          </View>
+
           <TextField
             value={address}
             onChangeText={(val) => {
@@ -244,7 +341,6 @@ export const RegisterScreen: FC<RegisterScreenProps> = memo(function RegisterScr
 
           {/* Submit Action */}
           <Button
-
             preset="primary"
             style={styles.registerBtn}
             onPress={handleRegister}
@@ -269,6 +365,88 @@ export const RegisterScreen: FC<RegisterScreenProps> = memo(function RegisterScr
           </TouchableOpacity>
         </View>
       </View>
+
+      {/* Region Selection Modal */}
+      <Modal visible={isRegionModalVisible} animationType="slide" transparent>
+        <View style={[styles.modalOverlay, $bottomContainerInsets]}>
+          <View style={styles.modalContent}>
+            <View style={styles.modalHeader}>
+              <Text tx="addListing:selectRegionPlaceholder" preset="bold" size="sm" />
+              <TouchableOpacity onPress={() => setIsRegionModalVisible(false)}>
+                <Ionicons name="close" size={24} color={colors.text} />
+              </TouchableOpacity>
+            </View>
+            {isFetchingRegions ? (
+              <ActivityIndicator
+                size="small"
+                color={colors.palette.primary}
+                style={{ margin: 20 }}
+              />
+            ) : (
+              <FlatList
+                data={dbRegions || []}
+                keyExtractor={(item: any) => item?._id}
+                renderItem={({ item }: any) => (
+                  <TouchableOpacity
+                    style={styles.modalItem}
+                    onPress={() => {
+                      setSelectedRegion(item)
+                      setSelectedProvince(null)
+                      setIsRegionModalVisible(false)
+                      if (regionError) setRegionError("")
+                    }}
+                  >
+                    <Text text={item.name} />
+                  </TouchableOpacity>
+                )}
+              />
+            )}
+          </View>
+        </View>
+      </Modal>
+
+      {/* Province Selection Modal */}
+      <Modal visible={isProvinceModalVisible} animationType="slide" transparent>
+        <View style={[styles.modalOverlay, $bottomContainerInsets]}>
+          <View style={styles.modalContent}>
+            <View style={styles.modalHeader}>
+              <Text
+                tx="addListing:selectProvincePlaceholder"
+                preset="bold"
+                size="sm"
+                style={{ textAlign: "left", flex: 1 }}
+              />
+              <TouchableOpacity onPress={() => setIsProvinceModalVisible(false)}>
+                <Ionicons name="close" size={24} color={colors.text} />
+              </TouchableOpacity>
+            </View>
+            {isFetchingProvinces ? (
+              <ActivityIndicator
+                size="small"
+                color={colors.palette.primary}
+                style={{ margin: 20 }}
+              />
+            ) : (
+              <FlatList
+                data={dbProvinces || []}
+                keyExtractor={(item: any) => item?._id}
+                renderItem={({ item }: any) => (
+                  <TouchableOpacity
+                    style={styles.modalItem}
+                    onPress={() => {
+                      setSelectedProvince(item)
+                      setIsProvinceModalVisible(false)
+                      if (provinceError) setProvinceError("")
+                    }}
+                  >
+                    <Text text={item.name} style={{ textAlign: "left", width: "100%" }} />
+                  </TouchableOpacity>
+                )}
+              />
+            )}
+          </View>
+        </View>
+      </Modal>
     </Screen>
   )
 })

@@ -78,6 +78,8 @@ const ary: Translations = {
     hasAccount: "عندك حساب ديجا؟",
     loginNow: "سجل الدخول",
     nameRequired: "السمية الكاملة ضرورية",
+    regionRequired: "الجهة ضرورية",
+    provinceRequired: "الإقليم ضروري",
     addressRequired: "العنوان ضروري باش نحددو بلاصة السلعة",
     registerFailedTitle: "فشل التسجيل",
     registerFailedMsg: "حدث خطأ أثناء فتح الحساب",

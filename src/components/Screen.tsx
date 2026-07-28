@@ -183,7 +183,7 @@ export function Screen(props: ScreenProps) {
       ]}
     >
       <SystemBars
-        style={systemBarStyle || (themeContext === "dark" ? "dark" : "dark")}
+        style={true ? "dark" : systemBarStyle || (themeContext === "dark" ? "dark" : "dark")}
         {...SystemBarsProps}
       />
 

@@ -22,8 +22,10 @@ export const CategoryCard = memo(function CategoryCard(props: CategoryCardProps)
 
   const bg = backgroundColor || colors.palette.surfaceContainerLow
   const borderStyle = selected
-    ? { borderColor: colors.palette.primary, borderWidth: 2 }
-    : { borderColor: "transparent", borderWidth: 2 }
+    ? { backgroundColor: colors.palette.primary, padding: s(5) }
+    : { backgroundColor: "transparent" }
+
+  const textColor = selected ? "white" : "black"
 
   const isEmoji = (val: any) => {
     if (typeof val === "string") {
@@ -43,10 +45,14 @@ export const CategoryCard = memo(function CategoryCard(props: CategoryCardProps)
 
   return (
     <TouchableOpacity activeOpacity={0.9} onPress={onPress} style={[$container, borderStyle]}>
-      <View style={[$circle, { backgroundColor: bg }]}>
-        {renderIcon()}
-      </View>
-      <Text text={label} size="xxs" preset="bold" numberOfLines={1} style={$label} />
+      <View style={[$circle, { backgroundColor: bg }]}>{renderIcon()}</View>
+      <Text
+        text={label}
+        size="xxs"
+        preset="bold"
+        numberOfLines={1}
+        style={[$label, { color: textColor }]}
+      />
     </TouchableOpacity>
   )
 })
@@ -54,17 +60,16 @@ export const CategoryCard = memo(function CategoryCard(props: CategoryCardProps)
 const $container: ViewStyle = {
   alignItems: "center",
   marginHorizontal: s(6),
-  borderRadius: s(16),
-  padding: s(6),
+  borderRadius: s(5),
 }
 
 const $circle: ViewStyle = {
   width: s(60),
   height: vs(60),
-  borderRadius: s(30),
   justifyContent: "center",
   alignItems: "center",
   marginBottom: vs(8),
+  borderRadius: s(5),
   elevation: 2,
   shadowColor: "#000",
   shadowOffset: { width: 0, height: 1 },
@@ -83,7 +88,8 @@ const $label: TextStyle = {
 }
 
 const $image: ImageStyle = {
-  width: s(40),
-  height: vs(40),
+  width: s(55),
+  height: vs(55),
   resizeMode: "contain",
+  borderRadius: s(5),
 }
