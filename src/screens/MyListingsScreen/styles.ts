@@ -21,7 +21,7 @@ export const $styles = (theme: Theme) => ({
 
   headerTitle: {
     fontSize: fontSizes.fs22,
-    lineHeight: vs(34),
+    lineHeight: vs(38),
     color: theme.colors.palette.primary,
   } as TextStyle,
 

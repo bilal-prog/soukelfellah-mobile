@@ -13,6 +13,6 @@ export const spacing = {
   unit: 8,
   marginMobile: 16,
   gutterMobile: 12,
-  touchTargetMin: 48,
+  touchTargetMin: 52,
   safeAreaBottom: 24,
 } as const
