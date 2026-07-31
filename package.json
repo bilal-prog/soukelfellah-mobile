@@ -114,11 +114,5 @@
   },
   "engines": {
     "node": ">=20.0.0"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "@bugsnag/cli",
-      "@bugsnag/expo"
-    ]
   }
 }
