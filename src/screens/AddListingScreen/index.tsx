@@ -235,14 +235,26 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
     if (type === "EQUIPMENT") {
       setCondition("USED")
       // Auto-resolve Category and Unit for Equipment
-      const equipCat = categories?.find(
-        (c) => c.slug.toLowerCase().includes("equip") || c.slug.toLowerCase().includes("mach"),
-      )
+      const equipCat = categories?.find((c) => {
+        const slug = c.slug?.toLowerCase() || ""
+        const name = c.name?.toLowerCase() || ""
+        return (
+          slug.includes("equip") ||
+          slug.includes("mach") ||
+          slug.includes("معدات") ||
+          name.includes("معدات") ||
+          name.includes("equip") ||
+          name.includes("mach")
+        )
+      })
       if (equipCat) {
         setSelectedCategory(equipCat)
       }
       const pieceUnit = units?.find(
-        (u) => u.name.toLowerCase() === "piece" || u.name.toLowerCase() === "pieces",
+        (u) =>
+          u.name.toLowerCase().includes("piece") ||
+          u.name.toLowerCase().includes("حبة") ||
+          u.name.toLowerCase().includes("راس"),
       )
       if (pieceUnit) {
         setSelectedUnit(pieceUnit)
@@ -409,7 +421,26 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
 
     if (!isValid) return
 
-    const categoryId = selectedCategory?._id
+    const equipCat = categories?.find((c) => {
+      const slug = c.slug?.toLowerCase() || ""
+      const name = c.name?.toLowerCase() || ""
+      return (
+        slug.includes("equip") ||
+        slug.includes("mach") ||
+        slug.includes("معدات") ||
+        name.includes("معدات") ||
+        name.includes("equip") ||
+        name.includes("mach")
+      )
+    })
+
+    const categoryId =
+      selectedCategory?._id ||
+      (typeof selectedProductType?.categoryId === "object"
+        ? (selectedProductType?.categoryId as any)?._id
+        : selectedProductType?.categoryId) ||
+      equipCat?._id
+
     const productTypeId = selectedProductType?._id
     const unitId = selectedUnit?._id
 

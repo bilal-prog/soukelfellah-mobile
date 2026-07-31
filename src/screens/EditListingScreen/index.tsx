@@ -450,7 +450,26 @@ export const EditListingScreen: FC<EditListingScreenProps> = memo(
 
       if (!isValid) return
 
-      const categoryId = selectedCategory?._id
+      const equipCat = categories?.find((c) => {
+        const slug = c.slug?.toLowerCase() || ""
+        const name = c.name?.toLowerCase() || ""
+        return (
+          slug.includes("equip") ||
+          slug.includes("mach") ||
+          slug.includes("معدات") ||
+          name.includes("معدات") ||
+          name.includes("equip") ||
+          name.includes("mach")
+        )
+      })
+
+      const categoryId =
+        selectedCategory?._id ||
+        (typeof selectedProductType?.categoryId === "object"
+          ? (selectedProductType?.categoryId as any)?._id
+          : selectedProductType?.categoryId) ||
+        equipCat?._id
+
       const productTypeId = selectedProductType?._id
       const unitId = selectedUnit?._id
 
