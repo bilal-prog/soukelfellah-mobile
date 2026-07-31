@@ -5,10 +5,10 @@ import { useFocusEffect } from "@react-navigation/native"
 
 import { Screen } from "@/components/Screen"
 import { Text } from "@/components/Text"
+import { NotificationIconButton } from "@/components/NotificationIconButton"
 import type { MainTabScreenProps } from "@/navigation/navigationTypes"
 import {
   useCategoriesQuery,
-  useUnreadNotificationsCountQuery,
   useInfiniteListingsQuery,
 } from "@/services/api/hooks"
 import { useAppTheme } from "@/theme/context"
@@ -29,9 +29,8 @@ export const HomeScreen: FC<HomeScreenProps> = memo(function HomeScreen(props) {
   // Category filter state
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | undefined>(undefined)
 
-  // Fetch reference categories and unread notifications count via React Query
+  // Fetch reference categories via React Query
   const { data: categories, refetch: refetchCategories } = useCategoriesQuery()
-  const { data: unreadCount } = useUnreadNotificationsCountQuery()
 
   // Fetch paginated feed listings using useInfiniteQuery under the hood
   const {
@@ -137,13 +136,7 @@ export const HomeScreen: FC<HomeScreenProps> = memo(function HomeScreen(props) {
           <Ionicons name="person-circle-outline" size={28} color={colors.palette.primary} />
         </TouchableOpacity>
         <Text tx="home:title" style={styles.headerTitle} preset="display" />
-        <TouchableOpacity
-          style={styles.headerButton}
-          onPress={() => navigation.navigate("Notifications")}
-        >
-          <Ionicons name="notifications-outline" size={26} color={colors.palette.primary} />
-          {!!unreadCount && unreadCount > 0 && <View style={styles.notificationBadge} />}
-        </TouchableOpacity>
+        <NotificationIconButton />
       </View>
 
       {/* Main listings feed using FlatList */}

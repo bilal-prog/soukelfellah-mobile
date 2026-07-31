@@ -1,7 +1,8 @@
 import "react-native-gesture-handler"
 import { useEffect, useState } from "react"
+import { AppState, AppStateStatus } from "react-native"
 import { useFonts } from "expo-font"
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { QueryClient, QueryClientProvider, useQueryClient } from "@tanstack/react-query"
 import { KeyboardProvider } from "react-native-keyboard-controller"
 import { OneSignal, LogLevel } from "react-native-onesignal"
 import { initialWindowMetrics, SafeAreaProvider } from "react-native-safe-area-context"
@@ -70,6 +71,7 @@ export function App() {
 
 function AppContent() {
   const { setNotification } = useNotification()
+  const queryClient = useQueryClient()
   const {
     isMaintenance,
     isForceUpdate,
@@ -84,9 +86,21 @@ function AppContent() {
     // 1. Request push notification permissions on startup
     OneSignal.Notifications.requestPermission(true)
 
-    // 2. Define event listeners for clicks and foreground displays
+    // 2. Refresh unread count on AppState change (from killed/background to active)
+    const handleAppStateChange = (nextAppState: AppStateStatus) => {
+      if (nextAppState === "active") {
+        queryClient.invalidateQueries({ queryKey: ["unreadNotificationsCount"] })
+        queryClient.invalidateQueries({ queryKey: ["notifications"] })
+      }
+    }
+
+    const appStateSubscription = AppState.addEventListener("change", handleAppStateChange)
+
+    // 3. Define event listeners for clicks and foreground displays
     const clickListener = (event: any) => {
       console.log("OneSignal: notification clicked:", event)
+      queryClient.invalidateQueries({ queryKey: ["unreadNotificationsCount"] })
+      queryClient.invalidateQueries({ queryKey: ["notifications"] })
     }
 
     const foregroundListener = (event: any) => {
@@ -99,6 +113,8 @@ function AppContent() {
         data: additionalData,
         imageUrl: bigPicture || largeIcon,
       })
+      queryClient.invalidateQueries({ queryKey: ["unreadNotificationsCount"] })
+      queryClient.invalidateQueries({ queryKey: ["notifications"] })
     }
 
     OneSignal.Notifications.addEventListener("click", clickListener)
@@ -106,10 +122,11 @@ function AppContent() {
 
     // Cleanup listeners on unmount
     return () => {
+      appStateSubscription.remove()
       OneSignal.Notifications.removeEventListener("click", clickListener)
       OneSignal.Notifications.removeEventListener("foregroundWillDisplay", foregroundListener)
     }
-  }, [setNotification])
+  }, [setNotification, queryClient])
 
   if (isMaintenance) {
     return <MaintenanceScreen onRetry={checkVersion} isChecking={isChecking} />

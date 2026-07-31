@@ -1,4 +1,4 @@
-import { ViewStyle, TextStyle } from "react-native"
+import { ViewStyle, TextStyle, ImageStyle } from "react-native"
 
 import { fontSizes } from "../../theme/fontSizes"
 import type { Theme } from "../../theme/types"
@@ -72,11 +72,12 @@ export const $styles = (theme: Theme) => ({
 
   notificationCard: {
     flexDirection: "row",
-    paddingHorizontal: s(24),
-    paddingVertical: vs(16),
+    paddingHorizontal: s(20),
+    paddingVertical: vs(14),
     backgroundColor: theme.colors.background,
     borderBottomWidth: 1,
     borderBottomColor: theme.colors.separator,
+    alignItems: "center",
   } as ViewStyle,
 
   notificationCardUnread: {
@@ -90,7 +91,7 @@ export const $styles = (theme: Theme) => ({
     backgroundColor: theme.colors.separator,
     justifyContent: "center",
     alignItems: "center",
-    marginRight: s(16),
+    marginRight: s(14),
   } as ViewStyle,
 
   iconContainerUnread: {
@@ -145,4 +146,14 @@ export const $styles = (theme: Theme) => ({
     color: theme.colors.textDim,
     opacity: 0.6,
   } as TextStyle,
+
+  thumbnailImage: {
+    width: s(54),
+    height: s(54),
+    borderRadius: s(8),
+    marginLeft: s(12),
+    backgroundColor: theme.colors.separator,
+    borderWidth: 1,
+    borderColor: theme.colors.separator,
+  } as ImageStyle,
 })

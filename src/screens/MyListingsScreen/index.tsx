@@ -7,13 +7,13 @@ import { ChangePasswordModal } from "@/components/ChangePasswordModal"
 import { GuestPlaceholder } from "@/components/GuestPlaceholder"
 import { Screen } from "@/components/Screen"
 import { Text } from "@/components/Text"
+import { NotificationIconButton } from "@/components/NotificationIconButton"
 import { useAuth } from "@/context/AuthContext"
 import { translate } from "@/localization/translate"
 import type { MainTabScreenProps } from "@/navigation/navigationTypes"
 import {
   useListingsQuery,
   useMarkListingSoldMutation,
-  useUnreadNotificationsCountQuery,
 } from "@/services/api/hooks"
 import { useAppTheme } from "@/theme/context"
 import { deleteAccount } from "@/services/api/modules/auth"
@@ -44,7 +44,6 @@ export const MyListingsScreen: FC<MyListingsScreenProps> = memo(function MyListi
     isLoading,
     refetch,
   } = useListingsQuery(userId ? { sellerId: userId, status: activeTab, limit: 100 } : undefined)
-  const { data: unreadCount } = useUnreadNotificationsCountQuery()
 
   const totalViews = useMemo(() => {
     if (!apiListings) return 0
@@ -199,13 +198,7 @@ export const MyListingsScreen: FC<MyListingsScreenProps> = memo(function MyListi
             <Ionicons name="document-text-outline" size={24} color={colors.palette.primary} />
           </TouchableOpacity>
 
-          <TouchableOpacity
-            style={styles.headerButton}
-            onPress={() => navigation.navigate("Notifications")}
-          >
-            <Ionicons name="notifications-outline" size={26} color={colors.palette.primary} />
-            {!!unreadCount && unreadCount > 0 && <View style={styles.notificationBadge} />}
-          </TouchableOpacity>
+          <NotificationIconButton />
         </View>
       </View>
 

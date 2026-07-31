@@ -30,16 +30,6 @@ export const $styles = (theme: Theme) => ({
     position: "relative",
   } as ViewStyle,
 
-  notificationBadge: {
-    position: "absolute",
-    top: vs(4),
-    right: s(4),
-    width: s(8),
-    height: vs(8),
-    borderRadius: s(4),
-    backgroundColor: theme.colors.palette.error,
-  } as ViewStyle,
-
   profileCard: {
     flexDirection: "row",
     alignItems: "center",

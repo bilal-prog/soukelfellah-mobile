@@ -4,6 +4,7 @@ import { Ionicons } from "@expo/vector-icons"
 
 import { Screen } from "@/components/Screen"
 import { Text } from "@/components/Text"
+import { NotificationIconButton } from "@/components/NotificationIconButton"
 import { isRTL } from "@/localization"
 import { translate } from "@/localization/translate"
 import type { MainTabScreenProps } from "@/navigation/navigationTypes"
@@ -11,7 +12,6 @@ import {
   useListingsQuery,
   useCategoriesQuery,
   useLocationsQuery,
-  useUnreadNotificationsCountQuery,
 } from "@/services/api/hooks"
 import { useAppTheme } from "@/theme/context"
 
@@ -63,7 +63,6 @@ export const SearchScreen: FC<SearchScreenProps> = memo(function SearchScreen(pr
 
   const { data: apiListings, isLoading } = useListingsQuery(searchParams)
   const { data: categories } = useCategoriesQuery()
-  const { data: unreadCount } = useUnreadNotificationsCountQuery()
   const { data: dbProvinces } = useLocationsQuery({ type: "province" })
 
   const filteredListings = apiListings || []
@@ -112,13 +111,7 @@ export const SearchScreen: FC<SearchScreenProps> = memo(function SearchScreen(pr
           <Ionicons name={isRTL ? "arrow-forward" : "arrow-back"} size={26} color={colors.text} />
         </TouchableOpacity>
         <Text tx="search:title" style={styles.headerTitle} preset="display" />
-        <TouchableOpacity
-          style={styles.headerButton}
-          onPress={() => navigation.navigate("Notifications")}
-        >
-          <Ionicons name="notifications-outline" size={26} color={colors.palette.primary} />
-          {!!unreadCount && unreadCount > 0 && <View style={styles.notificationBadge} />}
-        </TouchableOpacity>
+        <NotificationIconButton />
       </View>
 
       {/* Results loop inside FlatList */}

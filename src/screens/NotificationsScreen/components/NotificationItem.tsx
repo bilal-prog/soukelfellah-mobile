@@ -1,10 +1,10 @@
 import React, { memo } from "react"
-import { View, TouchableOpacity } from "react-native"
+import { View, TouchableOpacity, Image } from "react-native"
 import { Ionicons } from "@expo/vector-icons"
-import { formatDistanceToNow } from "date-fns"
 
 import { Text } from "@/components/Text"
 import { ApiNotification } from "@/services/api/modules/notifications"
+import { formatRelativeTime } from "@/utils/formatDate"
 import { $styles } from "../styles"
 import { useAppTheme } from "@/theme/context"
 
@@ -37,6 +37,7 @@ export const NotificationItem = memo(function NotificationItem({
   onLongPress,
 }: NotificationItemProps) {
   const isUnread = !item.isRead
+  const imageUrl = item.metadata?.imageUrl || item.metadata?.image || (item as any).imageUrl
 
   const handlePress = () => onPress(item)
   const handleLongPress = () => onLongPress(item?._id)
@@ -74,10 +75,17 @@ export const NotificationItem = memo(function NotificationItem({
           numberOfLines={2}
         />
         <Text
-          text={formatDistanceToNow(new Date(item.createdAt), { addSuffix: true })}
+          text={formatRelativeTime(item.createdAt)}
           style={styles.time}
         />
       </View>
+      {!!imageUrl && (
+        <Image
+          source={{ uri: imageUrl }}
+          style={styles.thumbnailImage}
+          resizeMode="cover"
+        />
+      )}
     </TouchableOpacity>
   )
 })

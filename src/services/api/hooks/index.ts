@@ -263,6 +263,9 @@ export const useUnreadNotificationsCountQuery = (options?: { enabled?: boolean }
       if (res.kind === "failure") throw new Error(extractErrorMessage(res.error))
       return res.count
     },
+    staleTime: 0,
+    refetchOnWindowFocus: true,
+    refetchOnMount: true,
     ...options,
   })
 }

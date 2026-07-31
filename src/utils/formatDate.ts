@@ -1,42 +1,52 @@
 import { format } from "date-fns/format"
+import { formatDistanceToNow } from "date-fns/formatDistanceToNow"
 import type { Locale } from "date-fns/locale"
 import { parseISO } from "date-fns/parseISO"
 import i18n from "i18next"
 
 type Options = Parameters<typeof format>[2]
 
-let dateFnsLocale: Locale
-export const loadDateFnsLocale = () => {
+export const getDateFnsLocale = (): Locale => {
   const primaryTag = i18n.language ? i18n.language.split("-")[0] : "ar"
   switch (primaryTag) {
     case "en":
-      dateFnsLocale = require("date-fns/locale/en-US").enUS
-      break
+      return require("date-fns/locale/en-US").enUS
+    case "fr":
+      return require("date-fns/locale/fr").fr
     case "ar":
     case "ary":
-      dateFnsLocale = require("date-fns/locale/ar").ar
-      break
-    case "fr":
-      dateFnsLocale = require("date-fns/locale/fr").fr
-      break
     default:
-      dateFnsLocale = require("date-fns/locale/ar").ar
-      break
+      return require("date-fns/locale/ar").ar
   }
 }
 
+export const loadDateFnsLocale = () => {
+  getDateFnsLocale()
+}
+
 export const formatDate = (date: string, dateFormat?: string, options?: Options) => {
-  if (!dateFnsLocale) {
-    loadDateFnsLocale()
-  }
+  const localeToUse = getDateFnsLocale()
   const dateOptions = {
     ...options,
-    locale: dateFnsLocale,
+    locale: localeToUse,
   }
   try {
     return format(parseISO(date), dateFormat ?? "MMM dd, yyyy", dateOptions)
   } catch {
     return date
+  }
+}
+
+export const formatRelativeTime = (dateInput?: string | Date) => {
+  if (!dateInput) return ""
+  try {
+    const dateObj = typeof dateInput === "string" ? parseISO(dateInput) : dateInput
+    return formatDistanceToNow(dateObj, {
+      addSuffix: true,
+      locale: getDateFnsLocale(),
+    })
+  } catch {
+    return String(dateInput)
   }
 }
 
@@ -64,3 +74,4 @@ export const formatListingDate = (dateStr: string) => {
     return dateStr
   }
 }
+

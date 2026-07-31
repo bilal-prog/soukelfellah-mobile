@@ -28,21 +28,6 @@ export const $styles = (theme: Theme) => ({
     textAlign: "left",
   } as TextStyle,
 
-  headerButton: {
-    padding: s(4),
-    position: "relative",
-  } as ViewStyle,
-
-  notificationBadge: {
-    position: "absolute",
-    top: vs(4),
-    right: s(4),
-    width: s(8),
-    height: vs(8),
-    borderRadius: s(4),
-    backgroundColor: theme.colors.palette.error,
-  } as ViewStyle,
-
   flatListContent: {
     paddingHorizontal: s(theme.spacing.marginMobile),
     paddingTop: vs(16),
