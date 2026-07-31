@@ -76,12 +76,17 @@ export const $styles = (theme: Theme) => ({
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
-    padding: s(20),
+    paddingVertical: vs(20),
     backgroundColor: "white",
     borderWidth: 2,
     borderRadius: s(12),
     borderColor: theme.colors.palette.outlineVariant,
   } as ViewStyle,
+
+  categoryText: {
+    textAlign: "center",
+    width: "100%",
+  } as TextStyle,
 
   categoryIconCircle: {
     width: s(60),
@@ -220,6 +225,7 @@ export const $styles = (theme: Theme) => ({
 
   selectValueText: {
     color: theme.colors.text,
+    width: "90%",
   } as TextStyle,
 
   modalOverlay: {
@@ -233,7 +239,9 @@ export const $styles = (theme: Theme) => ({
     borderTopLeftRadius: s(16),
     borderTopRightRadius: s(16),
     maxHeight: "70%",
+    minHeight: vs(250),
     padding: s(16),
+    flexShrink: 1,
   } as ViewStyle,
 
   modalHeader: {

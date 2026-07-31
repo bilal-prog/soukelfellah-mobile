@@ -62,7 +62,7 @@ const $sizeStyles = {
   md: { fontSize: fontSizes.fs18, lineHeight: vs(30) } satisfies TextStyle, // body-lg
   sm: { fontSize: fontSizes.fs16, lineHeight: vs(29) } satisfies TextStyle, // body-md
   xs: { fontSize: fontSizes.fs14, lineHeight: vs(25) } satisfies TextStyle, // label-lg
-  xxs: { fontSize: fontSizes.fs12, lineHeight: vs(19) } satisfies TextStyle, // label-md
+  xxs: { fontSize: fontSizes.fs12, lineHeight: vs(25) } satisfies TextStyle, // label-md
 }
 
 const $fontWeightStyles = Object.entries(typography.primary).reduce((acc, [weight, fontFamily]) => {

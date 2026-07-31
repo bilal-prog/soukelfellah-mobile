@@ -65,8 +65,6 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
   const [addressError, setAddressError] = useState("")
   const [descriptionError, setDescriptionError] = useState("")
 
-  const [selectedRegion, setSelectedRegion] = useState<any>(null)
-  const [selectedProvince, setSelectedProvince] = useState<any>(null)
   const [model, setModel] = useState("")
   const [hours, setHours] = useState("")
 
@@ -87,8 +85,13 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
   const [isProductTypeModalVisible, setIsProductTypeModalVisible] = useState(false)
   const [isUnitModalVisible, setIsUnitModalVisible] = useState(false)
 
+  const [selectedRegion, setSelectedRegion] = useState<any>(null)
+  const [selectedProvince, setSelectedProvince] = useState<any>(null)
+  const [selectedCommune, setSelectedCommune] = useState<any>(null)
+
   const [isRegionModalVisible, setIsRegionModalVisible] = useState(false)
   const [isProvinceModalVisible, setIsProvinceModalVisible] = useState(false)
+  const [isCommuneModalVisible, setIsCommuneModalVisible] = useState(false)
 
   const createListingMutation = useCreateListingMutation()
   const uploadImageMutation = useUploadListingImageMutation()
@@ -103,6 +106,10 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
   const { data: dbProvinces, isFetching: isFetchingProvinces } = useLocationsQuery(
     selectedRegion ? { type: "province", parentId: selectedRegion._id } : undefined,
     { enabled: !!selectedRegion },
+  )
+  const { data: dbCommunes, isFetching: isFetchingCommunes } = useLocationsQuery(
+    selectedProvince ? { type: "commune", parentId: selectedProvince._id } : undefined,
+    { enabled: !!selectedProvince },
   )
 
   // Auto-prefill location fields from authenticated user's location profile
@@ -134,11 +141,29 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
     }
   }, [userLocation?.province, dbProvinces, selectedProvince])
 
+  useEffect(() => {
+    if (userLocation?.commune && dbCommunes && !selectedCommune) {
+      const matchComm = dbCommunes.find(
+        (c: any) => c.name?.toLowerCase().trim() === userLocation.commune?.toLowerCase().trim(),
+      )
+      if (matchComm) {
+        setSelectedCommune(matchComm)
+      }
+    }
+  }, [userLocation?.commune, dbCommunes, selectedCommune])
+
   const productCategories = useMemo(() => {
     return (
       categories?.filter((c) => {
+        const slug = c.slug?.toLowerCase() || ""
+        const name = c.name?.toLowerCase() || ""
         const isEquip =
-          c.slug.toLowerCase().includes("equip") || c.slug.toLowerCase().includes("mach")
+          slug.includes("equip") ||
+          slug.includes("mach") ||
+          slug.includes("معدات") ||
+          name.includes("معدات") ||
+          name.includes("equip") ||
+          name.includes("mach")
         return !isEquip
       }) || []
     )
@@ -146,16 +171,34 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
 
   const filteredProductTypes = useMemo(() => {
     if (selectedCat === "EQUIPMENT") {
+      const equipCat = categories?.find((c) => {
+        const slug = c.slug?.toLowerCase() || ""
+        const name = c.name?.toLowerCase() || ""
+        return (
+          slug.includes("equip") ||
+          slug.includes("mach") ||
+          slug.includes("معدات") ||
+          name.includes("معدات") ||
+          name.includes("equip") ||
+          name.includes("mach")
+        )
+      })
+
+      const targetCatId = selectedCategory?._id || equipCat?._id
+
+      if (!targetCatId) return productTypes || []
+
       return (
         productTypes?.filter((p) => {
           const pCatId =
             typeof p.categoryId === "object" && p.categoryId !== null
               ? (p.categoryId as any)._id
               : p.categoryId
-          return pCatId === selectedCategory?._id
+          return pCatId === targetCatId
         }) || []
       )
     }
+
     if (!selectedCategory) return []
     return (
       productTypes?.filter((p) => {
@@ -166,7 +209,7 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
         return pCatId === selectedCategory?._id
       }) || []
     )
-  }, [productTypes, selectedCategory, selectedCat])
+  }, [productTypes, categories, selectedCategory, selectedCat])
 
   const mappedAllowedUnits = useMemo(() => {
     if (!selectedProductType) return []
@@ -388,6 +431,7 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
         address,
         region: selectedRegion?.name || undefined,
         province: selectedProvince?.name || undefined,
+        commune: selectedCommune?.name || undefined,
         coordinates: selectedProvince?.coordinates || undefined,
       },
       modelYear: selectedCat === "EQUIPMENT" ? model : undefined,
@@ -512,7 +556,12 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
                 <View style={[styles.categoryIconCircle, styles.categoryIconProduce]}>
                   <Ionicons name="leaf-outline" size={32} color={colors.palette.primary} />
                 </View>
-                <Text tx="addListing:produceCategory" size="xs" preset="bold" />
+                <Text
+                  tx="addListing:produceCategory"
+                  size="xs"
+                  preset="bold"
+                  style={styles.categoryText}
+                />
               </TouchableOpacity>
 
               {/* Machinery/Equipment button */}
@@ -523,7 +572,12 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
                 <View style={[styles.categoryIconCircle, styles.categoryIconEquipment]}>
                   <Ionicons name="construct-outline" size={32} color={colors.palette.secondary} />
                 </View>
-                <Text tx="addListing:equipmentCategory" size="xs" preset="bold" />
+                <Text
+                  tx="addListing:equipmentCategory"
+                  size="xs"
+                  preset="bold"
+                  style={styles.categoryText}
+                />
               </TouchableOpacity>
             </View>
           </View>
@@ -994,6 +1048,36 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
                 </View>
               </TouchableOpacity>
 
+              {/* Commune Selector (Optional) */}
+              <TouchableOpacity
+                onPress={() => {
+                  if (!selectedProvince) {
+                    Alert.alert(
+                      translate("addListing:communeWarningTitle"),
+                      translate("addListing:communeWarningMsg"),
+                    )
+                    return
+                  }
+                  setIsCommuneModalVisible(true)
+                }}
+                style={[styles.selectTrigger, { marginTop: 12 }]}
+              >
+                <Text size="xxs" style={styles.selectLabel}>
+                  {translate("addListing:communeLabel")}
+                </Text>
+                <View style={styles.selectContent}>
+                  <Text
+                    text={
+                      selectedCommune
+                        ? selectedCommune.name
+                        : translate("addListing:selectCommunePlaceholder")
+                    }
+                    style={styles.selectValueText}
+                  />
+                  <Ionicons name="chevron-down" size={20} color={colors.palette.onSurfaceVariant} />
+                </View>
+              </TouchableOpacity>
+
               <TextField
                 value={address}
                 onChangeText={(val) => {
@@ -1059,6 +1143,7 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
                     onPress={() => {
                       setSelectedRegion(item)
                       setSelectedProvince(null)
+                      setSelectedCommune(null)
                       setIsRegionModalVisible(false)
                     }}
                   >
@@ -1101,7 +1186,54 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
                     style={styles.modalItem}
                     onPress={() => {
                       setSelectedProvince(item)
+                      setSelectedCommune(null)
                       setIsProvinceModalVisible(false)
+                    }}
+                  >
+                    <Text text={item.name} style={{ textAlign: "left", width: "100%" }} />
+                  </TouchableOpacity>
+                )}
+              />
+            )}
+          </View>
+        </View>
+      </Modal>
+
+      {/* Commune Selection Modal (Optional) */}
+      <Modal visible={isCommuneModalVisible} animationType="slide" transparent>
+        <View style={[styles.modalOverlay, $bottomContainerInsets]}>
+          <View style={styles.modalContent}>
+            <View style={styles.modalHeader}>
+              <Text
+                tx="addListing:selectCommunePlaceholder"
+                preset="bold"
+                size="sm"
+                style={{ textAlign: "left", flex: 1 }}
+              />
+              <TouchableOpacity onPress={() => setIsCommuneModalVisible(false)}>
+                <Ionicons name="close" size={24} color={colors.text} />
+              </TouchableOpacity>
+            </View>
+            {isFetchingCommunes ? (
+              <ActivityIndicator
+                size="small"
+                color={colors.palette.primary}
+                style={{ margin: 20 }}
+              />
+            ) : (
+              <FlatList
+                data={[{ _id: "none", name: translate("common:none") }, ...(dbCommunes || [])]}
+                keyExtractor={(item: any) => item?._id}
+                renderItem={({ item }: any) => (
+                  <TouchableOpacity
+                    style={styles.modalItem}
+                    onPress={() => {
+                      if (item._id === "none") {
+                        setSelectedCommune(null)
+                      } else {
+                        setSelectedCommune(item)
+                      }
+                      setIsCommuneModalVisible(false)
                     }}
                   >
                     <Text text={item.name} style={{ textAlign: "left", width: "100%" }} />

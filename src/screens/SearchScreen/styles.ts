@@ -58,6 +58,38 @@ export const $styles = (theme: Theme) => ({
     height: "100%",
   } as TextStyle,
 
+  locationRow: {
+    flexDirection: "row",
+    gap: s(5),
+  } as ViewStyle,
+
+  locationHalfButton: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    backgroundColor: "white",
+    borderRadius: s(12),
+    borderWidth: 1,
+    borderColor: theme.colors.palette.outlineVariant,
+    paddingHorizontal: s(12),
+    height: vs(48),
+    // gap: s(6),
+  } as ViewStyle,
+
+  locationFullButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    backgroundColor: "white",
+    borderRadius: s(12),
+    borderWidth: 1,
+    borderColor: theme.colors.palette.outlineVariant,
+    paddingHorizontal: s(12),
+    height: vs(44),
+    marginTop: vs(8),
+  } as ViewStyle,
+
   locationButton: {
     flexDirection: "row",
     alignItems: "center",
@@ -71,6 +103,7 @@ export const $styles = (theme: Theme) => ({
   } as ViewStyle,
 
   locationBtnLeft: {
+    width: "95%",
     flexDirection: "row",
     alignItems: "center",
     gap: s(8),

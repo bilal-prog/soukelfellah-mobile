@@ -38,11 +38,13 @@ export const RegisterScreen: FC<RegisterScreenProps> = memo(function RegisterScr
   const [password, setPassword] = useState("")
   const [selectedRegion, setSelectedRegion] = useState<any>(null)
   const [selectedProvince, setSelectedProvince] = useState<any>(null)
+  const [selectedCommune, setSelectedCommune] = useState<any>(null)
   const [address, setAddress] = useState("")
   const [isPasswordVisible, setIsPasswordVisible] = useState(false)
 
   const [isRegionModalVisible, setIsRegionModalVisible] = useState(false)
   const [isProvinceModalVisible, setIsProvinceModalVisible] = useState(false)
+  const [isCommuneModalVisible, setIsCommuneModalVisible] = useState(false)
 
   const [nameError, setNameError] = useState("")
   const [phoneError, setPhoneError] = useState("")
@@ -55,6 +57,10 @@ export const RegisterScreen: FC<RegisterScreenProps> = memo(function RegisterScr
   const { data: dbProvinces, isFetching: isFetchingProvinces } = useLocationsQuery(
     selectedRegion ? { type: "province", parentId: selectedRegion._id } : undefined,
     { enabled: !!selectedRegion },
+  )
+  const { data: dbCommunes, isFetching: isFetchingCommunes } = useLocationsQuery(
+    selectedProvince ? { type: "commune", parentId: selectedProvince._id } : undefined,
+    { enabled: !!selectedProvince },
   )
 
   const validate = useCallback(() => {
@@ -127,6 +133,7 @@ export const RegisterScreen: FC<RegisterScreenProps> = memo(function RegisterScr
         address: address.trim(),
         region: selectedRegion?.name || "",
         province: selectedProvince?.name || "",
+        commune: selectedCommune?.name || undefined,
       },
     }
 
@@ -145,7 +152,7 @@ export const RegisterScreen: FC<RegisterScreenProps> = memo(function RegisterScr
         Alert.alert(translate("register:registerFailedTitle"), errMsg)
       },
     })
-  }, [validate, fullName, phone, password, address, selectedRegion, selectedProvince, registerMutation, setAuthSession])
+  }, [validate, fullName, phone, password, address, selectedRegion, selectedProvince, selectedCommune, registerMutation, setAuthSession])
 
   const handleGoBack = useCallback(() => {
     navigation.navigate("Welcome")
@@ -304,6 +311,38 @@ export const RegisterScreen: FC<RegisterScreenProps> = memo(function RegisterScr
             ) : null}
           </View>
 
+          {/* Commune Selector (Optional) */}
+          <View style={styles.inputGroup}>
+            <TouchableOpacity
+              onPress={() => {
+                if (!selectedProvince) {
+                  Alert.alert(
+                    translate("addListing:communeWarningTitle"),
+                    translate("addListing:communeWarningMsg"),
+                  )
+                  return
+                }
+                setIsCommuneModalVisible(true)
+              }}
+              style={styles.selectTrigger}
+            >
+              <Text size="xxs" style={styles.selectLabel}>
+                {translate("addListing:communeLabel")}
+              </Text>
+              <View style={styles.selectContent}>
+                <Text
+                  text={
+                    selectedCommune
+                      ? selectedCommune.name
+                      : translate("addListing:selectCommunePlaceholder")
+                  }
+                  style={styles.selectValueText}
+                />
+                <Ionicons name="chevron-down" size={20} color={colors.palette.onSurfaceVariant} />
+              </View>
+            </TouchableOpacity>
+          </View>
+
           <TextField
             value={address}
             onChangeText={(val) => {
@@ -392,6 +431,7 @@ export const RegisterScreen: FC<RegisterScreenProps> = memo(function RegisterScr
                     onPress={() => {
                       setSelectedRegion(item)
                       setSelectedProvince(null)
+                      setSelectedCommune(null)
                       setIsRegionModalVisible(false)
                       if (regionError) setRegionError("")
                     }}
@@ -435,8 +475,55 @@ export const RegisterScreen: FC<RegisterScreenProps> = memo(function RegisterScr
                     style={styles.modalItem}
                     onPress={() => {
                       setSelectedProvince(item)
+                      setSelectedCommune(null)
                       setIsProvinceModalVisible(false)
                       if (provinceError) setProvinceError("")
+                    }}
+                  >
+                    <Text text={item.name} style={{ textAlign: "left", width: "100%" }} />
+                  </TouchableOpacity>
+                )}
+              />
+            )}
+          </View>
+        </View>
+      </Modal>
+
+      {/* Commune Selection Modal (Optional) */}
+      <Modal visible={isCommuneModalVisible} animationType="slide" transparent>
+        <View style={[styles.modalOverlay, $bottomContainerInsets]}>
+          <View style={styles.modalContent}>
+            <View style={styles.modalHeader}>
+              <Text
+                tx="addListing:selectCommunePlaceholder"
+                preset="bold"
+                size="sm"
+                style={{ textAlign: "left", flex: 1 }}
+              />
+              <TouchableOpacity onPress={() => setIsCommuneModalVisible(false)}>
+                <Ionicons name="close" size={24} color={colors.text} />
+              </TouchableOpacity>
+            </View>
+            {isFetchingCommunes ? (
+              <ActivityIndicator
+                size="small"
+                color={colors.palette.primary}
+                style={{ margin: 20 }}
+              />
+            ) : (
+              <FlatList
+                data={[{ _id: "none", name: translate("common:none") }, ...(dbCommunes || [])]}
+                keyExtractor={(item: any) => item?._id}
+                renderItem={({ item }: any) => (
+                  <TouchableOpacity
+                    style={styles.modalItem}
+                    onPress={() => {
+                      if (item._id === "none") {
+                        setSelectedCommune(null)
+                      } else {
+                        setSelectedCommune(item)
+                      }
+                      setIsCommuneModalVisible(false)
                     }}
                   >
                     <Text text={item.name} style={{ textAlign: "left", width: "100%" }} />

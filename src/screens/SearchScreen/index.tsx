@@ -36,8 +36,12 @@ export const SearchScreen: FC<SearchScreenProps> = memo(function SearchScreen(pr
   const [debouncedMinPrice, setDebouncedMinPrice] = useState("")
   const [maxPrice, setMaxPrice] = useState("")
   const [debouncedMaxPrice, setDebouncedMaxPrice] = useState("")
-  const [selectedCity, setSelectedCity] = useState("all")
+  const [selectedRegion, setSelectedRegion] = useState<any>(null)
+  const [selectedProvince, setSelectedProvince] = useState<any>(null)
+  const [selectedCommune, setSelectedCommune] = useState<any>(null)
+  const [isRegionModalVisible, setIsRegionModalVisible] = useState(false)
   const [isProvinceModalVisible, setIsProvinceModalVisible] = useState(false)
+  const [isCommuneModalVisible, setIsCommuneModalVisible] = useState(false)
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -57,13 +61,25 @@ export const SearchScreen: FC<SearchScreenProps> = memo(function SearchScreen(pr
       categoryId: selectedCat !== "all" ? selectedCat : undefined,
       minPrice: debouncedMinPrice ? parseFloat(debouncedMinPrice) : undefined,
       maxPrice: debouncedMaxPrice ? parseFloat(debouncedMaxPrice) : undefined,
-      province: selectedCity !== "all" ? selectedCity : undefined,
+      region: selectedRegion && selectedRegion._id !== "all" ? selectedRegion.name : undefined,
+      province: selectedProvince && selectedProvince._id !== "all" ? selectedProvince.name : undefined,
+      commune: selectedCommune && selectedCommune._id !== "all" ? selectedCommune.name : undefined,
     }
-  }, [debouncedQuery, selectedCat, debouncedMinPrice, debouncedMaxPrice, selectedCity])
+  }, [debouncedQuery, selectedCat, debouncedMinPrice, debouncedMaxPrice, selectedRegion, selectedProvince, selectedCommune])
 
   const { data: apiListings, isLoading } = useListingsQuery(searchParams)
   const { data: categories } = useCategoriesQuery()
-  const { data: dbProvinces } = useLocationsQuery({ type: "province" })
+  const { data: dbRegions } = useLocationsQuery({ type: "region" })
+  const { data: dbProvinces } = useLocationsQuery(
+    selectedRegion && selectedRegion._id !== "all"
+      ? { type: "province", parentId: selectedRegion._id }
+      : { type: "province" },
+  )
+  const { data: dbCommunes } = useLocationsQuery(
+    selectedProvince && selectedProvince._id !== "all"
+      ? { type: "commune", parentId: selectedProvince._id }
+      : { type: "commune" },
+  )
 
   const filteredListings = apiListings || []
 
@@ -124,8 +140,12 @@ export const SearchScreen: FC<SearchScreenProps> = memo(function SearchScreen(pr
             styles={styles}
             query={query}
             setQuery={setQuery}
-            selectedCity={selectedCity}
-            onPressLocation={() => setIsProvinceModalVisible(true)}
+            selectedRegion={selectedRegion}
+            onPressRegion={() => setIsRegionModalVisible(true)}
+            selectedProvince={selectedProvince}
+            onPressProvince={() => setIsProvinceModalVisible(true)}
+            selectedCommune={selectedCommune}
+            onPressCommune={() => setIsCommuneModalVisible(true)}
             selectedCat={selectedCat}
             setSelectedCat={setSelectedCat}
             minPrice={minPrice}
@@ -142,13 +162,58 @@ export const SearchScreen: FC<SearchScreenProps> = memo(function SearchScreen(pr
         style={{ opacity: isLoading ? 0.6 : 1 }}
       />
 
+      {/* Region Selection Modal */}
+      <Modal visible={isRegionModalVisible} animationType="slide" transparent>
+        <View style={[styles.modalOverlay, $bottomContainerInsets]}>
+          <View style={styles.modalContent}>
+            <View style={styles.modalHeader}>
+              <Text
+                text={translate("addListing:selectRegionPlaceholder")}
+                preset="bold"
+                size="sm"
+                style={{ textAlign: "left", flex: 1 }}
+              />
+              <TouchableOpacity onPress={() => setIsRegionModalVisible(false)}>
+                <Ionicons name="close" size={24} color={colors.text} />
+              </TouchableOpacity>
+            </View>
+            <FlatList
+              data={[{ _id: "all", name: translate("common:all") }, ...(dbRegions || [])]}
+              keyExtractor={(item: any) => item?._id}
+              renderItem={({ item }: any) => (
+                <TouchableOpacity
+                  style={styles.modalItem}
+                  onPress={() => {
+                    if (item?._id === "all") {
+                      setSelectedRegion(null)
+                      setSelectedProvince(null)
+                      setSelectedCommune(null)
+                    } else {
+                      setSelectedRegion(item)
+                      setSelectedProvince(null)
+                      setSelectedCommune(null)
+                    }
+                    setIsRegionModalVisible(false)
+                  }}
+                >
+                  <Text
+                    text={item?.name}
+                    style={{ textAlign: "left", width: "100%" }}
+                  />
+                </TouchableOpacity>
+              )}
+            />
+          </View>
+        </View>
+      </Modal>
+
       {/* Province Selection Modal */}
       <Modal visible={isProvinceModalVisible} animationType="slide" transparent>
         <View style={[styles.modalOverlay, $bottomContainerInsets]}>
           <View style={styles.modalContent}>
             <View style={styles.modalHeader}>
               <Text
-                text={translate("search:selectCity")}
+                text={translate("addListing:selectProvincePlaceholder")}
                 preset="bold"
                 size="sm"
                 style={{ textAlign: "left", flex: 1 }}
@@ -158,18 +223,65 @@ export const SearchScreen: FC<SearchScreenProps> = memo(function SearchScreen(pr
               </TouchableOpacity>
             </View>
             <FlatList
-              data={[{ _id: "all", name: "all" }, ...(dbProvinces || [])]}
+              data={[{ _id: "all", name: translate("common:all") }, ...(dbProvinces || [])]}
               keyExtractor={(item: any) => item?._id}
               renderItem={({ item }: any) => (
                 <TouchableOpacity
                   style={styles.modalItem}
                   onPress={() => {
-                    setSelectedCity(item?._id === "all" ? "all" : item.name)
+                    if (item?._id === "all") {
+                      setSelectedProvince(null)
+                      setSelectedCommune(null)
+                    } else {
+                      setSelectedProvince(item)
+                      setSelectedCommune(null)
+                    }
                     setIsProvinceModalVisible(false)
                   }}
                 >
                   <Text
-                    text={item?._id === "all" ? translate("common:all") : item.name}
+                    text={item?.name}
+                    style={{ textAlign: "left", width: "100%" }}
+                  />
+                </TouchableOpacity>
+              )}
+            />
+          </View>
+        </View>
+      </Modal>
+
+      {/* Commune Selection Modal (Optional) */}
+      <Modal visible={isCommuneModalVisible} animationType="slide" transparent>
+        <View style={[styles.modalOverlay, $bottomContainerInsets]}>
+          <View style={styles.modalContent}>
+            <View style={styles.modalHeader}>
+              <Text
+                text={translate("addListing:selectCommunePlaceholder")}
+                preset="bold"
+                size="sm"
+                style={{ textAlign: "left", flex: 1 }}
+              />
+              <TouchableOpacity onPress={() => setIsCommuneModalVisible(false)}>
+                <Ionicons name="close" size={24} color={colors.text} />
+              </TouchableOpacity>
+            </View>
+            <FlatList
+              data={[{ _id: "all", name: translate("common:all") }, ...(dbCommunes || [])]}
+              keyExtractor={(item: any) => item?._id}
+              renderItem={({ item }: any) => (
+                <TouchableOpacity
+                  style={styles.modalItem}
+                  onPress={() => {
+                    if (item?._id === "all") {
+                      setSelectedCommune(null)
+                    } else {
+                      setSelectedCommune(item)
+                    }
+                    setIsCommuneModalVisible(false)
+                  }}
+                >
+                  <Text
+                    text={item?.name}
                     style={{ textAlign: "left", width: "100%" }}
                   />
                 </TouchableOpacity>

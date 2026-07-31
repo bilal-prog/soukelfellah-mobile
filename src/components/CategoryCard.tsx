@@ -84,6 +84,7 @@ const $emoji: TextStyle = {
 
 const $label: TextStyle = {
   textAlign: "center",
+  lineHeight: vs(20),
   color: "#191c1d",
 }
 

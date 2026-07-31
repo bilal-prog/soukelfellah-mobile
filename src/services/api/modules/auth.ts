@@ -10,6 +10,7 @@ export interface RegisterParams {
     address: string
     region?: string
     province?: string
+    commune?: string
   }
 }
 

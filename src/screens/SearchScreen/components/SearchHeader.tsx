@@ -6,13 +6,18 @@ import { Text } from "@/components/Text"
 import { translate } from "@/localization/translate"
 import { ApiCategory } from "@/services/api/modules"
 import { useAppTheme } from "@/theme/context"
+import { s } from "@/utils/scaling"
 
 export interface SearchHeaderProps {
   styles: any
   query: string
   setQuery: (val: string) => void
-  selectedCity: string
-  onPressLocation: () => void
+  selectedRegion?: any
+  onPressRegion: () => void
+  selectedProvince?: any
+  onPressProvince: () => void
+  selectedCommune?: any
+  onPressCommune: () => void
   selectedCat: string
   setSelectedCat: (val: string) => void
   minPrice: string
@@ -35,8 +40,12 @@ export const SearchHeader = memo(function SearchHeader(props: SearchHeaderProps)
     styles,
     query,
     setQuery,
-    selectedCity,
-    onPressLocation,
+    selectedRegion,
+    onPressRegion,
+    selectedProvince,
+    onPressProvince,
+    selectedCommune,
+    onPressCommune,
     selectedCat,
     setSelectedCat,
     minPrice,
@@ -50,17 +59,11 @@ export const SearchHeader = memo(function SearchHeader(props: SearchHeaderProps)
   const { theme } = useAppTheme()
   const colors = theme.colors
 
-  /*
-
-in the search screen the province selecter doesn't open, and the list of the categories keeps rerendering and scrolling to the initial scroll each tile I choose some category 
-
-*/
-
   const displayCategories = categories && categories.length > 0 ? categories : defaultMockCategories
 
   return (
     <View>
-      {/* Search bar & Location picker */}
+      {/* Search bar & Location pickers */}
       <View style={styles.searchContainer}>
         <View style={styles.searchBar}>
           <Ionicons name="search-outline" size={20} color={colors.palette.onSurfaceVariant} />
@@ -73,20 +76,75 @@ in the search screen the province selecter doesn't open, and the list of the cat
           />
         </View>
 
+        <View style={styles.locationRow}>
+          {/* Region Picker Button */}
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={onPressRegion}
+            style={styles.locationHalfButton}
+          >
+            <View style={styles.locationBtnLeft}>
+              <Ionicons name="map-outline" size={s(18)} color={colors.palette.primary} />
+              <Text
+                text={
+                  selectedRegion && selectedRegion._id !== "all"
+                    ? selectedRegion.name
+                    : translate("addListing:regionLabel")
+                }
+                size="xs"
+                preset="bold"
+                numberOfLines={1}
+                style={{ flex: 1, textAlign: "left" }}
+              />
+            </View>
+            <Ionicons name="chevron-down" size={s(16)} color={colors.palette.onSurfaceVariant} />
+          </TouchableOpacity>
+
+          {/* Province Picker Button */}
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={onPressProvince}
+            style={styles.locationHalfButton}
+          >
+            <View style={styles.locationBtnLeft}>
+              <Ionicons name="location-outline" size={s(18)} color={colors.palette.secondary} />
+              <Text
+                text={
+                  selectedProvince && selectedProvince._id !== "all"
+                    ? selectedProvince.name
+                    : translate("addListing:provinceLabel")
+                }
+                size="xs"
+                preset="bold"
+                numberOfLines={1}
+                style={{ flex: 1, textAlign: "left" }}
+              />
+            </View>
+            <Ionicons name="chevron-down" size={s(16)} color={colors.palette.onSurfaceVariant} />
+          </TouchableOpacity>
+        </View>
+
+        {/* Commune Picker Button (Optional) */}
         <TouchableOpacity
-          activeOpacity={0.9}
-          onPress={onPressLocation}
-          style={styles.locationButton}
+          activeOpacity={0.8}
+          onPress={onPressCommune}
+          style={styles.locationFullButton}
         >
           <View style={styles.locationBtnLeft}>
-            <Ionicons name="location-outline" size={20} color={colors.palette.secondary} />
+            <Ionicons name="navigate-outline" size={s(18)} color={colors.palette.tertiary || colors.palette.primary} />
             <Text
-              text={selectedCity === "all" ? translate("common:all") : selectedCity}
+              text={
+                selectedCommune && selectedCommune._id !== "all"
+                  ? selectedCommune.name
+                  : translate("addListing:communeLabel")
+              }
               size="xs"
               preset="bold"
+              numberOfLines={1}
+              style={{ flex: 1, textAlign: "left" }}
             />
           </View>
-          <Ionicons name="chevron-down" size={18} color={colors.palette.onSurfaceVariant} />
+          <Ionicons name="chevron-down" size={s(16)} color={colors.palette.onSurfaceVariant} />
         </TouchableOpacity>
       </View>
 

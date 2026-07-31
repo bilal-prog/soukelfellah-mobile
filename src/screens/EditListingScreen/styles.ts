@@ -220,6 +220,7 @@ export const $styles = (theme: Theme) => ({
 
   selectValueText: {
     color: theme.colors.text,
+    width: "90%",
   } as TextStyle,
 
   modalOverlay: {
@@ -233,7 +234,9 @@ export const $styles = (theme: Theme) => ({
     borderTopLeftRadius: s(16),
     borderTopRightRadius: s(16),
     maxHeight: "70%",
+    minHeight: vs(250),
     padding: s(16),
+    flexShrink: 1,
   } as ViewStyle,
 
   modalHeader: {

@@ -58,7 +58,9 @@ export interface GetListingsParams {
   page?: number
   sellerId?: string
   status?: string
+  region?: string
   province?: string
+  commune?: string
 }
 
 export interface CreateListingParams {
