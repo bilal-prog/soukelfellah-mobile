@@ -211,9 +211,10 @@ const ary: Translations = {
       messages: "الرسائل",
     },
     tabs: {
-      active: "نشطة",
-      paused: "متوقفة",
-      sold: "مباعة",
+      active: "مفعل",
+      paused: "موقوف",
+      sold: "مباع",
+      rejected: "مرفوض",
     },
     noListings: "ما عندك حتى شي إعلان فهاد القسم.",
     logoutTitle: "تسجيل الخروج",

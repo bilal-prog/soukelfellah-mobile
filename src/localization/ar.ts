@@ -214,6 +214,7 @@ const ar: Translations = {
       active: "نشطة",
       paused: "متوقفة",
       sold: "مباعة",
+      rejected: "مرفوض",
     },
     noListings: "ليس لديك أي إعلانات في هذا القسم.",
     logoutTitle: "تسجيل الخروج",

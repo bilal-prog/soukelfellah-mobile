@@ -216,6 +216,7 @@ const fr: Translations = {
       active: "Actif",
       paused: "En pause",
       sold: "Vendu",
+      rejected: "Refusé",
     },
     noListings: "Vous n'avez aucune annonce dans cette section.",
     logoutTitle: "Déconnexion",

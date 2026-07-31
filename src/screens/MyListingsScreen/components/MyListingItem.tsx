@@ -95,21 +95,23 @@ export const MyListingItem = memo(function MyListingItem({
       </View>
 
       {/* Sub row action buttons */}
-      {activeTab === "active" && (
+      {(activeTab === "active" || activeTab === "rejected") && (
         <View style={styles.listingActions}>
           <TouchableOpacity onPress={() => onEdit(item?._id)} style={styles.actionBtn}>
             <Ionicons name="create-outline" size={s(16)} color={styles.actionTextEdit.color} />
             <Text tx="common:edit" size="xxs" style={styles.actionTextEdit} />
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => onMarkSold(item?._id)} style={styles.actionBtn}>
-            <Ionicons
-              name="checkmark-circle-outline"
-              size={s(16)}
-              color={styles.actionTextSold.color}
-            />
-            <Text tx="common:sold" size="xxs" style={styles.actionTextSold} />
-          </TouchableOpacity>
+          {activeTab === "active" && (
+            <TouchableOpacity onPress={() => onMarkSold(item?._id)} style={styles.actionBtn}>
+              <Ionicons
+                name="checkmark-circle-outline"
+                size={s(16)}
+                color={styles.actionTextSold.color}
+              />
+              <Text tx="common:sold" size="xxs" style={styles.actionTextSold} />
+            </TouchableOpacity>
+          )}
 
           <TouchableOpacity onPress={() => onDelete(item?._id)} style={styles.deleteBtn}>
             <Ionicons

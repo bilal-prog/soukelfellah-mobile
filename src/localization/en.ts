@@ -212,6 +212,7 @@ const en = {
       active: "Active",
       paused: "Paused",
       sold: "Sold",
+      rejected: "Rejected",
     },
     noListings: "You have no listings in this section.",
     logoutTitle: "Log Out",

@@ -14,8 +14,8 @@ export interface MyListingsHeaderProps {
   myListingsLength: number
   viewsCount: number
   messagesCount: string | number
-  activeTab: "active" | "paused" | "sold"
-  setActiveTab: (val: "active" | "paused" | "sold") => void
+  activeTab: "active" | "paused" | "sold" | "rejected"
+  setActiveTab: (val: "active" | "paused" | "sold" | "rejected") => void
 }
 
 export const MyListingsHeader = memo(function MyListingsHeader(props: MyListingsHeaderProps) {
@@ -100,6 +100,15 @@ export const MyListingsHeader = memo(function MyListingsHeader(props: MyListings
               style={activeTab === "sold" ? styles.tabTextActive : styles.tabTextInactive}
             />
             {activeTab === "sold" && <View style={styles.activeTabBar} />}
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => setActiveTab("rejected")} style={styles.tabButton}>
+            <Text
+              tx="myListings:tabs.rejected"
+              size="xs"
+              preset="bold"
+              style={activeTab === "rejected" ? styles.tabTextActive : styles.tabTextInactive}
+            />
+            {activeTab === "rejected" && <View style={styles.activeTabBar} />}
           </TouchableOpacity>
         </View>
       </View>

@@ -35,7 +35,7 @@ export const MyListingsScreen: FC<MyListingsScreenProps> = memo(function MyListi
   const styles = $styles(theme)
   const { userId, userName, userPhone, logout, isAuthenticated } = useAuth()
 
-  const [activeTab, setActiveTab] = useState<"active" | "paused" | "sold">("active")
+  const [activeTab, setActiveTab] = useState<"active" | "paused" | "sold" | "rejected">("active")
   const [isChangePasswordVisible, setIsChangePasswordVisible] = useState(false)
 
   // Query database listings belonging to this seller matching the selected tab status
