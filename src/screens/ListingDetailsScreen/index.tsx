@@ -27,6 +27,7 @@ import { useAppTheme } from "@/theme/context"
 import { $styles } from "./styles"
 import { useSafeAreaInsetsStyle } from "@/utils/useSafeAreaInsetsStyle"
 import { formatFullAddress } from "@/utils/formatAddress"
+import { vs } from "@/utils/scaling"
 
 interface ListingDetailsScreenProps extends AppStackScreenProps<"ListingDetails"> {}
 
@@ -208,7 +209,7 @@ export const ListingDetailsScreen: FC<ListingDetailsScreenProps> = memo(
           <TouchableOpacity onPress={handleGoBack}>
             <Ionicons name={isRTL ? "arrow-forward" : "arrow-back"} size={26} color={colors.text} />
           </TouchableOpacity>
-          <Text tx="listingDetails:title" style={styles.headerTitle} preset="bold" />
+          <Text tx="listingDetails:title" style={styles.headerTitle} preset="bold" size="md" />
 
           <View style={styles.headerRight}>
             <TouchableOpacity onPress={handleReportPress}>
@@ -295,6 +296,7 @@ export const ListingDetailsScreen: FC<ListingDetailsScreenProps> = memo(
                   <Text
                     text={translate("addListing:priceTypeContact")}
                     preset="display"
+                    size="xxl"
                     style={styles.priceText}
                   />
                 ) : (
@@ -315,6 +317,7 @@ export const ListingDetailsScreen: FC<ListingDetailsScreenProps> = memo(
                         return `${listing.price} ${translate("common:currency")}${unitDisplay}`
                       })()}
                       preset="display"
+                      size="xxl"
                       style={styles.priceText}
                     />
                     {listing.priceType === "NEGOTIABLE" && (
@@ -365,7 +368,11 @@ export const ListingDetailsScreen: FC<ListingDetailsScreenProps> = memo(
                   size={16}
                   color={colors.palette.onSurfaceVariant}
                 />
-                <Text text={formatFullAddress(listing.location)} size="xs" style={styles.locationText} />
+                <Text
+                  text={formatFullAddress(listing.location)}
+                  size="xs"
+                  style={styles.locationText}
+                />
               </View>
             </View>
 
@@ -373,7 +380,11 @@ export const ListingDetailsScreen: FC<ListingDetailsScreenProps> = memo(
             <View style={styles.sellerCard}>
               <View style={styles.sellerLeft}>
                 <View style={styles.sellerAvatar}>
-                  <Ionicons name="person" size={24} color={colors.palette.onSecondaryContainer} />
+                  <Ionicons
+                    name="person"
+                    size={vs(24)}
+                    color={colors.palette.onSecondaryContainer}
+                  />
                 </View>
                 <View>
                   <Text
@@ -446,24 +457,26 @@ export const ListingDetailsScreen: FC<ListingDetailsScreenProps> = memo(
                   </View>
                 )}
               </View>
-            ) : (() => {
-              const uName =
-                typeof listing.unitId === "object" ? listing.unitId?.name : listing.unit || ""
-              if (!listing.quantity && !uName) return null
-              return (
-                <View style={styles.specsGrid}>
-                  <View style={styles.specBox}>
-                    <Ionicons name="cube-outline" size={20} color={colors.palette.primary} />
-                    <Text tx="addListing:quantityLabel" size="xxs" style={styles.locationText} />
-                    <Text
-                      text={`${listing.quantity || ""} ${uName}`.trim()}
-                      preset="bold"
-                      size="xs"
-                    />
+            ) : (
+              (() => {
+                const uName =
+                  typeof listing.unitId === "object" ? listing.unitId?.name : listing.unit || ""
+                if (!listing.quantity && !uName) return null
+                return (
+                  <View style={styles.specsGrid}>
+                    <View style={styles.specBox}>
+                      <Ionicons name="cube-outline" size={20} color={colors.palette.primary} />
+                      <Text tx="addListing:quantityLabel" size="xxs" style={styles.locationText} />
+                      <Text
+                        text={`${listing.quantity || ""} ${uName}`.trim()}
+                        preset="bold"
+                        size="xs"
+                      />
+                    </View>
                   </View>
-                </View>
-              )
-            })()}
+                )
+              })()
+            )}
 
             {/* Description Section */}
             <View style={styles.descSection}>
@@ -505,7 +518,12 @@ export const ListingDetailsScreen: FC<ListingDetailsScreenProps> = memo(
           <View style={styles.modalOverlay}>
             <View style={styles.modalContent}>
               <View style={styles.modalHeader}>
-                <Text tx="listingDetails:report.title" style={styles.modalTitle} preset="bold" />
+                <Text
+                  tx="listingDetails:report.title"
+                  style={styles.modalTitle}
+                  size="md"
+                  preset="bold"
+                />
                 <TouchableOpacity onPress={() => setIsReportModalVisible(false)}>
                   <Ionicons name="close" size={24} color={colors.text} />
                 </TouchableOpacity>

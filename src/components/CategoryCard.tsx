@@ -64,8 +64,8 @@ const $container: ViewStyle = {
 }
 
 const $circle: ViewStyle = {
-  width: s(60),
-  height: vs(60),
+  width: s(70),
+  height: s(70),
   justifyContent: "center",
   alignItems: "center",
   marginBottom: vs(8),
@@ -86,11 +86,12 @@ const $label: TextStyle = {
   textAlign: "center",
   lineHeight: vs(20),
   color: "#191c1d",
+  width: s(70),
 }
 
 const $image: ImageStyle = {
-  width: s(55),
-  height: vs(55),
-  resizeMode: "contain",
+  width: s(65),
+  height: s(65),
+  resizeMode: "cover",
   borderRadius: s(5),
 }

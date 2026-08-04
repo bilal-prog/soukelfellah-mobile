@@ -559,7 +559,7 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
           <TouchableOpacity onPress={handleGoBack}>
             <Ionicons name={isRTL ? "arrow-forward" : "arrow-back"} size={26} color={colors.text} />
           </TouchableOpacity>
-          <Text tx="addListing:title" style={styles.headerTitle} preset="bold" />
+          <Text tx="addListing:title" style={styles.headerTitle} size="lg" preset="bold" />
         </View>
 
         {/* Dynamic step dot indicators */}
@@ -1134,7 +1134,7 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
                   <ActivityIndicator color="white" />
                 ) : (
                   <View style={styles.submitBtnContent}>
-                    <Text tx="addListing:submit" style={styles.submitBtnText} />
+                    <Text tx="addListing:submit" size="md" style={styles.submitBtnText} />
                     <Ionicons
                       name={isRTL ? "arrow-back" : "arrow-forward"}
                       size={20}

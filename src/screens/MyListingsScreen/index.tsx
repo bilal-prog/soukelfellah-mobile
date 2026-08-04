@@ -11,10 +11,7 @@ import { NotificationIconButton } from "@/components/NotificationIconButton"
 import { useAuth } from "@/context/AuthContext"
 import { translate } from "@/localization/translate"
 import type { MainTabScreenProps } from "@/navigation/navigationTypes"
-import {
-  useListingsQuery,
-  useMarkListingSoldMutation,
-} from "@/services/api/hooks"
+import { useListingsQuery, useMarkListingSoldMutation } from "@/services/api/hooks"
 import { useAppTheme } from "@/theme/context"
 import { deleteAccount } from "@/services/api/modules/auth"
 
@@ -22,6 +19,7 @@ import { MyListingItem } from "./components/MyListingItem"
 import { MyListingsEmptyState } from "./components/MyListingsEmptyState"
 import { MyListingsHeader } from "./components/MyListingsHeader"
 import { $styles } from "./styles"
+import { vs } from "@/utils/scaling"
 
 interface MyListingsScreenProps extends MainTabScreenProps<"MyAccount"> {}
 
@@ -176,26 +174,26 @@ export const MyListingsScreen: FC<MyListingsScreenProps> = memo(function MyListi
       <View style={styles.header}>
         <View style={{ flexDirection: "row", alignItems: "center", gap: 14 }}>
           <TouchableOpacity onPress={handleLogout}>
-            <Ionicons name="log-out-outline" size={26} color={colors.palette.error} />
+            <Ionicons name="log-out-outline" size={vs(26)} color={colors.palette.error} />
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => setIsChangePasswordVisible(true)}>
-            <Ionicons name="key-outline" size={24} color={colors.palette.primary} />
+            <Ionicons name="key-outline" size={vs(26)} color={colors.palette.primary} />
           </TouchableOpacity>
 
           <TouchableOpacity onPress={handleDeleteAccount}>
-            <Ionicons name="trash-outline" size={24} color={colors.palette.error} />
+            <Ionicons name="trash-outline" size={vs(26)} color={colors.palette.error} />
           </TouchableOpacity>
         </View>
 
-        <Text tx="myListings:title" style={styles.headerTitle} preset="bold" />
+        <Text tx="myListings:title" style={styles.headerTitle} size="lg" preset="bold" />
 
         <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
           <TouchableOpacity
             onPress={() => navigation.navigate("Legal", { type: "cgu" })}
             style={styles.headerButton}
           >
-            <Ionicons name="document-text-outline" size={24} color={colors.palette.primary} />
+            <Ionicons name="document-text-outline" size={vs(26)} color={colors.palette.primary} />
           </TouchableOpacity>
 
           <NotificationIconButton />

@@ -4,7 +4,6 @@ import { Ionicons } from "@expo/vector-icons"
 
 import { useAuth } from "@/context/AuthContext"
 import { TxKeyPath } from "@/localization"
-import { fontSizes } from "@/theme/fontSizes"
 import { useAppTheme } from "@/theme/context"
 import { s, vs } from "@/utils/scaling"
 
@@ -35,7 +34,7 @@ export const GuestPlaceholder: FC<GuestPlaceholderProps> = ({ icon, titleTx, des
     >
       <View style={styles.content}>
         <View style={[styles.iconCircle, { backgroundColor: colors.palette.primaryContainer }]}>
-          <Ionicons name={icon} size={s(64)} color={colors.palette.primary} />
+          <Ionicons name={icon} size={vs(64)} color={colors.palette.primary} />
         </View>
 
         <Text tx={titleTx} preset="bold" size="lg" style={[styles.title, { color: colors.text }]} />
@@ -50,7 +49,7 @@ export const GuestPlaceholder: FC<GuestPlaceholderProps> = ({ icon, titleTx, des
           style={[styles.btn, { backgroundColor: colors.palette.primary }]}
           onPress={handleLoginRedirect}
         >
-          <Text tx="guest:loginRegisterCta" style={styles.btnText} />
+          <Text tx="guest:loginRegisterCta" style={styles.btnText} size="sm" />
         </Button>
       </View>
     </Screen>
@@ -67,7 +66,6 @@ const styles = StyleSheet.create({
   } as ViewStyle,
   btnText: {
     color: "white",
-    fontSize: fontSizes.fs16,
     fontWeight: "bold",
   } as TextStyle,
   container: {
@@ -82,11 +80,10 @@ const styles = StyleSheet.create({
   } as ViewStyle,
   description: {
     textAlign: "center",
-    lineHeight: vs(22),
     marginBottom: vs(32),
   } as TextStyle,
   iconCircle: {
-    width: s(120),
+    width: vs(120),
     height: vs(120),
     borderRadius: s(60),
     justifyContent: "center",

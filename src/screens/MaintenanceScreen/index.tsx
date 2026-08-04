@@ -5,7 +5,6 @@ import { Ionicons } from "@expo/vector-icons"
 import { Button } from "@/components/Button"
 import { Screen } from "@/components/Screen"
 import { Text } from "@/components/Text"
-import { fontSizes } from "@/theme/fontSizes"
 import { useAppTheme } from "@/theme/context"
 import { s, vs } from "@/utils/scaling"
 
@@ -14,58 +13,53 @@ interface MaintenanceScreenProps {
   isChecking?: boolean
 }
 
-export const MaintenanceScreen: FC<MaintenanceScreenProps> = memo(
-  function MaintenanceScreen({ onRetry, isChecking }) {
-    const { theme } = useAppTheme()
+export const MaintenanceScreen: FC<MaintenanceScreenProps> = memo(function MaintenanceScreen({
+  onRetry,
+  isChecking,
+}) {
+  const { theme } = useAppTheme()
 
-    return (
-      <Screen
-        preset="fixed"
-        safeAreaEdges={["top", "bottom"]}
-        contentContainerStyle={styles.container}
-      >
-        <View style={styles.content}>
-          {/* Main Info */}
-          <View style={styles.mainInfo}>
-            <View
-              style={[
-                styles.iconCircle,
-                { backgroundColor: theme.colors.palette.primary + "15" },
-              ]}
-            >
-              <Ionicons
-                name="construct-outline"
-                size={72}
-                color={theme.colors.palette.primary}
-                style={styles.iconStyle}
-              />
-
-            </View>
-
-            <Text tx="version:maintenanceTitle" preset="bold" style={styles.title} />
-            <Text tx="version:maintenanceMessage" style={styles.message} />
+  return (
+    <Screen
+      preset="fixed"
+      safeAreaEdges={["top", "bottom"]}
+      contentContainerStyle={styles.container}
+    >
+      <View style={styles.content}>
+        {/* Main Info */}
+        <View style={styles.mainInfo}>
+          <View
+            style={[styles.iconCircle, { backgroundColor: theme.colors.palette.primary + "15" }]}
+          >
+            <Ionicons
+              name="construct-outline"
+              size={72}
+              color={theme.colors.palette.primary}
+              style={styles.iconStyle}
+            />
           </View>
 
-          {/* Bottom Action */}
-          {onRetry && (
-            <View style={styles.actionContainer}>
-              <Button
-                preset="primary"
-                style={[
-                  styles.retryBtn,
-                  { backgroundColor: theme.colors.palette.primary },
-                ]}
-                onPress={onRetry}
-                disabled={isChecking}
-                tx="common:retry"
-              />
-            </View>
-          )}
+          <Text tx="version:maintenanceTitle" preset="bold" size={"lg"} style={styles.title} />
+          <Text tx="version:maintenanceMessage" size={"md"} style={styles.message} />
         </View>
-      </Screen>
-    )
-  },
-)
+
+        {/* Bottom Action */}
+        {onRetry && (
+          <View style={styles.actionContainer}>
+            <Button
+              preset="primary"
+              style={[styles.retryBtn, { backgroundColor: theme.colors.palette.primary }]}
+              onPress={onRetry}
+              disabled={isChecking}
+              tx="common:retry"
+              textStyle={styles.retryBtnText}
+            />
+          </View>
+        )}
+      </View>
+    </Screen>
+  )
+})
 
 const styles = StyleSheet.create({
   container: {
@@ -99,14 +93,11 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    fontSize: fontSizes.fs24,
     textAlign: "center",
     marginBottom: vs(12),
   },
   message: {
-    fontSize: fontSizes.fs15,
     textAlign: "center",
-    lineHeight: vs(22),
     opacity: 0.8,
     paddingHorizontal: s(12),
   },
@@ -119,7 +110,9 @@ const styles = StyleSheet.create({
     height: vs(52),
     borderRadius: s(26),
   },
+  retryBtnText: {
+    lineHeight: vs(50),
+  },
 })
 
 export default MaintenanceScreen
-

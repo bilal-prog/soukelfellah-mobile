@@ -1,6 +1,5 @@
 import { ViewStyle, TextStyle } from "react-native"
 
-import { fontSizes } from "@/theme/fontSizes"
 import type { Theme } from "@/theme/types"
 import { s, vs } from "@/utils/scaling"
 
@@ -23,8 +22,6 @@ export const $styles = (theme: Theme) => ({
   } as ViewStyle,
 
   headerTitle: {
-    fontSize: fontSizes.fs22,
-    lineHeight: vs(34),
     color: theme.colors.palette.primary,
     flex: 1,
     textAlign: "center",

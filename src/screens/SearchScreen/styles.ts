@@ -1,6 +1,5 @@
 import { ViewStyle, TextStyle } from "react-native"
 
-import { fontSizes } from "@/theme/fontSizes"
 import type { Theme } from "@/theme/types"
 import { isRTL } from "@/localization"
 import { s, vs } from "@/utils/scaling"
@@ -21,8 +20,6 @@ export const $styles = (theme: Theme) => ({
   } as ViewStyle,
 
   headerTitle: {
-    fontSize: fontSizes.fs22,
-    lineHeight: vs(34),
     color: theme.colors.palette.primary,
     flex: 1,
     textAlign: "left",
@@ -52,7 +49,8 @@ export const $styles = (theme: Theme) => ({
 
   searchInput: {
     flex: 1,
-    fontSize: fontSizes.fs16,
+    fontSize: vs(17),
+    lineHeight: vs(25),
     color: theme.colors.text,
     textAlign: "left",
     height: "100%",
@@ -168,14 +166,14 @@ export const $styles = (theme: Theme) => ({
   } as TextStyle,
 
   priceInput: {
-    height: vs(48),
+    height: vs(50),
     backgroundColor: "white",
     borderRadius: s(8),
     borderWidth: 1,
     borderColor: theme.colors.palette.outlineVariant,
     paddingHorizontal: s(12),
     textAlign: "center",
-    fontSize: fontSizes.fs16,
+    fontSize: vs(17),
     color: theme.colors.text,
   } as TextStyle,
 

@@ -16,7 +16,6 @@ import { Text } from "./Text"
 import { TextField, TextFieldAccessoryProps } from "./TextField"
 import { translate } from "@/localization/translate"
 import { changePassword } from "@/services/api/modules/auth"
-import { fontSizes } from "@/theme/fontSizes"
 import { useAppTheme } from "@/theme/context"
 import { s, vs } from "@/utils/scaling"
 
@@ -203,7 +202,7 @@ export const ChangePasswordModal: FC<ChangePasswordModalProps> = memo(function C
             </View>
 
             {/* Title */}
-            <Text tx="changePassword:title" preset="bold" style={styles.title} />
+            <Text tx="changePassword:title" preset="bold" size="lg" style={styles.title} />
 
             {/* Form Fields */}
             <View style={styles.form}>
@@ -254,6 +253,7 @@ export const ChangePasswordModal: FC<ChangePasswordModalProps> = memo(function C
                   <Ionicons name="alert-circle-outline" size={s(18)} color={colors.palette.error} />
                   <Text
                     text={errorMsg}
+                    size="xxs"
                     style={[styles.errorText, { color: colors.palette.error }]}
                   />
                 </View>
@@ -262,13 +262,19 @@ export const ChangePasswordModal: FC<ChangePasswordModalProps> = memo(function C
               <Button
                 preset="primary"
                 style={styles.submitBtn}
+                textStyle={styles.submitBtnTextContainer}
                 onPress={handleSubmit}
                 disabled={isLoading}
               >
                 {isLoading ? (
                   <ActivityIndicator color="white" size="small" />
                 ) : (
-                  <Text tx="changePassword:submit" style={styles.submitBtnText} preset="bold" />
+                  <Text
+                    tx="changePassword:submit"
+                    style={styles.submitBtnText}
+                    size="md"
+                    preset="bold"
+                  />
                 )}
               </Button>
             </View>
@@ -328,8 +334,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   title: {
-    fontSize: fontSizes.fs20,
-    lineHeight: vs(28),
     textAlign: "center",
     marginBottom: vs(16),
   },
@@ -349,15 +353,21 @@ const styles = StyleSheet.create({
   },
   errorText: {
     flex: 1,
-    fontSize: fontSizes.fs13,
-    lineHeight: vs(18),
   },
   submitBtn: {
     marginTop: vs(8),
+    width: "100%",
+  },
+  submitBtnTextContainer: {
+    width: "100%",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
   },
   submitBtnText: {
     color: "white",
-    fontSize: fontSizes.fs16,
+    width: "100%",
+    textAlign: "center",
   },
 })
 

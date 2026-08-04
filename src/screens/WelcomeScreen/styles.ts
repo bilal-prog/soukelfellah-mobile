@@ -6,9 +6,18 @@ import { ms, s, vs } from "@/utils/scaling"
 export const $styles = (theme: Theme) => ({
   container: {
     flexGrow: 1,
+  } as ViewStyle,
+
+  bg: {
+    flex: 1,
+  } as ViewStyle,
+
+  content: {
+    flex: 1,
     paddingHorizontal: s(20),
     paddingBottom: vs(30),
     justifyContent: "space-between",
+    backgroundColor: "rgba(255, 255, 255, 0.7)",
   } as ViewStyle,
 
   header: {
@@ -19,9 +28,14 @@ export const $styles = (theme: Theme) => ({
     gap: s(8),
   } as ViewStyle,
 
+  logo: {
+    width: s(50),
+    height: vs(50),
+    resizeMode: "contain",
+    tintColor: theme.colors.palette.primary,
+  } as ImageStyle,
+
   logoText: {
-    fontSize: theme.fontSizes.fs26,
-    lineHeight: vs(45),
     color: theme.colors.palette.primary,
   } as TextStyle,
 
@@ -33,13 +47,20 @@ export const $styles = (theme: Theme) => ({
   } as ViewStyle,
 
   heroCircle: {
-    width: s(140),
+    width: vs(140),
     height: vs(140),
-    borderRadius: ms(70),
+    borderRadius: ms(100),
     backgroundColor: theme.colors.palette.primaryFixed,
     justifyContent: "center",
     alignItems: "center",
   } as ViewStyle,
+
+  heroLogo: {
+    width: vs(120),
+    height: vs(120),
+    resizeMode: "contain",
+    tintColor: theme.colors.palette.primary,
+  } as ImageStyle,
 
   heroImage: {
     width: "100%",
@@ -54,18 +75,14 @@ export const $styles = (theme: Theme) => ({
   } as ViewStyle,
 
   title: {
-    fontSize: theme.fontSizes.fs25,
-    lineHeight: vs(44),
     color: theme.colors.palette.primary,
     marginBottom: vs(12),
     textAlign: "center",
   } as TextStyle,
 
   subtitle: {
-    fontSize: theme.fontSizes.fs18,
     color: theme.colors.palette.onSurfaceVariant,
     textAlign: "center",
-    lineHeight: vs(34),
   } as TextStyle,
 
   actionContainer: {
@@ -92,14 +109,18 @@ export const $styles = (theme: Theme) => ({
 
   btnTextPrimary: {
     color: "white",
-    fontSize: theme.fontSizes.fs16,
-    lineHeight: vs(24),
+    fontSize: vs(22),
+    lineHeight: vs(32),
+    width: "100%",
+    textAlign: "center",
   } as TextStyle,
 
   btnTextSecondary: {
     color: theme.colors.palette.secondary,
-    fontSize: theme.fontSizes.fs16,
-    lineHeight: vs(24),
+    fontSize: vs(22),
+    lineHeight: vs(32),
+    width: "100%",
+    textAlign: "center",
   } as TextStyle,
 
   guestButton: {
@@ -109,8 +130,8 @@ export const $styles = (theme: Theme) => ({
 
   guestButtonText: {
     color: theme.colors.palette.primary,
-    fontSize: theme.fontSizes.fs16,
-    lineHeight: vs(24),
     textDecorationLine: "underline",
+    textAlign: "center",
+    width: "55%",
   } as TextStyle,
 })

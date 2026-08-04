@@ -4,7 +4,6 @@ import { TOptions } from "i18next"
 
 import { isRTL, TxKeyPath } from "@/localization"
 import { translate } from "@/localization/translate"
-import { fontSizes } from "@/theme/fontSizes"
 import { useAppTheme } from "@/theme/context"
 import type { ThemedStyle, ThemedStyleArray } from "@/theme/types"
 import { typography } from "@/theme/typography"
@@ -56,13 +55,41 @@ export const Text = forwardRef(function Text(props: TextProps, ref: ForwardedRef
 })
 
 const $sizeStyles = {
-  xxl: { fontSize: fontSizes.fs30, lineHeight: vs(45) } satisfies TextStyle, // display-lg
-  xl: { fontSize: fontSizes.fs24, lineHeight: vs(37) } satisfies TextStyle, // headline-md
-  lg: { fontSize: fontSizes.fs20, lineHeight: vs(35) } satisfies TextStyle, // headline-sm
-  md: { fontSize: fontSizes.fs18, lineHeight: vs(30) } satisfies TextStyle, // body-lg
-  sm: { fontSize: fontSizes.fs16, lineHeight: vs(29) } satisfies TextStyle, // body-md
-  xs: { fontSize: fontSizes.fs14, lineHeight: vs(25) } satisfies TextStyle, // label-lg
-  xxs: { fontSize: fontSizes.fs12, lineHeight: vs(25) } satisfies TextStyle, // label-md
+  xxl: {
+    fontSize: vs(29),
+    lineHeight: vs(50),
+    // backgroundColor: "red",
+  } satisfies TextStyle, // display-lg
+  xl: {
+    fontSize: vs(27),
+    lineHeight: vs(45),
+    // backgroundColor: "green",
+  } satisfies TextStyle, // headline-md
+  lg: {
+    fontSize: vs(21),
+    lineHeight: vs(37),
+    // backgroundColor: "blue",
+  } satisfies TextStyle, // headline-sm
+  md: {
+    fontSize: vs(19),
+    lineHeight: vs(30),
+    // backgroundColor: "yellow",
+  } satisfies TextStyle, // body-lg
+  sm: {
+    fontSize: vs(17),
+    lineHeight: vs(29),
+    // backgroundColor: "pink",
+  } satisfies TextStyle, // body-md
+  xs: {
+    fontSize: vs(15),
+    lineHeight: vs(25),
+    // backgroundColor: "orange",
+  } satisfies TextStyle, // label-lg
+  xxs: {
+    fontSize: vs(13),
+    lineHeight: vs(25),
+    // backgroundColor: "purple",
+  } satisfies TextStyle, // label-md
 }
 
 const $fontWeightStyles = Object.entries(typography.primary).reduce((acc, [weight, fontFamily]) => {

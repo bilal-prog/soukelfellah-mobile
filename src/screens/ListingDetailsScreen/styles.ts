@@ -28,7 +28,6 @@ export const $styles = (theme: Theme) => ({
   } as ViewStyle,
 
   headerTitle: {
-    fontSize: fontSizes.fs18,
     color: theme.colors.text,
   } as TextStyle,
 
@@ -98,8 +97,6 @@ export const $styles = (theme: Theme) => ({
 
   priceText: {
     color: theme.colors.palette.primary,
-    fontSize: fontSizes.fs28,
-    lineHeight: vs(44),
   } as TextStyle,
 
   negotiationBadge: {
@@ -141,9 +138,9 @@ export const $styles = (theme: Theme) => ({
   } as ViewStyle,
 
   sellerAvatar: {
-    width: s(48),
+    width: vs(48),
     height: vs(48),
-    borderRadius: s(24),
+    borderRadius: s(100),
     backgroundColor: theme.colors.palette.secondaryContainer,
     justifyContent: "center",
     alignItems: "center",
@@ -171,7 +168,6 @@ export const $styles = (theme: Theme) => ({
 
   descText: {
     color: theme.colors.palette.onSurfaceVariant,
-    lineHeight: vs(24),
   } as TextStyle,
 
   specsGrid: {
@@ -253,7 +249,6 @@ export const $styles = (theme: Theme) => ({
   } as ViewStyle,
 
   modalTitle: {
-    fontSize: fontSizes.fs18,
     color: theme.colors.text,
   } as TextStyle,
 
@@ -379,7 +374,6 @@ export const $styles = (theme: Theme) => ({
 
   modalSubtitle: {
     color: theme.colors.palette.onSurfaceVariant,
-    fontSize: fontSizes.fs12,
     marginBottom: vs(12),
   } as TextStyle,
 

@@ -26,8 +26,6 @@ export const $styles = (theme: Theme) => ({
   } as ViewStyle,
 
   headerTitle: {
-    fontSize: fontSizes.fs20,
-    lineHeight: vs(30),
     color: theme.colors.palette.primary,
   } as TextStyle,
 
@@ -64,6 +62,7 @@ export const $styles = (theme: Theme) => ({
 
   sectionTitle: {
     color: theme.colors.palette.onSurface,
+    width: "40%",
   } as TextStyle,
 
   categoryGrid: {

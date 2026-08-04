@@ -2,7 +2,6 @@ import { useEffect, useRef, useCallback } from "react"
 import { Animated, Pressable, ViewStyle, TextStyle, Image, ImageStyle, View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
-import { fontSizes } from "@/theme/fontSizes"
 import { useAppTheme } from "@/theme/context"
 import type { ThemedStyle } from "@/theme/types"
 import { s, vs } from "@/utils/scaling"
@@ -104,6 +103,7 @@ export function InAppBanner(props: InAppBannerProps) {
               tx={titleTx}
               txOptions={titleTxOptions}
               style={themed($title)}
+              size="xs"
               numberOfLines={1}
             />
           )}
@@ -113,6 +113,7 @@ export function InAppBanner(props: InAppBannerProps) {
               tx={bodyTx}
               txOptions={bodyTxOptions}
               style={themed($body)}
+              size="xxs"
               numberOfLines={2}
             />
           )}
@@ -157,11 +158,9 @@ const $textContainer: ThemedStyle<ViewStyle> = (theme) => ({
 
 const $title: ThemedStyle<TextStyle> = (theme) => ({
   color: theme.colors.palette.inverseOnSurface,
-  fontSize: fontSizes.fs14,
 })
 
 const $body: ThemedStyle<TextStyle> = (theme) => ({
   color: theme.colors.palette.inverseOnSurface,
   opacity: 0.8,
-  fontSize: fontSizes.fs13,
 })

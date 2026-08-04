@@ -5,7 +5,6 @@ import { Ionicons } from "@expo/vector-icons"
 import { Button } from "./Button"
 import { Text } from "./Text"
 import { AppVersion } from "@/services/api/modules/appVersions"
-import { fontSizes } from "@/theme/fontSizes"
 import { useAppTheme } from "@/theme/context"
 import { s, vs } from "@/utils/scaling"
 import { getCurrentAppInfo } from "@/utils/versionCheck"
@@ -69,7 +68,6 @@ export const UpdateModal: FC<UpdateModalProps> = memo(function UpdateModal({
                 style={styles.iconStyle}
               />
             </View>
-
           </View>
 
           {/* Title & Description */}
@@ -77,11 +75,13 @@ export const UpdateModal: FC<UpdateModalProps> = memo(function UpdateModal({
             tx={isForceUpdate ? "version:forceUpdateTitle" : "version:optionalUpdateTitle"}
             preset="bold"
             style={styles.title}
+            size="lg"
           />
 
           <Text
             tx={isForceUpdate ? "version:forceUpdateMessage" : "version:optionalUpdateMessage"}
             style={styles.message}
+            size="xs"
           />
 
           {/* Versions Comparison Badge */}
@@ -91,7 +91,7 @@ export const UpdateModal: FC<UpdateModalProps> = memo(function UpdateModal({
               { backgroundColor: theme.colors.palette.secondary + "15" },
             ]}
           >
-            <Text style={styles.versionBadgeText}>
+            <Text style={styles.versionBadgeText} size="xxs">
               v{appInfo.version} → v{latestVersion.versionNumber}
             </Text>
           </View>
@@ -99,9 +99,11 @@ export const UpdateModal: FC<UpdateModalProps> = memo(function UpdateModal({
           {/* Release Notes */}
           {Boolean(latestVersion.releaseNotes?.trim()) && (
             <View style={styles.notesContainer}>
-              <Text tx="version:releaseNotes" preset="bold" style={styles.notesHeader} />
+              <Text tx="version:releaseNotes" preset="bold" style={styles.notesHeader} size="xxs" />
               <ScrollView style={styles.notesScroll} nestedScrollEnabled>
-                <Text style={styles.notesText}>{latestVersion.releaseNotes}</Text>
+                <Text style={styles.notesText} size="xxs">
+                  {latestVersion.releaseNotes}
+                </Text>
               </ScrollView>
             </View>
           )}
@@ -113,11 +115,12 @@ export const UpdateModal: FC<UpdateModalProps> = memo(function UpdateModal({
               style={[styles.updateBtn, { backgroundColor: theme.colors.palette.primary }]}
               onPress={handleUpdate}
               tx="version:updateNow"
+              textStyle={styles.submitBtnText}
             />
 
             {!isForceUpdate && onDismiss && (
               <TouchableOpacity style={styles.laterBtn} onPress={onDismiss}>
-                <Text tx="version:later" style={styles.laterText} />
+                <Text tx="version:later" style={styles.laterText} size="xs" />
               </TouchableOpacity>
             )}
           </View>
@@ -169,14 +172,11 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    fontSize: fontSizes.fs20,
     textAlign: "center",
     marginBottom: vs(8),
   },
   message: {
-    fontSize: fontSizes.fs14,
     textAlign: "center",
-    lineHeight: vs(20),
     opacity: 0.8,
     marginBottom: vs(14),
   },
@@ -187,7 +187,6 @@ const styles = StyleSheet.create({
     marginBottom: vs(16),
   },
   versionBadgeText: {
-    fontSize: fontSizes.fs13,
     fontWeight: "600",
   },
   notesContainer: {
@@ -199,15 +198,12 @@ const styles = StyleSheet.create({
     marginBottom: vs(20),
   },
   notesHeader: {
-    fontSize: fontSizes.fs13,
     marginBottom: vs(4),
   },
   notesScroll: {
     maxHeight: vs(80),
   },
   notesText: {
-    fontSize: fontSizes.fs13,
-    lineHeight: vs(18),
     opacity: 0.85,
   },
   actions: {
@@ -218,13 +214,15 @@ const styles = StyleSheet.create({
     width: "100%",
     borderRadius: s(12),
   },
+  submitBtnText: {
+    lineHeight: vs(50),
+  },
   laterBtn: {
     marginTop: vs(14),
     paddingVertical: vs(8),
     paddingHorizontal: s(16),
   },
   laterText: {
-    fontSize: fontSizes.fs14,
     opacity: 0.7,
   },
 })

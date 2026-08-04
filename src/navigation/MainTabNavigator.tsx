@@ -9,7 +9,6 @@ import { FavoritesScreen } from "@/screens/FavoritesScreen"
 import { HomeScreen } from "@/screens/HomeScreen"
 import { MyListingsScreen } from "@/screens/MyListingsScreen"
 import { SearchScreen } from "@/screens/SearchScreen"
-import { fontSizes } from "@/theme/fontSizes"
 import { useAppTheme } from "@/theme/context"
 import type { ThemedStyle } from "@/theme/types"
 import { vs } from "@/utils/scaling"
@@ -107,7 +106,7 @@ const $tabBarItem: ThemedStyle<ViewStyle> = ({ spacing }) => ({
 })
 
 const $tabBarLabel: ThemedStyle<TextStyle> = ({ typography }) => ({
-  fontSize: fontSizes.fs12,
+  fontSize: vs(13),
   fontFamily: typography.primary.medium,
   lineHeight: vs(25),
 })

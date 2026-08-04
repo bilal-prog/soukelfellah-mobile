@@ -1,6 +1,5 @@
 import { ViewStyle, TextStyle } from "react-native"
 
-import { fontSizes } from "@/theme/fontSizes"
 import type { Theme } from "@/theme/types"
 import { s, vs } from "@/utils/scaling"
 
@@ -25,8 +24,8 @@ export const $styles = (theme: Theme) => ({
   } as ViewStyle,
 
   headerTitle: {
-    fontSize: fontSizes.fs20,
-    lineHeight: vs(34),
+    fontSize: vs(22),
+    lineHeight: vs(38),
     color: theme.colors.palette.primary,
   } as TextStyle,
 
@@ -53,7 +52,6 @@ export const $styles = (theme: Theme) => ({
 
   searchTextPlaceholder: {
     color: theme.colors.palette.onSurfaceVariant,
-    fontSize: fontSizes.fs16,
     flex: 1,
     textAlign: "left",
     marginHorizontal: s(12),

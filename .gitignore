@@ -106,3 +106,4 @@ souk-el-fellah-4ef5e-firebase-adminsdk-fbsvc-dcb07def24.json
 # Local builds
 *.apk
 *.aab
+*.log

@@ -1,6 +1,5 @@
 import { ViewStyle, TextStyle, ImageStyle } from "react-native"
 
-import { fontSizes } from "@/theme/fontSizes"
 import type { Theme } from "@/theme/types"
 import { s, vs } from "@/utils/scaling"
 
@@ -20,8 +19,6 @@ export const $styles = (theme: Theme) => ({
   } as ViewStyle,
 
   headerTitle: {
-    fontSize: fontSizes.fs22,
-    lineHeight: vs(38),
     color: theme.colors.palette.primary,
   } as TextStyle,
 
@@ -44,7 +41,7 @@ export const $styles = (theme: Theme) => ({
   } as ViewStyle,
 
   profileAvatar: {
-    width: s(60),
+    width: vs(60),
     height: vs(60),
     borderRadius: s(30),
     backgroundColor: theme.colors.palette.primaryFixed,

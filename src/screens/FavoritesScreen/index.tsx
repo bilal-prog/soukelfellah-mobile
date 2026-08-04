@@ -84,7 +84,7 @@ export const FavoritesScreen: FC<FavoritesScreenProps> = memo(function Favorites
         <TouchableOpacity onPress={handleGoBack}>
           <Ionicons name={isRTL ? "arrow-forward" : "arrow-back"} size={26} color={colors.text} />
         </TouchableOpacity>
-        <Text tx="common:favorites" style={styles.headerTitle} preset="bold" />
+        <Text tx="common:favorites" style={styles.headerTitle} size="lg" preset="bold" />
         <View style={styles.headerSpacer} />
       </View>
 

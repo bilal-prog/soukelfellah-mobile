@@ -1,5 +1,5 @@
 import React, { FC, useState, memo, useCallback } from "react"
-import { View, TouchableOpacity, ActivityIndicator, Alert } from "react-native"
+import { View, TouchableOpacity, ActivityIndicator, Alert, Image } from "react-native"
 import { Ionicons } from "@expo/vector-icons"
 
 import { Button } from "@/components/Button"
@@ -16,6 +16,7 @@ import { useAppTheme } from "@/theme/context"
 import { CallIcon } from "./components/CallIcon"
 import { LockIcon } from "./components/LockIcon"
 import { $styles } from "./styles"
+import { vs } from "@/utils/scaling"
 
 interface LoginScreenProps extends AppStackScreenProps<"Login"> {}
 
@@ -72,7 +73,8 @@ export const LoginScreen: FC<LoginScreenProps> = memo(function LoginScreen(props
           const { accessToken, refreshToken, user } = data
           setAuthSession(accessToken, refreshToken, {
             id: user.id,
-            name: `${user.firstName || ""} ${user.lastName || ""}`.trim() || translate("common:farmer"),
+            name:
+              `${user.firstName || ""} ${user.lastName || ""}`.trim() || translate("common:farmer"),
             phone: user.phone,
             role: user.role,
             location: user.location,
@@ -122,17 +124,17 @@ export const LoginScreen: FC<LoginScreenProps> = memo(function LoginScreen(props
     >
       {/* Back Button */}
       <TouchableOpacity style={styles.backButton} onPress={handleGoBack}>
-        <Ionicons name={isRTL ? "arrow-forward" : "arrow-back"} size={24} color={colors.text} />
+        <Ionicons name={isRTL ? "arrow-forward" : "arrow-back"} size={vs(24)} color={colors.text} />
       </TouchableOpacity>
 
       <View style={styles.content}>
         {/* Header Block */}
         <View style={styles.headerSection}>
           <View style={styles.logoCircle}>
-            <Ionicons name="leaf" size={40} color={colors.palette.onPrimaryContainer} />
+            <Image source={require("../../../assets/icons/app-logo.png")} style={styles.logo} />
           </View>
-          <Text tx="login:title" style={styles.title} preset="heading" />
-          <Text tx="welcome:subtitle" style={styles.subtitle} />
+          <Text tx="login:title" style={styles.title} size="xxl" preset="heading" />
+          <Text tx="welcome:subtitle" style={styles.subtitle} size="sm" />
         </View>
 
         {/* Inputs Form */}
@@ -188,7 +190,6 @@ export const LoginScreen: FC<LoginScreenProps> = memo(function LoginScreen(props
                 />
               </TouchableOpacity>
             </View>
-
           </View>
 
           {/* Submit Action */}

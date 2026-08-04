@@ -8,16 +8,12 @@ import { Text } from "@/components/Text"
 import { isRTL } from "@/localization"
 import { getLegalContent, LegalTabType } from "@/localization/legalContent"
 import { AppStackScreenProps } from "@/navigation/navigationTypes"
-import { fontSizes } from "@/theme/fontSizes"
 import { useAppTheme } from "@/theme/context"
 import { s, vs } from "@/utils/scaling"
 
 interface LegalScreenProps extends AppStackScreenProps<"Legal"> {}
 
-export const LegalScreen: FC<LegalScreenProps> = memo(function LegalScreen({
-  navigation,
-  route,
-}) {
+export const LegalScreen: FC<LegalScreenProps> = memo(function LegalScreen({ navigation, route }) {
   const { theme } = useAppTheme()
   const colors = theme.colors
 
@@ -35,19 +31,19 @@ export const LegalScreen: FC<LegalScreenProps> = memo(function LegalScreen({
       {/* App Bar Header */}
       <View style={styles.header}>
         <TouchableOpacity style={styles.backButton} onPress={handleGoBack}>
-          <Ionicons
-            name={isRTL ? "arrow-forward" : "arrow-back"}
-            size={24}
-            color={colors.text}
-          />
+          <Ionicons name={isRTL ? "arrow-forward" : "arrow-back"} size={24} color={colors.text} />
         </TouchableOpacity>
-        <Text tx="legal:title" style={styles.headerTitle} preset="bold" />
+        <Text tx="legal:title" size="md" preset="bold" />
         <View style={styles.headerRightPlaceholder} />
       </View>
 
       {/* Segmented Tab Selector */}
       <View style={styles.tabContainer}>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.tabScroll}>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.tabScroll}
+        >
           <TouchableOpacity
             style={[
               styles.tabItem,
@@ -57,9 +53,11 @@ export const LegalScreen: FC<LegalScreenProps> = memo(function LegalScreen({
           >
             <Text
               tx="legal:cguTab"
+              size="xs"
               style={[
-                styles.tabText,
-                activeTab === "cgu" ? { color: "white", fontWeight: "bold" } : { color: colors.text },
+                activeTab === "cgu"
+                  ? { color: "white", fontWeight: "bold" }
+                  : { color: colors.text },
               ]}
             />
           </TouchableOpacity>
@@ -73,9 +71,11 @@ export const LegalScreen: FC<LegalScreenProps> = memo(function LegalScreen({
           >
             <Text
               tx="legal:cgvTab"
+              size="xs"
               style={[
-                styles.tabText,
-                activeTab === "cgv" ? { color: "white", fontWeight: "bold" } : { color: colors.text },
+                activeTab === "cgv"
+                  ? { color: "white", fontWeight: "bold" }
+                  : { color: colors.text },
               ]}
             />
           </TouchableOpacity>
@@ -89,9 +89,11 @@ export const LegalScreen: FC<LegalScreenProps> = memo(function LegalScreen({
           >
             <Text
               tx="legal:privacyTab"
+              size="xs"
               style={[
-                styles.tabText,
-                activeTab === "privacy" ? { color: "white", fontWeight: "bold" } : { color: colors.text },
+                activeTab === "privacy"
+                  ? { color: "white", fontWeight: "bold" }
+                  : { color: colors.text },
               ]}
             />
           </TouchableOpacity>
@@ -105,9 +107,11 @@ export const LegalScreen: FC<LegalScreenProps> = memo(function LegalScreen({
           >
             <Text
               tx="legal:mentionsTab"
+              size="xs"
               style={[
-                styles.tabText,
-                activeTab === "mentions" ? { color: "white", fontWeight: "bold" } : { color: colors.text },
+                activeTab === "mentions"
+                  ? { color: "white", fontWeight: "bold" }
+                  : { color: colors.text },
               ]}
             />
           </TouchableOpacity>
@@ -115,25 +119,43 @@ export const LegalScreen: FC<LegalScreenProps> = memo(function LegalScreen({
       </View>
 
       {/* Document Content */}
-      <ScrollView contentContainerStyle={styles.contentContainer} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        contentContainerStyle={styles.contentContainer}
+        showsVerticalScrollIndicator={false}
+      >
         <View style={styles.docHeader}>
-          <Text style={[styles.docTitle, { color: colors.text }]} preset="bold">
+          <Text style={[styles.docTitle, { color: colors.text }]} size="lg" preset="bold">
             {doc.title}
           </Text>
           <View style={styles.dateRow}>
-            <Text tx="legal:lastUpdated" style={[styles.dateLabel, { color: colors.palette.onSurfaceVariant }]} size="xs" />
+            <Text
+              tx="legal:lastUpdated"
+              style={[styles.dateLabel, { color: colors.palette.onSurfaceVariant }]}
+              size="xs"
+            />
             <Text style={[styles.dateValue, { color: colors.palette.onSurfaceVariant }]} size="xs">
-              {" "}{doc.lastUpdated}
+              {" "}
+              {doc.lastUpdated}
             </Text>
           </View>
         </View>
 
         {doc.sections.map((section, idx) => (
-          <View key={idx} style={[styles.sectionCard, { backgroundColor: colors.palette.surfaceContainerHigh || "rgba(0,0,0,0.03)" }]}>
-            <Text style={[styles.sectionTitle, { color: colors.palette.primary }]} preset="bold">
+          <View
+            key={idx}
+            style={[
+              styles.sectionCard,
+              { backgroundColor: colors.palette.surfaceContainerHigh || "rgba(0,0,0,0.03)" },
+            ]}
+          >
+            <Text
+              style={[styles.sectionTitle, { color: colors.palette.primary }]}
+              size="sm"
+              preset="bold"
+            >
               {section.title}
             </Text>
-            <Text style={[styles.sectionContent, { color: colors.text }]}>
+            <Text style={[styles.sectionContent, { color: colors.text }]} size="xs">
               {section.content}
             </Text>
           </View>
@@ -159,9 +181,7 @@ const styles = StyleSheet.create({
   backButton: {
     padding: s(6),
   },
-  headerTitle: {
-    fontSize: fontSizes.fs18,
-  },
+
   headerRightPlaceholder: {
     width: s(36),
   },
@@ -180,9 +200,7 @@ const styles = StyleSheet.create({
     borderRadius: s(20),
     backgroundColor: "rgba(0,0,0,0.05)",
   },
-  tabText: {
-    fontSize: fontSizes.fs13,
-  },
+
   contentContainer: {
     padding: s(20),
     paddingBottom: vs(40),
@@ -191,7 +209,6 @@ const styles = StyleSheet.create({
     marginBottom: vs(20),
   },
   docTitle: {
-    fontSize: fontSizes.fs20,
     marginBottom: vs(6),
   },
   dateRow: {
@@ -211,11 +228,9 @@ const styles = StyleSheet.create({
     marginBottom: vs(14),
   },
   sectionTitle: {
-    fontSize: fontSizes.fs15,
     marginBottom: vs(8),
   },
   sectionContent: {
-    fontSize: fontSizes.fs14,
     lineHeight: vs(22),
     opacity: 0.9,
   },

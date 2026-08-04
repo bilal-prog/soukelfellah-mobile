@@ -67,7 +67,7 @@ export const HomeHeader = memo(function HomeHeader({
       <View style={styles.searchBarContainer}>
         <TouchableOpacity activeOpacity={0.9} style={styles.searchBar} onPress={handleSearchPress}>
           <Ionicons name="search-outline" size={22} color={colors.palette.onSurfaceVariant} />
-          <Text tx="home:searchPlaceholder" style={styles.searchTextPlaceholder} />
+          <Text tx="home:searchPlaceholder" style={styles.searchTextPlaceholder} size="sm" />
         </TouchableOpacity>
       </View>
 

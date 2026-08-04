@@ -8,11 +8,7 @@ import { NotificationIconButton } from "@/components/NotificationIconButton"
 import { isRTL } from "@/localization"
 import { translate } from "@/localization/translate"
 import type { MainTabScreenProps } from "@/navigation/navigationTypes"
-import {
-  useListingsQuery,
-  useCategoriesQuery,
-  useLocationsQuery,
-} from "@/services/api/hooks"
+import { useListingsQuery, useCategoriesQuery, useLocationsQuery } from "@/services/api/hooks"
 import { useAppTheme } from "@/theme/context"
 
 import { SearchHeader } from "./components/SearchHeader"
@@ -62,10 +58,19 @@ export const SearchScreen: FC<SearchScreenProps> = memo(function SearchScreen(pr
       minPrice: debouncedMinPrice ? parseFloat(debouncedMinPrice) : undefined,
       maxPrice: debouncedMaxPrice ? parseFloat(debouncedMaxPrice) : undefined,
       region: selectedRegion && selectedRegion._id !== "all" ? selectedRegion.name : undefined,
-      province: selectedProvince && selectedProvince._id !== "all" ? selectedProvince.name : undefined,
+      province:
+        selectedProvince && selectedProvince._id !== "all" ? selectedProvince.name : undefined,
       commune: selectedCommune && selectedCommune._id !== "all" ? selectedCommune.name : undefined,
     }
-  }, [debouncedQuery, selectedCat, debouncedMinPrice, debouncedMaxPrice, selectedRegion, selectedProvince, selectedCommune])
+  }, [
+    debouncedQuery,
+    selectedCat,
+    debouncedMinPrice,
+    debouncedMaxPrice,
+    selectedRegion,
+    selectedProvince,
+    selectedCommune,
+  ])
 
   const { data: apiListings, isLoading } = useListingsQuery(searchParams)
   const { data: categories } = useCategoriesQuery()
@@ -196,10 +201,7 @@ export const SearchScreen: FC<SearchScreenProps> = memo(function SearchScreen(pr
                     setIsRegionModalVisible(false)
                   }}
                 >
-                  <Text
-                    text={item?.name}
-                    style={{ textAlign: "left", width: "100%" }}
-                  />
+                  <Text text={item?.name} style={{ textAlign: "left", width: "100%" }} />
                 </TouchableOpacity>
               )}
             />
@@ -239,10 +241,7 @@ export const SearchScreen: FC<SearchScreenProps> = memo(function SearchScreen(pr
                     setIsProvinceModalVisible(false)
                   }}
                 >
-                  <Text
-                    text={item?.name}
-                    style={{ textAlign: "left", width: "100%" }}
-                  />
+                  <Text text={item?.name} style={{ textAlign: "left", width: "100%" }} />
                 </TouchableOpacity>
               )}
             />
@@ -280,10 +279,7 @@ export const SearchScreen: FC<SearchScreenProps> = memo(function SearchScreen(pr
                     setIsCommuneModalVisible(false)
                   }}
                 >
-                  <Text
-                    text={item?.name}
-                    style={{ textAlign: "left", width: "100%" }}
-                  />
+                  <Text text={item?.name} style={{ textAlign: "left", width: "100%" }} />
                 </TouchableOpacity>
               )}
             />

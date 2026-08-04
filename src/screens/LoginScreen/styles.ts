@@ -1,4 +1,4 @@
-import { ViewStyle, TextStyle } from "react-native"
+import { ViewStyle, TextStyle, ImageStyle } from "react-native"
 
 import { fontSizes } from "@/theme/fontSizes"
 import type { Theme } from "@/theme/types"
@@ -31,27 +31,30 @@ export const $styles = (theme: Theme) => ({
   } as ViewStyle,
 
   logoCircle: {
-    width: s(80),
+    width: vs(80),
     height: vs(80),
-    borderRadius: s(40),
+    borderRadius: s(100),
     backgroundColor: theme.colors.palette.primaryContainer,
     justifyContent: "center",
     alignItems: "center",
     marginBottom: vs(16),
   } as ViewStyle,
 
+  logo: {
+    width: vs(70),
+    height: vs(70),
+    resizeMode: "contain",
+    tintColor: theme.colors.palette.onPrimaryContainer,
+  } as ImageStyle,
+
   title: {
-    fontSize: fontSizes.fs28,
-    lineHeight: vs(44),
     color: theme.colors.palette.primary,
     marginBottom: vs(8),
   } as TextStyle,
 
   subtitle: {
-    fontSize: fontSizes.fs16,
     color: theme.colors.palette.onSurfaceVariant,
     textAlign: "center",
-    lineHeight: vs(24),
   } as TextStyle,
 
   form: {

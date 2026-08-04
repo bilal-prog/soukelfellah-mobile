@@ -271,7 +271,7 @@ export const EditListingScreen: FC<EditListingScreenProps> = memo(
       navigation.goBack()
     }, [navigation])
 
-    const selectCategory = (type: "PRODUCT" | "EQUIPMENT") => {
+    /* const selectCategory = (type: "PRODUCT" | "EQUIPMENT") => {
       setSelectedCat(type)
       if (type === "EQUIPMENT") {
         setCondition("USED")
@@ -300,7 +300,7 @@ export const EditListingScreen: FC<EditListingScreenProps> = memo(
       setProductTypeError("")
       setUnitError("")
       setStep(2)
-    }
+    } */
 
     const uploadImage = (localUri: string) => {
       const filename = localUri.split("/").pop() || "upload.jpg"
@@ -580,7 +580,7 @@ export const EditListingScreen: FC<EditListingScreenProps> = memo(
                 color={colors.text}
               />
             </TouchableOpacity>
-            <Text tx="editListing:title" style={styles.headerTitle} preset="bold" />
+            <Text tx="editListing:title" style={styles.headerTitle} size="lg" preset="bold" />
           </View>
 
           {/* Dynamic step dot indicators */}
@@ -598,14 +598,13 @@ export const EditListingScreen: FC<EditListingScreenProps> = memo(
           contentContainerStyle={styles.scrollContent}
           showsVerticalScrollIndicator={false}
         >
-          {step === 1 && (
+          {/* {step === 1 && (
             <View style={styles.section}>
               <Text tx="addListing:step1Title" preset="subheading" style={styles.sectionTitle} />
 
               <View style={styles.categoryGrid}>
-                {/* Agricultural produce button */}
                 <TouchableOpacity
-                  onPress={() => selectCategory("PRODUCT")}
+                  onPress={() => _selectCategory("PRODUCT")}
                   style={styles.categoryBtn}
                 >
                   <View style={[styles.categoryIconCircle, styles.categoryIconProduce]}>
@@ -614,9 +613,8 @@ export const EditListingScreen: FC<EditListingScreenProps> = memo(
                   <Text tx="addListing:produceCategory" size="xs" preset="bold" />
                 </TouchableOpacity>
 
-                {/* Machinery/Equipment button */}
                 <TouchableOpacity
-                  onPress={() => selectCategory("EQUIPMENT")}
+                  onPress={() => _selectCategory("EQUIPMENT")}
                   style={styles.categoryBtn}
                 >
                   <View style={[styles.categoryIconCircle, styles.categoryIconEquipment]}>
@@ -626,7 +624,7 @@ export const EditListingScreen: FC<EditListingScreenProps> = memo(
                 </TouchableOpacity>
               </View>
             </View>
-          )}
+          )} */}
 
           {step === 2 && (
             <View style={styles.section}>

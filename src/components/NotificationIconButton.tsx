@@ -9,7 +9,6 @@ import { useAuth } from "@/context/AuthContext"
 import { AppStackParamList } from "@/navigation/navigationTypes"
 import { useUnreadNotificationsCountQuery } from "@/services/api/hooks"
 import { useAppTheme } from "@/theme/context"
-import { fontSizes } from "@/theme/fontSizes"
 import { s, vs } from "@/utils/scaling"
 
 interface NotificationIconButtonProps {
@@ -21,7 +20,7 @@ interface NotificationIconButtonProps {
 
 export const NotificationIconButton: FC<NotificationIconButtonProps> = ({
   color,
-  size = 26,
+  size = vs(26),
   style,
   onPress,
 }) => {
@@ -99,8 +98,8 @@ const $badge: ViewStyle = {
 
 const $badgeText: TextStyle = {
   color: "#FFFFFF",
-  fontSize: fontSizes.fs10,
+  fontSize: vs(11),
   fontWeight: "bold",
-  lineHeight: vs(12),
+  lineHeight: vs(15),
   textAlign: "center",
 }
