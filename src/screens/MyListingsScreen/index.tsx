@@ -48,6 +48,16 @@ export const MyListingsScreen: FC<MyListingsScreenProps> = memo(function MyListi
     return apiListings.reduce((sum, item) => sum + (item.viewsCount || 0), 0)
   }, [apiListings])
 
+  const totalCalls = useMemo(() => {
+    if (!apiListings) return 0
+    return apiListings.reduce((sum, item) => sum + (item.callsCount || 0), 0)
+  }, [apiListings])
+
+  const totalMessages = useMemo(() => {
+    if (!apiListings) return 0
+    return apiListings.reduce((sum, item) => sum + (item.messagesCount || 0), 0)
+  }, [apiListings])
+
   useFocusEffect(
     useCallback(() => {
       refetch()
@@ -147,12 +157,13 @@ export const MyListingsScreen: FC<MyListingsScreenProps> = memo(function MyListi
         userPhone={userPhone || ""}
         myListingsLength={listLength}
         viewsCount={totalViews}
-        messagesCount="-"
+        callsCount={totalCalls}
+        messagesCount={totalMessages}
         activeTab={activeTab}
         setActiveTab={setActiveTab}
       />
     )
-  }, [styles, userName, userPhone, apiListings, totalViews, activeTab])
+  }, [styles, userName, userPhone, apiListings, totalViews, totalCalls, totalMessages, activeTab])
 
   const renderMyListingsEmptyState = useCallback(() => {
     return <MyListingsEmptyState styles={styles} />

@@ -208,6 +208,7 @@ const ary: Translations = {
     stats: {
       total: "المجموع",
       views: "المشاهدات",
+      calls: "المكالمات",
       messages: "الرسائل",
     },
     tabs: {

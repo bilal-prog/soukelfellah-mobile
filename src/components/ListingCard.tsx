@@ -18,6 +18,8 @@ import { useAppTheme } from "@/theme/context"
 import { formatListingDate } from "@/utils/formatDate"
 import { s, scale, vs } from "@/utils/scaling"
 
+import { trackListingCall, trackListingMessage } from "@/services/api/modules/listings"
+
 import { Text } from "./Text"
 
 export interface ListingCardProps {
@@ -33,6 +35,7 @@ export interface ListingCardProps {
   imageUri?: string
   phone: string
   whatsapp?: string
+  sellerId?: any
   isNew?: boolean
   rating?: number
   createdAt?: string
@@ -53,6 +56,7 @@ export const ListingCard = memo(function ListingCard(props: ListingCardProps) {
     imageUri,
     phone,
     whatsapp,
+    sellerId,
     isNew,
     rating,
     createdAt,
@@ -60,7 +64,10 @@ export const ListingCard = memo(function ListingCard(props: ListingCardProps) {
   } = props
   const { theme } = useAppTheme()
   const { colors, spacing } = theme
-  const { toggleFavorite, isFavorite, isAuthenticated, setGuestMode } = useAuth()
+  const { toggleFavorite, isFavorite, isAuthenticated, setGuestMode, userId } = useAuth()
+
+  const sellerIdStr = typeof sellerId === "object" ? sellerId?._id : sellerId
+  const isOwner = Boolean(userId && sellerIdStr && String(userId) === String(sellerIdStr))
 
   const favorited = isFavorite(id)
 
@@ -88,17 +95,25 @@ export const ListingCard = memo(function ListingCard(props: ListingCardProps) {
   }, [checkAuthAndExecute, toggleFavorite, id])
 
   const handleCall = useCallback(() => {
-    checkAuthAndExecute(() => Linking.openURL(`tel:${phone}`))
-  }, [checkAuthAndExecute, phone])
+    checkAuthAndExecute(() => {
+      if (!isOwner && id) {
+        trackListingCall(id).catch(() => {})
+      }
+      Linking.openURL(`tel:${phone}`)
+    })
+  }, [checkAuthAndExecute, phone, id, isOwner])
 
   const handleWhatsapp = useCallback(() => {
     checkAuthAndExecute(() => {
+      if (!isOwner && id) {
+        trackListingMessage(id).catch(() => {})
+      }
       const waPhone = whatsapp || phone
       const formattedPhone = waPhone.startsWith("0") ? `+212${waPhone.slice(1)}` : waPhone
       const message = `${translate("common:whatsappMessage")}"${title}"`
       Linking.openURL(`whatsapp://send?phone=${formattedPhone}&text=${encodeURIComponent(message)}`)
     })
-  }, [checkAuthAndExecute, phone, whatsapp])
+  }, [checkAuthAndExecute, phone, whatsapp, title, id, isOwner])
 
   return (
     <TouchableOpacity

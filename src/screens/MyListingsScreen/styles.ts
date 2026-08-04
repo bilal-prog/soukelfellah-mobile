@@ -65,19 +65,20 @@ export const $styles = (theme: Theme) => ({
 
   statsContainer: {
     flexDirection: "row",
-    gap: s(12),
+    gap: s(6),
     marginBottom: vs(24),
   } as ViewStyle,
 
   statBox: {
     flex: 1,
     backgroundColor: "white",
-    borderRadius: s(12),
-    padding: s(12),
+    borderRadius: s(10),
+    paddingVertical: vs(10),
+    paddingHorizontal: s(4),
     borderWidth: 1,
     borderColor: theme.colors.palette.outlineVariant,
     alignItems: "center",
-    gap: s(4),
+    gap: s(2),
     elevation: 2,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 1 },
@@ -97,8 +98,12 @@ export const $styles = (theme: Theme) => ({
     color: theme.colors.palette.secondary,
   } as TextStyle,
 
+  statValueCalls: {
+    color: "#007AFF",
+  } as TextStyle,
+
   statValueMessages: {
-    color: theme.colors.palette.tertiary,
+    color: "#25D366",
   } as TextStyle,
 
   tabBar: {

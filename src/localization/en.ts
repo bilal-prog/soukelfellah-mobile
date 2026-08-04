@@ -206,6 +206,7 @@ const en = {
     stats: {
       total: "Total",
       views: "Views",
+      calls: "Calls",
       messages: "Messages",
     },
     tabs: {

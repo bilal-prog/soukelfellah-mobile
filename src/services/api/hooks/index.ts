@@ -23,6 +23,9 @@ import {
   getUnreadNotificationsCount,
   deleteNotification,
   reportListing,
+  trackListingCall,
+  trackListingMessage,
+  trackListingView,
 } from "../modules"
 
 const extractErrorMessage = (error: any): string => {
@@ -148,6 +151,36 @@ export const useMarkListingSoldMutation = () => {
       const res = await markListingSold(id)
       if (res.kind === "failure") throw new Error(extractErrorMessage(res.error))
       return res.listing
+    },
+  })
+}
+
+export const useTrackListingCallMutation = () => {
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const res = await trackListingCall(id)
+      if (res.kind === "failure") throw new Error(extractErrorMessage(res.error))
+      return res
+    },
+  })
+}
+
+export const useTrackListingMessageMutation = () => {
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const res = await trackListingMessage(id)
+      if (res.kind === "failure") throw new Error(extractErrorMessage(res.error))
+      return res
+    },
+  })
+}
+
+export const useTrackListingViewMutation = () => {
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const res = await trackListingView(id)
+      if (res.kind === "failure") throw new Error(extractErrorMessage(res.error))
+      return res
     },
   })
 }

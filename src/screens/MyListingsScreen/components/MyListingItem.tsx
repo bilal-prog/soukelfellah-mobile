@@ -81,7 +81,23 @@ export const MyListingItem = memo(function MyListingItem({
             <View style={styles.metaItem}>
               <Ionicons name="eye-outline" size={s(14)} color={styles.metaText.color} />
               <Text
-                text={`${item.viewsCount || 0} ${translate("common:views")}`}
+                text={`${item.viewsCount || 0}`}
+                size="xxs"
+                style={styles.metaText}
+              />
+            </View>
+            <View style={styles.metaItem}>
+              <Ionicons name="call-outline" size={s(14)} color={styles.metaText.color} />
+              <Text
+                text={`${item.callsCount || 0}`}
+                size="xxs"
+                style={styles.metaText}
+              />
+            </View>
+            <View style={styles.metaItem}>
+              <Ionicons name="logo-whatsapp" size={s(14)} color={styles.metaText.color} />
+              <Text
+                text={`${item.messagesCount || 0}`}
                 size="xxs"
                 style={styles.metaText}
               />

@@ -13,7 +13,8 @@ export interface MyListingsHeaderProps {
   userPhone: string
   myListingsLength: number
   viewsCount: number
-  messagesCount: string | number
+  callsCount: number
+  messagesCount: number
   activeTab: "active" | "paused" | "sold" | "rejected"
   setActiveTab: (val: "active" | "paused" | "sold" | "rejected") => void
 }
@@ -25,6 +26,7 @@ export const MyListingsHeader = memo(function MyListingsHeader(props: MyListings
     userPhone,
     myListingsLength,
     viewsCount,
+    callsCount,
     messagesCount,
     activeTab,
     setActiveTab,
@@ -53,20 +55,24 @@ export const MyListingsHeader = memo(function MyListingsHeader(props: MyListings
             <Text
               text={String(myListingsLength)}
               preset="bold"
-              size="lg"
+              size="md"
               style={styles.statValueTotal}
             />
           </View>
           <View style={styles.statBox}>
             <Text tx="myListings:stats.views" size="xxs" style={styles.statLabel} />
-            <Text text={String(viewsCount)} preset="bold" size="lg" style={styles.statValueViews} />
+            <Text text={String(viewsCount)} preset="bold" size="md" style={styles.statValueViews} />
+          </View>
+          <View style={styles.statBox}>
+            <Text tx="myListings:stats.calls" size="xxs" style={styles.statLabel} />
+            <Text text={String(callsCount)} preset="bold" size="md" style={styles.statValueCalls} />
           </View>
           <View style={styles.statBox}>
             <Text tx="myListings:stats.messages" size="xxs" style={styles.statLabel} />
             <Text
               text={String(messagesCount)}
               preset="bold"
-              size="lg"
+              size="md"
               style={styles.statValueMessages}
             />
           </View>

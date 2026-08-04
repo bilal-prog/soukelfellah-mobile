@@ -37,6 +37,8 @@ export interface ApiListing {
   location: LocationSchema
   status: "draft" | "active" | "paused" | "sold" | "expired" | "rejected"
   viewsCount: number
+  callsCount?: number
+  messagesCount?: number
   createdAt: string
 }
 
@@ -172,4 +174,37 @@ export const updateListing = async (id: string, params: CreateListingParams) => 
     return { kind: "failure", error: response.data || response.problem } as const
   }
   return { kind: "ok", listing: response.data!.data } as const
+}
+
+export const trackListingCall = async (id: string) => {
+  const response = await apiClient.post<{ success: boolean; data?: any }>(
+    `/api/listings/${id}/call`,
+    {},
+  )
+  if (!response.ok) {
+    return { kind: "failure", error: response.data || response.problem } as const
+  }
+  return { kind: "ok" } as const
+}
+
+export const trackListingMessage = async (id: string) => {
+  const response = await apiClient.post<{ success: boolean; data?: any }>(
+    `/api/listings/${id}/message`,
+    {},
+  )
+  if (!response.ok) {
+    return { kind: "failure", error: response.data || response.problem } as const
+  }
+  return { kind: "ok" } as const
+}
+
+export const trackListingView = async (id: string) => {
+  const response = await apiClient.post<{ success: boolean; data?: any }>(
+    `/api/listings/${id}/view`,
+    {},
+  )
+  if (!response.ok) {
+    return { kind: "failure", error: response.data || response.problem } as const
+  }
+  return { kind: "ok" } as const
 }

@@ -210,6 +210,7 @@ const fr: Translations = {
     stats: {
       total: "Total",
       views: "Vues",
+      calls: "Appels",
       messages: "Messages",
     },
     tabs: {

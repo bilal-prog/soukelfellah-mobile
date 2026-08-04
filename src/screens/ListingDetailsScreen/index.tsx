@@ -1,4 +1,4 @@
-import { FC, memo, useCallback, useMemo, useState } from "react"
+import { FC, memo, useCallback, useMemo, useState, useEffect } from "react"
 import {
   View,
   ScrollView,
@@ -21,7 +21,13 @@ import { useAuth } from "@/context/AuthContext"
 import { isRTL } from "@/localization"
 import { translate } from "@/localization/translate"
 import type { AppStackScreenProps } from "@/navigation/navigationTypes"
-import { useListingDetailsQuery, useReportListingMutation } from "@/services/api/hooks"
+import {
+  useListingDetailsQuery,
+  useReportListingMutation,
+  useTrackListingCallMutation,
+  useTrackListingMessageMutation,
+  useTrackListingViewMutation,
+} from "@/services/api/hooks"
 import { useAppTheme } from "@/theme/context"
 
 import { $styles } from "./styles"
@@ -61,7 +67,7 @@ export const ListingDetailsScreen: FC<ListingDetailsScreenProps> = memo(
     const $bottomContainerInsets = useSafeAreaInsetsStyle(["bottom"])
     const { navigation, route } = props
     const { listingId } = route.params
-    const { toggleFavorite, isFavorite, isAuthenticated, setGuestMode } = useAuth()
+    const { toggleFavorite, isFavorite, isAuthenticated, setGuestMode, userId } = useAuth()
 
     const favorited = isFavorite(listingId)
 
@@ -101,6 +107,23 @@ export const ListingDetailsScreen: FC<ListingDetailsScreenProps> = memo(
         hours: `1200 ${translate("common:hoursUnit")}`,
       }
     }, [apiListing])
+
+    // Owner check
+    const isOwner = useMemo(() => {
+      const sellerIdStr =
+        typeof listing?.sellerId === "object" ? listing.sellerId?._id : listing?.sellerId
+      return Boolean(userId && sellerIdStr && String(userId) === String(sellerIdStr))
+    }, [userId, listing])
+
+    const { mutate: trackView } = useTrackListingViewMutation()
+    const { mutate: trackCall } = useTrackListingCallMutation()
+    const { mutate: trackMessage } = useTrackListingMessageMutation()
+
+    useEffect(() => {
+      if (listingId && !isOwner) {
+        trackView(listingId)
+      }
+    }, [listingId, isOwner, trackView])
 
     const handleGoBack = useCallback(() => {
       navigation.goBack()
@@ -174,13 +197,19 @@ export const ListingDetailsScreen: FC<ListingDetailsScreenProps> = memo(
 
     const handleCall = useCallback(() => {
       checkAuthAndExecute(() => {
+        if (!isOwner && listingId) {
+          trackCall(listingId)
+        }
         const phone = typeof listing.sellerId === "object" ? listing.sellerId?.phone : "0661234567"
         Linking.openURL(`tel:${phone}`)
       })
-    }, [checkAuthAndExecute, listing])
+    }, [checkAuthAndExecute, listing, listingId, isOwner, trackCall])
 
     const handleWhatsapp = useCallback(() => {
       checkAuthAndExecute(() => {
+        if (!isOwner && listingId) {
+          trackMessage(listingId)
+        }
         const phone = typeof listing.sellerId === "object" ? listing.sellerId?.phone : "0661234567"
         const formattedPhone = phone.startsWith("0") ? `+212${phone.slice(1)}` : phone
         const message = `${translate("common:whatsappMessage")}"${listing.title}"`
@@ -188,7 +217,7 @@ export const ListingDetailsScreen: FC<ListingDetailsScreenProps> = memo(
           `whatsapp://send?phone=${formattedPhone}&text=${encodeURIComponent(message)}`,
         )
       })
-    }, [checkAuthAndExecute, listing])
+    }, [checkAuthAndExecute, listing, listingId, isOwner, trackMessage])
 
     if (isLoading) {
       return (

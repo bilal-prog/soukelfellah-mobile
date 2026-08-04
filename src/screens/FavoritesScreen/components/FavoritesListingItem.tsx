@@ -31,6 +31,7 @@ export const FavoritesListingItem = memo(function FavoritesListingItem({
       locationName={formatFullAddress(item.location)}
       imageUri={typeof item.images[0] === "object" ? item.images[0]?.url : item.images[0]}
       phone={typeof item.sellerId === "object" ? item.sellerId?.phone : "0600000000"}
+      sellerId={item.sellerId}
       isNew={item.isNew}
       rating={item.rating}
       createdAt={item.createdAt}
