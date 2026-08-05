@@ -1,6 +1,5 @@
 import { ViewStyle, TextStyle, ImageStyle } from "react-native"
 
-import { fontSizes } from "../../theme/fontSizes"
 import type { Theme } from "../../theme/types"
 import { s, vs } from "../../utils/scaling"
 
@@ -34,13 +33,11 @@ export const $styles = (theme: Theme) => ({
   } as ViewStyle,
 
   headerTitle: {
-    fontSize: fontSizes.fs24,
     fontWeight: "800",
     color: theme.colors.text,
   } as TextStyle,
 
   headerAction: {
-    fontSize: fontSizes.fs14,
     fontWeight: "600",
     color: theme.colors.tint,
   } as TextStyle,
@@ -84,9 +81,9 @@ export const $styles = (theme: Theme) => ({
   } as ViewStyle,
 
   iconContainer: {
-    width: s(48),
+    width: vs(48),
     height: vs(48),
-    borderRadius: s(24),
+    borderRadius: s(100),
     backgroundColor: theme.colors.separator,
     justifyContent: "center",
     alignItems: "center",
@@ -111,7 +108,6 @@ export const $styles = (theme: Theme) => ({
 
   title: {
     flex: 1,
-    fontSize: fontSizes.fs16,
     fontWeight: "600",
     color: theme.colors.text,
     marginRight: s(8),
@@ -123,13 +119,12 @@ export const $styles = (theme: Theme) => ({
 
   unreadDot: {
     width: s(8),
-    height: vs(8),
-    borderRadius: s(4),
+    height: s(8),
+    borderRadius: s(100),
     backgroundColor: theme.colors.error,
   } as ViewStyle,
 
   message: {
-    fontSize: fontSizes.fs14,
     color: theme.colors.textDim,
     lineHeight: vs(20),
     marginBottom: vs(6),
@@ -141,7 +136,6 @@ export const $styles = (theme: Theme) => ({
   } as TextStyle,
 
   time: {
-    fontSize: fontSizes.fs12,
     color: theme.colors.textDim,
     opacity: 0.6,
   } as TextStyle,

@@ -87,7 +87,7 @@ const $badge: ViewStyle = {
   top: vs(-2),
   right: -s(4),
   minWidth: s(18),
-  height: vs(18),
+  height: vs(20),
   borderRadius: s(9),
   paddingHorizontal: s(4),
   justifyContent: "center",
@@ -98,7 +98,7 @@ const $badge: ViewStyle = {
 
 const $badgeText: TextStyle = {
   color: "#FFFFFF",
-  fontSize: vs(11),
+  fontSize: vs(10),
   fontWeight: "bold",
   lineHeight: vs(15),
   textAlign: "center",

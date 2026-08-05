@@ -72,7 +72,7 @@ const $sizeStyles = {
   } satisfies TextStyle, // headline-sm
   md: {
     fontSize: vs(19),
-    lineHeight: vs(30),
+    lineHeight: vs(32),
     // backgroundColor: "yellow",
   } satisfies TextStyle, // body-lg
   sm: {

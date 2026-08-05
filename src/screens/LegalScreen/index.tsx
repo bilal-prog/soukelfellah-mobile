@@ -216,8 +216,10 @@ const styles = StyleSheet.create({
     marginBottom: vs(6),
   },
   dateRow: {
-    flexDirection: "row",
-    alignItems: "center",
+    // width: 200,
+    // flexDirection: "row",
+    // alignItems: "center",
+    // backgroundColor: "red",
   },
   dateLabel: {
     opacity: 0.7,

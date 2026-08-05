@@ -140,14 +140,14 @@ export const NotificationsScreen: FC<AppStackScreenProps<"Notifications">> = mem
                 color={colors.text}
               />
             </TouchableOpacity>
-            <Text tx="notifications:title" style={styles.headerTitle} />
+            <Text tx="notifications:title" style={styles.headerTitle} size="xl" />
           </View>
           {unreadCount > 0 && (
             <TouchableOpacity onPress={handleMarkAllRead} disabled={markReadMutation.isPending}>
               {markReadMutation.isPending && !markReadMutation.variables ? (
                 <ActivityIndicator size="small" color={colors.tint} />
               ) : (
-                <Text tx="notifications:markAllRead" style={styles.headerAction} />
+                <Text tx="notifications:markAllRead" style={styles.headerAction} size="xs" />
               )}
             </TouchableOpacity>
           )}

@@ -7,7 +7,7 @@ import { ApiNotification } from "@/services/api/modules/notifications"
 import { formatRelativeTime } from "@/utils/formatDate"
 import { $styles } from "../styles"
 import { useAppTheme } from "@/theme/context"
-import { s } from "@/utils/scaling"
+import { vs } from "@/utils/scaling"
 
 interface NotificationItemProps {
   item: ApiNotification
@@ -57,7 +57,7 @@ export const NotificationItem = memo(function NotificationItem({
       <View style={[styles.iconContainer, isUnread && styles.iconContainerUnread]}>
         <Ionicons
           name={getIconForType(item.type)}
-          size={s(24)}
+          size={vs(24)}
           color={isUnread ? colors.tint : colors.textDim}
         />
       </View>
@@ -67,6 +67,7 @@ export const NotificationItem = memo(function NotificationItem({
             text={item.title}
             style={[styles.title, isUnread && styles.titleUnread]}
             numberOfLines={1}
+            size="sm"
           />
           {isUnread && <View style={styles.unreadDot} />}
         </View>
@@ -74,8 +75,9 @@ export const NotificationItem = memo(function NotificationItem({
           text={item.message}
           style={[styles.message, isUnread && styles.messageUnread]}
           numberOfLines={2}
+          size="xs"
         />
-        <Text text={formatRelativeTime(item.createdAt)} style={styles.time} />
+        <Text text={formatRelativeTime(item.createdAt)} style={styles.time} size="xxs" />
       </View>
       {!!imageUrl && (
         <Image source={{ uri: imageUrl }} style={styles.thumbnailImage} resizeMode="cover" />
