@@ -20,6 +20,7 @@ import { NotificationItem } from "./components/NotificationItem"
 import { $styles } from "./styles"
 import { useAppTheme } from "@/theme/context"
 import { isRTL } from "@/localization"
+import { s } from "@/utils/scaling"
 
 export const NotificationsScreen: FC<AppStackScreenProps<"Notifications">> = memo(
   function NotificationsScreen({ navigation }) {
@@ -135,7 +136,7 @@ export const NotificationsScreen: FC<AppStackScreenProps<"Notifications">> = mem
             <TouchableOpacity onPress={handleGoBack} style={styles.backButton}>
               <Ionicons
                 name={isRTL ? "arrow-forward" : "arrow-back"}
-                size={24}
+                size={s(24)}
                 color={colors.text}
               />
             </TouchableOpacity>
@@ -158,12 +159,12 @@ export const NotificationsScreen: FC<AppStackScreenProps<"Notifications">> = mem
           <View style={styles.center}>
             <Ionicons
               name="notifications-off-outline"
-              size={64}
+              size={s(64)}
               color={colors.textDim}
               style={{ opacity: 0.5 }}
             />
-            <Text tx="notifications:emptyTitle" style={styles.emptyText} />
-            <Text tx="notifications:emptyDesc" style={styles.emptySubText} />
+            <Text tx="notifications:emptyTitle" size="lg" style={styles.emptyText} />
+            <Text tx="notifications:emptyDesc" size="sm" style={styles.emptySubText} />
           </View>
         ) : (
           <FlashList

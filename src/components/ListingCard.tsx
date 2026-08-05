@@ -261,7 +261,7 @@ export const ListingCard = memo(function ListingCard(props: ListingCardProps) {
           </View>
           {!!createdAt && (
             <View style={$row}>
-              <Ionicons name="time-outline" size={14} color={colors.palette.onSurfaceVariant} />
+              <Ionicons name="time-outline" size={s(14)} color={colors.palette.onSurfaceVariant} />
               <Text
                 text={formatListingDate(createdAt)}
                 size="xxs"

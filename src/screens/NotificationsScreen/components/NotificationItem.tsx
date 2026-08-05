@@ -7,6 +7,7 @@ import { ApiNotification } from "@/services/api/modules/notifications"
 import { formatRelativeTime } from "@/utils/formatDate"
 import { $styles } from "../styles"
 import { useAppTheme } from "@/theme/context"
+import { s } from "@/utils/scaling"
 
 interface NotificationItemProps {
   item: ApiNotification
@@ -56,7 +57,7 @@ export const NotificationItem = memo(function NotificationItem({
       <View style={[styles.iconContainer, isUnread && styles.iconContainerUnread]}>
         <Ionicons
           name={getIconForType(item.type)}
-          size={24}
+          size={s(24)}
           color={isUnread ? colors.tint : colors.textDim}
         />
       </View>
@@ -74,17 +75,10 @@ export const NotificationItem = memo(function NotificationItem({
           style={[styles.message, isUnread && styles.messageUnread]}
           numberOfLines={2}
         />
-        <Text
-          text={formatRelativeTime(item.createdAt)}
-          style={styles.time}
-        />
+        <Text text={formatRelativeTime(item.createdAt)} style={styles.time} />
       </View>
       {!!imageUrl && (
-        <Image
-          source={{ uri: imageUrl }}
-          style={styles.thumbnailImage}
-          resizeMode="cover"
-        />
+        <Image source={{ uri: imageUrl }} style={styles.thumbnailImage} resizeMode="cover" />
       )}
     </TouchableOpacity>
   )

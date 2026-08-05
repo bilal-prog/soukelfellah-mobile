@@ -8,10 +8,7 @@ import { Text } from "@/components/Text"
 import { NotificationIconButton } from "@/components/NotificationIconButton"
 import { ListingFeedSkeleton } from "@/components/Skeletons"
 import type { MainTabScreenProps } from "@/navigation/navigationTypes"
-import {
-  useCategoriesQuery,
-  useInfiniteListingsQuery,
-} from "@/services/api/hooks"
+import { useCategoriesQuery, useInfiniteListingsQuery } from "@/services/api/hooks"
 import { useAppTheme } from "@/theme/context"
 
 import { $styles } from "./styles"
@@ -31,7 +28,11 @@ export const HomeScreen: FC<HomeScreenProps> = memo(function HomeScreen(props) {
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | undefined>(undefined)
 
   // Fetch reference categories via React Query
-  const { data: categories, isLoading: isCategoriesLoading, refetch: refetchCategories } = useCategoriesQuery()
+  const {
+    data: categories,
+    isLoading: isCategoriesLoading,
+    refetch: refetchCategories,
+  } = useCategoriesQuery()
 
   // Fetch paginated feed listings using useInfiniteQuery under the hood
   const {
@@ -118,7 +119,7 @@ export const HomeScreen: FC<HomeScreenProps> = memo(function HomeScreen(props) {
     }
     return (
       <View style={{ alignItems: "center", marginTop: 40 }}>
-        <Ionicons name="search-outline" size={48} color={colors.palette.outline} />
+        <Ionicons name="search-outline" size={s(48)} color={colors.palette.outline} />
         <Text
           tx="common:noResults"
           preset="bold"
@@ -133,7 +134,7 @@ export const HomeScreen: FC<HomeScreenProps> = memo(function HomeScreen(props) {
       {/* Top App Bar */}
       <View style={styles.header}>
         <TouchableOpacity style={styles.headerButton} onPress={handleProfilePress}>
-          <Ionicons name="person-circle-outline" size={28} color={colors.palette.primary} />
+          <Ionicons name="person-circle-outline" size={s(28)} color={colors.palette.primary} />
         </TouchableOpacity>
         <Text tx="home:title" style={styles.headerTitle} preset="display" />
         <NotificationIconButton />

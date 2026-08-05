@@ -75,7 +75,7 @@ export const ForgotPasswordScreen: FC<ForgotPasswordScreenProps> = memo(
         <TouchableOpacity style={styles.backButton} onPress={handleGoBack}>
           <Ionicons
             name={isRTL ? "arrow-forward" : "arrow-back"}
-            size={24}
+            size={s(24)}
             color={colors.text}
           />
         </TouchableOpacity>
@@ -83,15 +83,10 @@ export const ForgotPasswordScreen: FC<ForgotPasswordScreenProps> = memo(
         <View style={styles.content}>
           {/* Visual Header */}
           <View style={styles.headerSection}>
-            <View
-              style={[
-                styles.iconCircle,
-                { backgroundColor: colors.palette.primary + "15" },
-              ]}
-            >
+            <View style={[styles.iconCircle, { backgroundColor: colors.palette.primary + "15" }]}>
               <Ionicons
                 name="logo-whatsapp"
-                size={48}
+                size={s(48)}
                 color="#25D366"
                 style={styles.whatsappIcon}
               />
@@ -122,7 +117,7 @@ export const ForgotPasswordScreen: FC<ForgotPasswordScreenProps> = memo(
 
             {/* WhatsApp Reset Button */}
             <TouchableOpacity style={styles.whatsappBtn} onPress={handleWhatsAppReset}>
-              <Ionicons name="logo-whatsapp" size={24} color="white" />
+              <Ionicons name="logo-whatsapp" size={s(24)} color="white" />
               <Text tx="forgotPassword:whatsappBtn" style={styles.whatsappBtnText} preset="bold" />
             </TouchableOpacity>
 
@@ -136,8 +131,17 @@ export const ForgotPasswordScreen: FC<ForgotPasswordScreenProps> = memo(
           </View>
 
           {/* Helper Note */}
-          <View style={[styles.noteCard, { backgroundColor: colors.palette.surfaceContainerHigh || "rgba(0,0,0,0.03)" }]}>
-            <Ionicons name="information-circle-outline" size={20} color={colors.palette.primary} />
+          <View
+            style={[
+              styles.noteCard,
+              { backgroundColor: colors.palette.surfaceContainerHigh || "rgba(0,0,0,0.03)" },
+            ]}
+          >
+            <Ionicons
+              name="information-circle-outline"
+              size={s(20)}
+              color={colors.palette.primary}
+            />
             <Text tx="forgotPassword:supportNote" style={styles.noteText} size="xs" />
           </View>
         </View>

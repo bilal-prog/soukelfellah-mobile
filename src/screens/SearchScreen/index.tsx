@@ -15,6 +15,7 @@ import { SearchHeader } from "./components/SearchHeader"
 import { SearchListingItem } from "./components/SearchListingItem"
 import { $styles } from "./styles"
 import { useSafeAreaInsetsStyle } from "@/utils/useSafeAreaInsetsStyle"
+import { s } from "@/utils/scaling"
 
 interface SearchScreenProps extends MainTabScreenProps<"Search"> {}
 
@@ -107,7 +108,7 @@ export const SearchScreen: FC<SearchScreenProps> = memo(function SearchScreen(pr
     }
     return (
       <View style={{ alignItems: "center", marginTop: 40 }}>
-        <Ionicons name="search-outline" size={48} color={colors.palette.outline} />
+        <Ionicons name="search-outline" size={s(48)} color={colors.palette.outline} />
         <Text
           tx="common:noResults"
           preset="bold"
@@ -129,7 +130,11 @@ export const SearchScreen: FC<SearchScreenProps> = memo(function SearchScreen(pr
       {/* Header bar */}
       <View style={styles.header}>
         <TouchableOpacity onPress={handleGoBack}>
-          <Ionicons name={isRTL ? "arrow-forward" : "arrow-back"} size={26} color={colors.text} />
+          <Ionicons
+            name={isRTL ? "arrow-forward" : "arrow-back"}
+            size={s(26)}
+            color={colors.text}
+          />
         </TouchableOpacity>
         <Text tx="search:title" style={styles.headerTitle} preset="display" />
         <NotificationIconButton />
@@ -179,7 +184,7 @@ export const SearchScreen: FC<SearchScreenProps> = memo(function SearchScreen(pr
                 style={{ textAlign: "left", flex: 1 }}
               />
               <TouchableOpacity onPress={() => setIsRegionModalVisible(false)}>
-                <Ionicons name="close" size={24} color={colors.text} />
+                <Ionicons name="close" size={s(24)} color={colors.text} />
               </TouchableOpacity>
             </View>
             <FlatList
@@ -221,7 +226,7 @@ export const SearchScreen: FC<SearchScreenProps> = memo(function SearchScreen(pr
                 style={{ textAlign: "left", flex: 1 }}
               />
               <TouchableOpacity onPress={() => setIsProvinceModalVisible(false)}>
-                <Ionicons name="close" size={24} color={colors.text} />
+                <Ionicons name="close" size={s(24)} color={colors.text} />
               </TouchableOpacity>
             </View>
             <FlatList
@@ -261,7 +266,7 @@ export const SearchScreen: FC<SearchScreenProps> = memo(function SearchScreen(pr
                 style={{ textAlign: "left", flex: 1 }}
               />
               <TouchableOpacity onPress={() => setIsCommuneModalVisible(false)}>
-                <Ionicons name="close" size={24} color={colors.text} />
+                <Ionicons name="close" size={s(24)} color={colors.text} />
               </TouchableOpacity>
             </View>
             <FlatList

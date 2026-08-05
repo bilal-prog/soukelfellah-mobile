@@ -33,7 +33,7 @@ export const MaintenanceScreen: FC<MaintenanceScreenProps> = memo(function Maint
           >
             <Ionicons
               name="construct-outline"
-              size={72}
+              size={s(72)}
               color={theme.colors.palette.primary}
               style={styles.iconStyle}
             />

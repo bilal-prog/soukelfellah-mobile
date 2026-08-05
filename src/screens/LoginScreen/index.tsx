@@ -16,7 +16,7 @@ import { useAppTheme } from "@/theme/context"
 import { CallIcon } from "./components/CallIcon"
 import { LockIcon } from "./components/LockIcon"
 import { $styles } from "./styles"
-import { vs } from "@/utils/scaling"
+import { s, vs } from "@/utils/scaling"
 
 interface LoginScreenProps extends AppStackScreenProps<"Login"> {}
 
@@ -170,7 +170,7 @@ export const LoginScreen: FC<LoginScreenProps> = memo(function LoginScreen(props
                   <TouchableOpacity onPress={togglePasswordVisibility} style={iconProps.style}>
                     <Ionicons
                       name={isPasswordVisible ? "eye-off-outline" : "eye-outline"}
-                      size={20}
+                      size={s(20)}
                       color={colors.palette.onSurfaceVariant}
                     />
                   </TouchableOpacity>

@@ -34,6 +34,7 @@ import { useAppTheme } from "@/theme/context"
 
 import { $styles } from "./styles"
 import { useSafeAreaInsetsStyle } from "@/utils/useSafeAreaInsetsStyle"
+import { s } from "@/utils/scaling"
 
 interface EditListingScreenProps extends AppStackScreenProps<"EditListing"> {}
 
@@ -501,7 +502,7 @@ export const EditListingScreen: FC<EditListingScreenProps> = memo(
       (p: any) => (
         <Ionicons
           name="location-outline"
-          size={20}
+          size={s(20)}
           color={colors.palette.onSurfaceVariant}
           style={p.style}
         />
@@ -527,7 +528,7 @@ export const EditListingScreen: FC<EditListingScreenProps> = memo(
             <TouchableOpacity onPress={handleGoBack}>
               <Ionicons
                 name={isRTL ? "arrow-forward" : "arrow-back"}
-                size={26}
+                size={s(26)}
                 color={colors.text}
               />
             </TouchableOpacity>
@@ -559,7 +560,7 @@ export const EditListingScreen: FC<EditListingScreenProps> = memo(
                   style={styles.categoryBtn}
                 >
                   <View style={[styles.categoryIconCircle, styles.categoryIconProduce]}>
-                    <Ionicons name="leaf-outline" size={32} color={colors.palette.primary} />
+                    <Ionicons name="leaf-outline" size={s(32)} color={colors.palette.primary} />
                   </View>
                   <Text tx="addListing:produceCategory" size="xs" preset="bold" />
                 </TouchableOpacity>
@@ -569,7 +570,7 @@ export const EditListingScreen: FC<EditListingScreenProps> = memo(
                   style={styles.categoryBtn}
                 >
                   <View style={[styles.categoryIconCircle, styles.categoryIconEquipment]}>
-                    <Ionicons name="construct-outline" size={32} color={colors.palette.secondary} />
+                    <Ionicons name="construct-outline" size={s(32)} color={colors.palette.secondary} />
                   </View>
                   <Text tx="addListing:equipmentCategory" size="xs" preset="bold" />
                 </TouchableOpacity>
@@ -623,7 +624,7 @@ export const EditListingScreen: FC<EditListingScreenProps> = memo(
                         />
                         <Ionicons
                           name="chevron-down"
-                          size={20}
+                          size={s(20)}
                           color={colors.palette.onSurfaceVariant}
                         />
                       </View>
@@ -665,7 +666,7 @@ export const EditListingScreen: FC<EditListingScreenProps> = memo(
                       />
                       <Ionicons
                         name="chevron-down"
-                        size={20}
+                        size={s(20)}
                         color={colors.palette.onSurfaceVariant}
                       />
                     </View>
@@ -707,7 +708,7 @@ export const EditListingScreen: FC<EditListingScreenProps> = memo(
                         />
                         <Ionicons
                           name="chevron-down"
-                          size={20}
+                          size={s(20)}
                           color={colors.palette.onSurfaceVariant}
                         />
                       </View>
@@ -1003,7 +1004,7 @@ export const EditListingScreen: FC<EditListingScreenProps> = memo(
                     />
                     <Ionicons
                       name="chevron-down"
-                      size={20}
+                      size={s(20)}
                       color={colors.palette.onSurfaceVariant}
                     />
                   </View>
@@ -1037,7 +1038,7 @@ export const EditListingScreen: FC<EditListingScreenProps> = memo(
                     />
                     <Ionicons
                       name="chevron-down"
-                      size={20}
+                      size={s(20)}
                       color={colors.palette.onSurfaceVariant}
                     />
                   </View>
@@ -1071,7 +1072,7 @@ export const EditListingScreen: FC<EditListingScreenProps> = memo(
                     />
                     <Ionicons
                       name="chevron-down"
-                      size={20}
+                      size={s(20)}
                       color={colors.palette.onSurfaceVariant}
                     />
                   </View>
@@ -1105,7 +1106,7 @@ export const EditListingScreen: FC<EditListingScreenProps> = memo(
                       <Text tx="editListing:saveBtn" style={styles.submitBtnText} />
                       <Ionicons
                         name={isRTL ? "arrow-back" : "arrow-forward"}
-                        size={20}
+                        size={s(20)}
                         color="white"
                       />
                     </View>
@@ -1123,7 +1124,7 @@ export const EditListingScreen: FC<EditListingScreenProps> = memo(
               <View style={styles.modalHeader}>
                 <Text tx="addListing:selectRegionPlaceholder" preset="bold" size="sm" />
                 <TouchableOpacity onPress={() => setIsRegionModalVisible(false)}>
-                  <Ionicons name="close" size={24} color={colors.text} />
+                  <Ionicons name="close" size={s(24)} color={colors.text} />
                 </TouchableOpacity>
               </View>
               {isFetchingRegions ? (
@@ -1167,7 +1168,7 @@ export const EditListingScreen: FC<EditListingScreenProps> = memo(
                   style={{ textAlign: "left", flex: 1 }}
                 />
                 <TouchableOpacity onPress={() => setIsProvinceModalVisible(false)}>
-                  <Ionicons name="close" size={24} color={colors.text} />
+                  <Ionicons name="close" size={s(24)} color={colors.text} />
                 </TouchableOpacity>
               </View>
               {isFetchingProvinces ? (
@@ -1210,7 +1211,7 @@ export const EditListingScreen: FC<EditListingScreenProps> = memo(
                   style={{ textAlign: "left", flex: 1 }}
                 />
                 <TouchableOpacity onPress={() => setIsCommuneModalVisible(false)}>
-                  <Ionicons name="close" size={24} color={colors.text} />
+                  <Ionicons name="close" size={s(24)} color={colors.text} />
                 </TouchableOpacity>
               </View>
               {isFetchingCommunes ? (
@@ -1256,7 +1257,7 @@ export const EditListingScreen: FC<EditListingScreenProps> = memo(
                   style={{ textAlign: "left", flex: 1 }}
                 />
                 <TouchableOpacity onPress={() => setIsCategoryModalVisible(false)}>
-                  <Ionicons name="close" size={24} color={colors.text} />
+                  <Ionicons name="close" size={s(24)} color={colors.text} />
                 </TouchableOpacity>
               </View>
               <FlatList
@@ -1293,7 +1294,7 @@ export const EditListingScreen: FC<EditListingScreenProps> = memo(
                   style={{ textAlign: "left", flex: 1 }}
                 />
                 <TouchableOpacity onPress={() => setIsProductTypeModalVisible(false)}>
-                  <Ionicons name="close" size={24} color={colors.text} />
+                  <Ionicons name="close" size={s(24)} color={colors.text} />
                 </TouchableOpacity>
               </View>
               <FlatList
@@ -1346,7 +1347,7 @@ export const EditListingScreen: FC<EditListingScreenProps> = memo(
                   style={{ textAlign: "left", flex: 1 }}
                 />
                 <TouchableOpacity onPress={() => setIsUnitModalVisible(false)}>
-                  <Ionicons name="close" size={24} color={colors.text} />
+                  <Ionicons name="close" size={s(24)} color={colors.text} />
                 </TouchableOpacity>
               </View>
               <FlatList

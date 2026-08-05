@@ -15,7 +15,9 @@ export const $styles = (theme: Theme) => ({
     justifyContent: "space-between",
     alignItems: "center",
     paddingBottom: vs(12),
-    backgroundColor: theme.isDark ? theme.colors.palette.surfaceContainer : theme.colors.palette.surfaceContainerLowest,
+    backgroundColor: theme.isDark
+      ? theme.colors.palette.surfaceContainer
+      : theme.colors.palette.surfaceContainerLowest,
     borderBottomWidth: 1,
     borderBottomColor: theme.colors.separator,
     paddingHorizontal: s(24),
@@ -52,17 +54,14 @@ export const $styles = (theme: Theme) => ({
 
   emptyText: {
     marginTop: vs(16),
-    fontSize: fontSizes.fs18,
     fontWeight: "700",
     color: theme.colors.textDim,
   } as TextStyle,
 
   emptySubText: {
     marginTop: vs(8),
-    fontSize: fontSizes.fs14,
     color: theme.colors.textDim,
     textAlign: "center",
-    lineHeight: vs(20),
     opacity: 0.7,
   } as TextStyle,
 

@@ -3,6 +3,7 @@ import { View } from "react-native"
 import { Ionicons } from "@expo/vector-icons"
 
 import { useAppTheme } from "@/theme/context"
+import { s } from "@/utils/scaling"
 
 export const LockIcon = memo(function LockIcon(iconProps: { style: any }) {
   const { theme } = useAppTheme()
@@ -10,7 +11,7 @@ export const LockIcon = memo(function LockIcon(iconProps: { style: any }) {
     <View style={iconProps.style}>
       <Ionicons
         name="lock-closed-outline"
-        size={20}
+        size={s(20)}
         color={theme.colors.palette.onSurfaceVariant}
       />
     </View>

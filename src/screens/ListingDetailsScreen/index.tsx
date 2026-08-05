@@ -34,7 +34,7 @@ import { useAppTheme } from "@/theme/context"
 import { $styles } from "./styles"
 import { useSafeAreaInsetsStyle } from "@/utils/useSafeAreaInsetsStyle"
 import { formatFullAddress } from "@/utils/formatAddress"
-import { vs } from "@/utils/scaling"
+import { s, vs } from "@/utils/scaling"
 
 interface ListingDetailsScreenProps extends AppStackScreenProps<"ListingDetails"> {}
 
@@ -233,23 +233,27 @@ export const ListingDetailsScreen: FC<ListingDetailsScreenProps> = memo(
         {/* Top App Bar */}
         <View style={styles.header}>
           <TouchableOpacity onPress={handleGoBack}>
-            <Ionicons name={isRTL ? "arrow-forward" : "arrow-back"} size={26} color={colors.text} />
+            <Ionicons
+              name={isRTL ? "arrow-forward" : "arrow-back"}
+              size={s(26)}
+              color={colors.text}
+            />
           </TouchableOpacity>
           <Text tx="listingDetails:title" style={styles.headerTitle} preset="bold" size="md" />
 
           <View style={styles.headerRight}>
             <TouchableOpacity onPress={handleReportPress}>
-              <Ionicons name="flag-outline" size={24} color={colors.text} />
+              <Ionicons name="flag-outline" size={s(24)} color={colors.text} />
             </TouchableOpacity>
             <TouchableOpacity onPress={handleFavoritePress}>
               <Ionicons
                 name={favorited ? "heart" : "heart-outline"}
-                size={26}
+                size={s(26)}
                 color={favorited ? colors.palette.error : colors.text}
               />
             </TouchableOpacity>
             {/* <TouchableOpacity>
-              <Ionicons name="share-social-outline" size={26} color={colors.text} />
+              <Ionicons name="share-social-outline" size={s(26)} color={colors.text} />
             </TouchableOpacity> */}
           </View>
         </View>
@@ -391,7 +395,7 @@ export const ListingDetailsScreen: FC<ListingDetailsScreenProps> = memo(
               <View style={styles.locationRow}>
                 <Ionicons
                   name="location-outline"
-                  size={16}
+                  size={s(16)}
                   color={colors.palette.onSurfaceVariant}
                 />
                 <Text
@@ -440,7 +444,7 @@ export const ListingDetailsScreen: FC<ListingDetailsScreenProps> = memo(
             {listing.listingType === "EQUIPMENT" ? (
               <View style={styles.specsGrid}>
                 <View style={styles.specBox}>
-                  <Ionicons name="calendar-outline" size={20} color={colors.palette.primary} />
+                  <Ionicons name="calendar-outline" size={s(20)} color={colors.palette.primary} />
                   <Text tx="listingDetails:specs.model" size="xxs" style={styles.locationText} />
                   <Text
                     text={listing.modelYear || translate("common:notSpecified")}
@@ -449,7 +453,7 @@ export const ListingDetailsScreen: FC<ListingDetailsScreenProps> = memo(
                   />
                 </View>
                 <View style={styles.specBox}>
-                  <Ionicons name="time-outline" size={20} color={colors.palette.primary} />
+                  <Ionicons name="time-outline" size={s(20)} color={colors.palette.primary} />
                   <Text tx="listingDetails:specs.hours" size="xxs" style={styles.locationText} />
                   <Text
                     text={
@@ -467,7 +471,7 @@ export const ListingDetailsScreen: FC<ListingDetailsScreenProps> = memo(
                   <View style={styles.specBox}>
                     <Ionicons
                       name="shield-checkmark-outline"
-                      size={20}
+                      size={s(20)}
                       color={colors.palette.primary}
                     />
                     <Text tx="addListing:conditionLabel" size="xxs" style={styles.locationText} />
@@ -491,7 +495,7 @@ export const ListingDetailsScreen: FC<ListingDetailsScreenProps> = memo(
                 return (
                   <View style={styles.specsGrid}>
                     <View style={styles.specBox}>
-                      <Ionicons name="cube-outline" size={20} color={colors.palette.primary} />
+                      <Ionicons name="cube-outline" size={s(20)} color={colors.palette.primary} />
                       <Text tx="addListing:quantityLabel" size="xxs" style={styles.locationText} />
                       <Text
                         text={listing.quantity ? `${listing.quantity} (${uName})`.trim() : uName}
@@ -525,12 +529,12 @@ export const ListingDetailsScreen: FC<ListingDetailsScreenProps> = memo(
             onPress={handleCall}
             style={[styles.ctaBtn, { backgroundColor: colors.palette.primary }]}
           >
-            <Ionicons name="call" size={20} color="white" />
+            <Ionicons name="call" size={s(20)} color="white" />
             <Text tx="common:call" style={styles.ctaTextCall} preset="bold" />
           </TouchableOpacity>
 
           <TouchableOpacity onPress={handleWhatsapp} style={[styles.ctaBtn, styles.ctaBtnWhatsapp]}>
-            <Ionicons name="logo-whatsapp" size={20} color={colors.palette.secondary} />
+            <Ionicons name="logo-whatsapp" size={s(20)} color={colors.palette.secondary} />
             <Text tx="common:whatsapp" style={styles.ctaTextWa} preset="bold" />
           </TouchableOpacity>
         </View>
@@ -551,7 +555,7 @@ export const ListingDetailsScreen: FC<ListingDetailsScreenProps> = memo(
                   preset="bold"
                 />
                 <TouchableOpacity onPress={() => setIsReportModalVisible(false)}>
-                  <Ionicons name="close" size={24} color={colors.text} />
+                  <Ionicons name="close" size={s(24)} color={colors.text} />
                 </TouchableOpacity>
               </View>
 
@@ -569,7 +573,7 @@ export const ListingDetailsScreen: FC<ListingDetailsScreenProps> = memo(
                     >
                       <Ionicons
                         name={isSelected ? "radio-button-on" : "radio-button-off"}
-                        size={20}
+                        size={s(20)}
                         color={isSelected ? colors.palette.primary : colors.palette.outline}
                       />
                       <Text
@@ -632,7 +636,7 @@ export const ListingDetailsScreen: FC<ListingDetailsScreenProps> = memo(
               style={styles.imageViewerCloseBtn}
               onPress={() => setIsViewerVisible(false)}
             >
-              <Ionicons name="close" size={30} color="white" />
+              <Ionicons name="close" size={s(30)} color="white" />
             </TouchableOpacity>
 
             {listing.images && listing.images.length > 0 && (

@@ -33,6 +33,7 @@ import { useAppTheme } from "@/theme/context"
 
 import { $styles } from "./styles"
 import { useSafeAreaInsetsStyle } from "@/utils/useSafeAreaInsetsStyle"
+import { s } from "@/utils/scaling"
 
 interface AddListingScreenProps extends MainTabScreenProps<"Add"> {}
 
@@ -482,7 +483,7 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
     (p: any) => (
       <Ionicons
         name="location-outline"
-        size={20}
+        size={s(20)}
         color={colors.palette.onSurfaceVariant}
         style={p.style}
       />
@@ -506,7 +507,11 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
       <View style={styles.header}>
         <View style={styles.headerLeft}>
           <TouchableOpacity onPress={handleGoBack}>
-            <Ionicons name={isRTL ? "arrow-forward" : "arrow-back"} size={26} color={colors.text} />
+            <Ionicons
+              name={isRTL ? "arrow-forward" : "arrow-back"}
+              size={s(26)}
+              color={colors.text}
+            />
           </TouchableOpacity>
           <Text tx="addListing:title" style={styles.headerTitle} size="lg" preset="bold" />
         </View>
@@ -534,7 +539,7 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
                 style={styles.categoryBtn}
               >
                 <View style={[styles.categoryIconCircle, styles.categoryIconProduce]}>
-                  <Ionicons name="leaf-outline" size={32} color={colors.palette.primary} />
+                  <Ionicons name="leaf-outline" size={s(32)} color={colors.palette.primary} />
                 </View>
                 <Text
                   tx="addListing:produceCategory"
@@ -550,7 +555,11 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
                 style={styles.categoryBtn}
               >
                 <View style={[styles.categoryIconCircle, styles.categoryIconEquipment]}>
-                  <Ionicons name="construct-outline" size={32} color={colors.palette.secondary} />
+                  <Ionicons
+                    name="construct-outline"
+                    size={s(32)}
+                    color={colors.palette.secondary}
+                  />
                 </View>
                 <Text
                   tx="addListing:equipmentCategory"
@@ -605,7 +614,7 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
                       />
                       <Ionicons
                         name="chevron-down"
-                        size={20}
+                        size={s(20)}
                         color={colors.palette.onSurfaceVariant}
                       />
                     </View>
@@ -647,7 +656,7 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
                     />
                     <Ionicons
                       name="chevron-down"
-                      size={20}
+                      size={s(20)}
                       color={colors.palette.onSurfaceVariant}
                     />
                   </View>
@@ -689,7 +698,7 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
                       />
                       <Ionicons
                         name="chevron-down"
-                        size={20}
+                        size={s(20)}
                         color={colors.palette.onSurfaceVariant}
                       />
                     </View>
@@ -969,7 +978,11 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
                     }
                     style={styles.selectValueText}
                   />
-                  <Ionicons name="chevron-down" size={20} color={colors.palette.onSurfaceVariant} />
+                  <Ionicons
+                    name="chevron-down"
+                    size={s(20)}
+                    color={colors.palette.onSurfaceVariant}
+                  />
                 </View>
               </TouchableOpacity>
 
@@ -999,7 +1012,11 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
                     }
                     style={styles.selectValueText}
                   />
-                  <Ionicons name="chevron-down" size={20} color={colors.palette.onSurfaceVariant} />
+                  <Ionicons
+                    name="chevron-down"
+                    size={s(20)}
+                    color={colors.palette.onSurfaceVariant}
+                  />
                 </View>
               </TouchableOpacity>
 
@@ -1029,7 +1046,11 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
                     }
                     style={styles.selectValueText}
                   />
-                  <Ionicons name="chevron-down" size={20} color={colors.palette.onSurfaceVariant} />
+                  <Ionicons
+                    name="chevron-down"
+                    size={s(20)}
+                    color={colors.palette.onSurfaceVariant}
+                  />
                 </View>
               </TouchableOpacity>
 
@@ -1061,7 +1082,7 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
                     <Text tx="addListing:submit" size="md" style={styles.submitBtnText} />
                     <Ionicons
                       name={isRTL ? "arrow-back" : "arrow-forward"}
-                      size={20}
+                      size={s(20)}
                       color="white"
                     />
                   </View>
@@ -1079,7 +1100,7 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
             <View style={styles.modalHeader}>
               <Text tx="addListing:selectRegionPlaceholder" preset="bold" size="sm" />
               <TouchableOpacity onPress={() => setIsRegionModalVisible(false)}>
-                <Ionicons name="close" size={24} color={colors.text} />
+                <Ionicons name="close" size={s(24)} color={colors.text} />
               </TouchableOpacity>
             </View>
             {isFetchingRegions ? (
@@ -1123,7 +1144,7 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
                 style={{ textAlign: "left", flex: 1 }}
               />
               <TouchableOpacity onPress={() => setIsProvinceModalVisible(false)}>
-                <Ionicons name="close" size={24} color={colors.text} />
+                <Ionicons name="close" size={s(24)} color={colors.text} />
               </TouchableOpacity>
             </View>
             {isFetchingProvinces ? (
@@ -1166,7 +1187,7 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
                 style={{ textAlign: "left", flex: 1 }}
               />
               <TouchableOpacity onPress={() => setIsCommuneModalVisible(false)}>
-                <Ionicons name="close" size={24} color={colors.text} />
+                <Ionicons name="close" size={s(24)} color={colors.text} />
               </TouchableOpacity>
             </View>
             {isFetchingCommunes ? (
@@ -1212,7 +1233,7 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
                 style={{ textAlign: "left", flex: 1 }}
               />
               <TouchableOpacity onPress={() => setIsCategoryModalVisible(false)}>
-                <Ionicons name="close" size={24} color={colors.text} />
+                <Ionicons name="close" size={s(24)} color={colors.text} />
               </TouchableOpacity>
             </View>
             <FlatList
@@ -1249,7 +1270,7 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
                 style={{ textAlign: "left", flex: 1 }}
               />
               <TouchableOpacity onPress={() => setIsProductTypeModalVisible(false)}>
-                <Ionicons name="close" size={24} color={colors.text} />
+                <Ionicons name="close" size={s(24)} color={colors.text} />
               </TouchableOpacity>
             </View>
             <FlatList
@@ -1302,7 +1323,7 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
                 style={{ textAlign: "left", flex: 1 }}
               />
               <TouchableOpacity onPress={() => setIsUnitModalVisible(false)}>
-                <Ionicons name="close" size={24} color={colors.text} />
+                <Ionicons name="close" size={s(24)} color={colors.text} />
               </TouchableOpacity>
             </View>
             <FlatList

@@ -31,7 +31,11 @@ export const LegalScreen: FC<LegalScreenProps> = memo(function LegalScreen({ nav
       {/* App Bar Header */}
       <View style={styles.header}>
         <TouchableOpacity style={styles.backButton} onPress={handleGoBack}>
-          <Ionicons name={isRTL ? "arrow-forward" : "arrow-back"} size={24} color={colors.text} />
+          <Ionicons
+            name={isRTL ? "arrow-forward" : "arrow-back"}
+            size={s(24)}
+            color={colors.text}
+          />
         </TouchableOpacity>
         <Text tx="legal:title" size="md" preset="bold" />
         <View style={styles.headerRightPlaceholder} />

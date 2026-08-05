@@ -8,6 +8,7 @@ import { CategoryListSkeleton } from "@/components/Skeletons"
 import { Text } from "@/components/Text"
 import { ApiCategory } from "@/services/api/modules"
 import { useAppTheme } from "@/theme/context"
+import { s } from "@/utils/scaling"
 
 export interface HomeHeaderProps {
   styles: any
@@ -61,7 +62,7 @@ export const HomeHeader = memo(function HomeHeader({
       {/* Search Input Box */}
       <View style={styles.searchBarContainer}>
         <TouchableOpacity activeOpacity={0.9} style={styles.searchBar} onPress={handleSearchPress}>
-          <Ionicons name="search-outline" size={22} color={colors.palette.onSurfaceVariant} />
+          <Ionicons name="search-outline" size={s(22)} color={colors.palette.onSurfaceVariant} />
           <Text tx="home:searchPlaceholder" style={styles.searchTextPlaceholder} size="sm" />
         </TouchableOpacity>
       </View>

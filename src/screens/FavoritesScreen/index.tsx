@@ -16,6 +16,7 @@ import { FavoritesEmptyState } from "./components/FavoritesEmptyState"
 import { FavoritesListingItem } from "./components/FavoritesListingItem"
 import { $styles } from "./styles"
 import { isRTL } from "@/localization"
+import { s } from "@/utils/scaling"
 
 interface FavoritesScreenProps extends MainTabScreenProps<"Favorites"> {}
 
@@ -74,7 +75,11 @@ export const FavoritesScreen: FC<FavoritesScreenProps> = memo(function Favorites
       {/* Header bar */}
       <View style={styles.header}>
         <TouchableOpacity onPress={handleGoBack}>
-          <Ionicons name={isRTL ? "arrow-forward" : "arrow-back"} size={26} color={colors.text} />
+          <Ionicons
+            name={isRTL ? "arrow-forward" : "arrow-back"}
+            size={s(26)}
+            color={colors.text}
+          />
         </TouchableOpacity>
         <Text tx="common:favorites" style={styles.headerTitle} size="lg" preset="bold" />
         <View style={styles.headerSpacer} />

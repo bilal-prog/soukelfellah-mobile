@@ -66,7 +66,7 @@ export const SearchHeader = memo(function SearchHeader(props: SearchHeaderProps)
       {/* Search bar & Location pickers */}
       <View style={styles.searchContainer}>
         <View style={styles.searchBar}>
-          <Ionicons name="search-outline" size={20} color={colors.palette.onSurfaceVariant} />
+          <Ionicons name="search-outline" size={s(20)} color={colors.palette.onSurfaceVariant} />
           <TextInput
             value={query}
             onChangeText={setQuery}
@@ -131,7 +131,11 @@ export const SearchHeader = memo(function SearchHeader(props: SearchHeaderProps)
           style={styles.locationFullButton}
         >
           <View style={styles.locationBtnLeft}>
-            <Ionicons name="navigate-outline" size={s(18)} color={colors.palette.tertiary || colors.palette.primary} />
+            <Ionicons
+              name="navigate-outline"
+              size={s(18)}
+              color={colors.palette.tertiary || colors.palette.primary}
+            />
             <Text
               text={
                 selectedCommune && selectedCommune._id !== "all"

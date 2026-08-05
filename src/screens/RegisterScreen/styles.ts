@@ -1,6 +1,5 @@
 import { ViewStyle, TextStyle } from "react-native"
 
-import { fontSizes } from "@/theme/fontSizes"
 import type { Theme } from "@/theme/types"
 import { s, vs } from "@/utils/scaling"
 
@@ -31,17 +30,13 @@ export const $styles = (theme: Theme) => ({
   } as ViewStyle,
 
   title: {
-    fontSize: fontSizes.fs26,
-    lineHeight: vs(45),
     color: theme.colors.palette.primary,
     marginBottom: vs(8),
   } as TextStyle,
 
   subtitle: {
-    fontSize: fontSizes.fs15,
     color: theme.colors.palette.onSurfaceVariant,
     textAlign: "center",
-    lineHeight: vs(22),
   } as TextStyle,
 
   form: {
@@ -64,8 +59,6 @@ export const $styles = (theme: Theme) => ({
 
   registerBtnText: {
     color: "white",
-    fontSize: fontSizes.fs18,
-    lineHeight: vs(37),
   } as TextStyle,
 
   footer: {
@@ -76,12 +69,10 @@ export const $styles = (theme: Theme) => ({
   } as ViewStyle,
 
   footerText: {
-    fontSize: fontSizes.fs15,
     color: theme.colors.palette.onSurfaceVariant,
   } as TextStyle,
 
   loginLink: {
-    fontSize: fontSizes.fs15,
     color: theme.colors.palette.primary,
     fontWeight: "bold",
   } as TextStyle,
@@ -97,15 +88,11 @@ export const $styles = (theme: Theme) => ({
   } as ViewStyle,
 
   legalDisclaimerText: {
-    fontSize: fontSizes.fs12,
-    lineHeight: vs(25),
     color: theme.colors.palette.onSurfaceVariant,
     textAlign: "center",
   } as TextStyle,
 
   legalLink: {
-    fontSize: fontSizes.fs12,
-    lineHeight: vs(18),
     color: theme.colors.palette.primary,
     fontWeight: "bold",
     textDecorationLine: "underline",

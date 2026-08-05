@@ -13,6 +13,7 @@ import { useVerifyOtpMutation } from "@/services/api/hooks"
 import { useAppTheme } from "@/theme/context"
 
 import { $styles } from "./styles"
+import { s } from "@/utils/scaling"
 
 interface VerifyPhoneScreenProps extends AppStackScreenProps<"VerifyPhone"> {}
 
@@ -64,7 +65,9 @@ export const VerifyPhoneScreen: FC<VerifyPhoneScreenProps> = memo(
             const { accessToken, refreshToken, user } = data
             setAuthSession(accessToken, refreshToken, {
               id: user.id,
-              name: `${user.firstName || ""} ${user.lastName || ""}`.trim() || translate("common:farmer"),
+              name:
+                `${user.firstName || ""} ${user.lastName || ""}`.trim() ||
+                translate("common:farmer"),
               phone: user.phone,
               role: user.role,
               location: user.location,
@@ -129,14 +132,18 @@ export const VerifyPhoneScreen: FC<VerifyPhoneScreenProps> = memo(
       >
         {/* Back button */}
         <TouchableOpacity style={styles.backButton} onPress={handleGoBack}>
-          <Ionicons name={isRTL ? "arrow-forward" : "arrow-back"} size={24} color={colors.text} />
+          <Ionicons
+            name={isRTL ? "arrow-forward" : "arrow-back"}
+            size={s(24)}
+            color={colors.text}
+          />
         </TouchableOpacity>
 
         <View style={styles.content}>
           {/* Lock Icon */}
           <View style={styles.iconContainer}>
             <View style={styles.iconBackground}>
-              <Ionicons name="lock-closed" size={48} color={colors.palette.primary} />
+              <Ionicons name="lock-closed" size={s(48)} color={colors.palette.primary} />
             </View>
           </View>
 

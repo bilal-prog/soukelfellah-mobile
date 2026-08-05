@@ -19,6 +19,7 @@ import { LocationIcon } from "./components/LocationIcon"
 import { LockIcon } from "./components/LockIcon"
 import { PersonIcon } from "./components/PersonIcon"
 import { $styles } from "./styles"
+import { s } from "@/utils/scaling"
 
 interface RegisterScreenProps extends AppStackScreenProps<"Register"> {}
 
@@ -152,7 +153,18 @@ export const RegisterScreen: FC<RegisterScreenProps> = memo(function RegisterScr
         Alert.alert(translate("register:registerFailedTitle"), errMsg)
       },
     })
-  }, [validate, fullName, phone, password, address, selectedRegion, selectedProvince, selectedCommune, registerMutation, setAuthSession])
+  }, [
+    validate,
+    fullName,
+    phone,
+    password,
+    address,
+    selectedRegion,
+    selectedProvince,
+    selectedCommune,
+    registerMutation,
+    setAuthSession,
+  ])
 
   const handleGoBack = useCallback(() => {
     navigation.navigate("Welcome")
@@ -170,14 +182,14 @@ export const RegisterScreen: FC<RegisterScreenProps> = memo(function RegisterScr
     >
       {/* Back button */}
       <TouchableOpacity style={styles.backButton} onPress={handleGoBack}>
-        <Ionicons name={isRTL ? "arrow-forward" : "arrow-back"} size={24} color={colors.text} />
+        <Ionicons name={isRTL ? "arrow-forward" : "arrow-back"} size={s(24)} color={colors.text} />
       </TouchableOpacity>
 
       <View style={styles.content}>
         {/* Header Block */}
         <View style={styles.headerSection}>
-          <Text tx="register:title" style={styles.title} preset="heading" />
-          <Text tx="welcome:subtitle" style={styles.subtitle} />
+          <Text tx="register:title" style={styles.title} size="xxl" preset="heading" />
+          <Text tx="welcome:subtitle" style={styles.subtitle} size="sm" />
         </View>
 
         {/* Form Inputs */}
@@ -234,7 +246,7 @@ export const RegisterScreen: FC<RegisterScreenProps> = memo(function RegisterScr
                 <TouchableOpacity onPress={togglePasswordVisibility} style={iconProps.style}>
                   <Ionicons
                     name={isPasswordVisible ? "eye-off-outline" : "eye-outline"}
-                    size={20}
+                    size={s(20)}
                     color={colors.palette.onSurfaceVariant}
                   />
                 </TouchableOpacity>
@@ -265,11 +277,19 @@ export const RegisterScreen: FC<RegisterScreenProps> = memo(function RegisterScr
                   }
                   style={styles.selectValueText}
                 />
-                <Ionicons name="chevron-down" size={20} color={colors.palette.onSurfaceVariant} />
+                <Ionicons
+                  name="chevron-down"
+                  size={s(20)}
+                  color={colors.palette.onSurfaceVariant}
+                />
               </View>
             </TouchableOpacity>
             {regionError ? (
-              <Text text={regionError} size="xxs" style={{ color: colors.palette.error, marginTop: 4 }} />
+              <Text
+                text={regionError}
+                size="xxs"
+                style={{ color: colors.palette.error, marginTop: 4 }}
+              />
             ) : null}
           </View>
 
@@ -303,11 +323,19 @@ export const RegisterScreen: FC<RegisterScreenProps> = memo(function RegisterScr
                   }
                   style={styles.selectValueText}
                 />
-                <Ionicons name="chevron-down" size={20} color={colors.palette.onSurfaceVariant} />
+                <Ionicons
+                  name="chevron-down"
+                  size={s(20)}
+                  color={colors.palette.onSurfaceVariant}
+                />
               </View>
             </TouchableOpacity>
             {provinceError ? (
-              <Text text={provinceError} size="xxs" style={{ color: colors.palette.error, marginTop: 4 }} />
+              <Text
+                text={provinceError}
+                size="xxs"
+                style={{ color: colors.palette.error, marginTop: 4 }}
+              />
             ) : null}
           </View>
 
@@ -338,7 +366,11 @@ export const RegisterScreen: FC<RegisterScreenProps> = memo(function RegisterScr
                   }
                   style={styles.selectValueText}
                 />
-                <Ionicons name="chevron-down" size={20} color={colors.palette.onSurfaceVariant} />
+                <Ionicons
+                  name="chevron-down"
+                  size={s(20)}
+                  color={colors.palette.onSurfaceVariant}
+                />
               </View>
             </TouchableOpacity>
           </View>
@@ -359,19 +391,23 @@ export const RegisterScreen: FC<RegisterScreenProps> = memo(function RegisterScr
 
           {/* Legal Acceptance Disclaimer */}
           <View style={styles.legalDisclaimerContainer}>
-            <Text style={styles.legalDisclaimerText} size="xs">
-              <Text tx="legal:registerAcceptancePrefix" style={styles.legalDisclaimerText} size="xs" />
+            <Text style={styles.legalDisclaimerText} size="xxs">
+              <Text
+                tx="legal:registerAcceptancePrefix"
+                style={styles.legalDisclaimerText}
+                size="xxs"
+              />
               <Text
                 tx="legal:termsLink"
                 style={styles.legalLink}
-                size="xs"
+                size="xxs"
                 onPress={() => navigation.navigate("Legal", { type: "cgu" })}
               />
-              <Text tx="legal:and" style={styles.legalDisclaimerText} size="xs" />
+              <Text tx="legal:and" style={styles.legalDisclaimerText} size="xxs" />
               <Text
                 tx="legal:privacyLink"
                 style={styles.legalLink}
-                size="xs"
+                size="xxs"
                 onPress={() => navigation.navigate("Legal", { type: "privacy" })}
               />
               .
@@ -388,7 +424,7 @@ export const RegisterScreen: FC<RegisterScreenProps> = memo(function RegisterScr
             {isLoading ? (
               <ActivityIndicator color="white" />
             ) : (
-              <Text tx="register:submit" style={styles.registerBtnText} />
+              <Text tx="register:submit" style={styles.registerBtnText} size="md" />
             )}
           </Button>
         </View>
@@ -412,7 +448,7 @@ export const RegisterScreen: FC<RegisterScreenProps> = memo(function RegisterScr
             <View style={styles.modalHeader}>
               <Text tx="addListing:selectRegionPlaceholder" preset="bold" size="sm" />
               <TouchableOpacity onPress={() => setIsRegionModalVisible(false)}>
-                <Ionicons name="close" size={24} color={colors.text} />
+                <Ionicons name="close" size={s(24)} color={colors.text} />
               </TouchableOpacity>
             </View>
             {isFetchingRegions ? (
@@ -457,7 +493,7 @@ export const RegisterScreen: FC<RegisterScreenProps> = memo(function RegisterScr
                 style={{ textAlign: "left", flex: 1 }}
               />
               <TouchableOpacity onPress={() => setIsProvinceModalVisible(false)}>
-                <Ionicons name="close" size={24} color={colors.text} />
+                <Ionicons name="close" size={s(24)} color={colors.text} />
               </TouchableOpacity>
             </View>
             {isFetchingProvinces ? (
@@ -501,7 +537,7 @@ export const RegisterScreen: FC<RegisterScreenProps> = memo(function RegisterScr
                 style={{ textAlign: "left", flex: 1 }}
               />
               <TouchableOpacity onPress={() => setIsCommuneModalVisible(false)}>
-                <Ionicons name="close" size={24} color={colors.text} />
+                <Ionicons name="close" size={s(24)} color={colors.text} />
               </TouchableOpacity>
             </View>
             {isFetchingCommunes ? (

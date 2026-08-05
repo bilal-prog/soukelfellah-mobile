@@ -4,6 +4,7 @@ import { Ionicons } from "@expo/vector-icons"
 
 import { Text } from "@/components/Text"
 import { useAppTheme } from "@/theme/context"
+import { s } from "@/utils/scaling"
 
 export interface FavoritesEmptyStateProps {
   styles: any
@@ -17,7 +18,7 @@ export const FavoritesEmptyState = memo(function FavoritesEmptyState({
 
   return (
     <View style={styles.emptyContainer}>
-      <Ionicons name="heart-dislike-outline" size={80} color={colors.palette.onSurfaceVariant} />
+      <Ionicons name="heart-dislike-outline" size={s(80)} color={colors.palette.onSurfaceVariant} />
       <Text
         tx="common:noFavorites"
         preset="subheading"

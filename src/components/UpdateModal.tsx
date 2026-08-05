@@ -63,7 +63,7 @@ export const UpdateModal: FC<UpdateModalProps> = memo(function UpdateModal({
             >
               <Ionicons
                 name="cloud-download-outline"
-                size={44}
+                size={s(44)}
                 color={theme.colors.palette.primary}
                 style={styles.iconStyle}
               />
