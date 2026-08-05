@@ -340,7 +340,7 @@ export const ListingDetailsScreen: FC<ListingDetailsScreenProps> = memo(
                             : ""
                         const unitDisplay = unitName
                           ? listing.quantity && listing.quantity > 1
-                            ? ` / ${listing.quantity} ${unitName}`
+                            ? ` / ${listing.quantity} (${unitName})`
                             : ` / ${unitName}`
                           : ""
                         return `${listing.price} ${translate("common:currency")}${unitDisplay}`
@@ -497,7 +497,7 @@ export const ListingDetailsScreen: FC<ListingDetailsScreenProps> = memo(
                       <Ionicons name="cube-outline" size={20} color={colors.palette.primary} />
                       <Text tx="addListing:quantityLabel" size="xxs" style={styles.locationText} />
                       <Text
-                        text={`${listing.quantity || ""} ${uName}`.trim()}
+                        text={listing.quantity ? `${listing.quantity} (${uName})`.trim() : uName}
                         preset="bold"
                         size="xs"
                       />

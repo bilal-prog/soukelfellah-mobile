@@ -1,14 +1,14 @@
-import React, { FC, memo, useCallback, useMemo } from "react"
+import React, { FC, memo, useCallback } from "react"
 import { View, TouchableOpacity, ActivityIndicator, FlatList } from "react-native"
 import { Ionicons } from "@expo/vector-icons"
-import { useQueries } from "@tanstack/react-query"
+import { useQuery } from "@tanstack/react-query"
 
 import { GuestPlaceholder } from "@/components/GuestPlaceholder"
 import { Screen } from "@/components/Screen"
 import { Text } from "@/components/Text"
 import { useAuth } from "@/context/AuthContext"
 import type { MainTabScreenProps } from "@/navigation/navigationTypes"
-import { getListingDetails } from "@/services/api/modules/listings"
+import { getUserFavorites } from "@/services/api/modules"
 import { useAppTheme } from "@/theme/context"
 
 import { FavoritesEmptyState } from "./components/FavoritesEmptyState"
@@ -23,27 +23,18 @@ export const FavoritesScreen: FC<FavoritesScreenProps> = memo(function Favorites
   const colors = theme.colors
   const styles = $styles(theme)
   const { navigation } = props
-  const { favorites, isAuthenticated } = useAuth()
+  const { isAuthenticated } = useAuth()
 
-  // Fetch details for each favorited listing ID in parallel
-  const favoritesQueries = useQueries({
-    queries: (favorites || []).map((id) => ({
-      queryKey: ["listingDetails", id],
-      queryFn: async () => {
-        const res = await getListingDetails(id)
-        if (res.kind === "failure") throw new Error("Could not fetch listing details")
-        return res.listing
-      },
-    })),
+  // Fetch populated favorited listings in a single request
+  const { data: favoritedListings = [], isLoading } = useQuery({
+    queryKey: ["userFavorites"],
+    queryFn: async () => {
+      const res = await getUserFavorites()
+      if (res.kind === "failure") throw new Error("Could not fetch user favorites")
+      return res.listings
+    },
+    enabled: isAuthenticated,
   })
-
-  // Map only the successfully resolved listing details
-  const favoritedListings = useMemo(() => {
-    return favoritesQueries.map((q) => q.data).filter((listing): listing is any => !!listing)
-  }, [favoritesQueries])
-
-  // Determine loading state across all parallel queries
-  const isLoading = favoritesQueries.some((q) => q.isLoading)
 
   const handleListingDetails = useCallback(
     (id: string) => {

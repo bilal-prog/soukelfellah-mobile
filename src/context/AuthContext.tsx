@@ -6,6 +6,7 @@ import {
   useContext,
   useMemo,
   useEffect,
+  useState,
 } from "react"
 import { useMMKVString } from "react-native-mmkv"
 import { OneSignal } from "react-native-onesignal"
@@ -13,7 +14,7 @@ import { useQueryClient } from "@tanstack/react-query"
 
 import { socketClient } from "@/services/socket/socketClient"
 import { useLogoutMutation } from "@/services/api/hooks"
-import { UserLocation } from "@/services/api/modules"
+import { UserLocation, getFavoriteIds, toggleFavoriteApi } from "@/services/api/modules"
 
 export type AuthContextType = {
   isAuthenticated: boolean
@@ -50,8 +51,8 @@ export const AuthProvider: FC<PropsWithChildren<AuthProviderProps>> = ({ childre
   const [userPhone, setUserPhone] = useMMKVString("AuthProvider.userPhone")
   const [userRole, setUserRole] = useMMKVString("AuthProvider.userRole")
   const [userLocationStr, setUserLocationStr] = useMMKVString("AuthProvider.userLocation")
-  const [favoritesStr, setFavoritesStr] = useMMKVString("AuthProvider.favorites")
   const [isGuestStr, setIsGuestStr] = useMMKVString("AuthProvider.isGuest")
+  const [favorites, setFavorites] = useState<string[]>([])
 
   const queryClient = useQueryClient()
   const logoutMutation = useLogoutMutation()
@@ -75,6 +76,25 @@ export const AuthProvider: FC<PropsWithChildren<AuthProviderProps>> = ({ childre
     }
   }, [accessToken])
 
+  // Load backend favorite listing IDs when user is authenticated
+  useEffect(() => {
+    if (!accessToken) {
+      setFavorites([])
+      return
+    }
+
+    let isMounted = true
+    getFavoriteIds().then((res) => {
+      if (isMounted && res.kind === "ok") {
+        setFavorites(res.favorites)
+      }
+    })
+
+    return () => {
+      isMounted = false
+    }
+  }, [accessToken])
+
   const setGuestMode = useCallback(
     (val: boolean) => {
       setIsGuestStr(val ? "true" : "false")
@@ -82,24 +102,12 @@ export const AuthProvider: FC<PropsWithChildren<AuthProviderProps>> = ({ childre
     [setIsGuestStr],
   )
 
-  const favorites = useMemo(() => {
-    try {
-      const parsed = favoritesStr ? JSON.parse(favoritesStr) : []
-      return Array.isArray(parsed) ? parsed : []
-    } catch {
-      return []
-    }
-  }, [favoritesStr])
-
   const setAuthSession = useCallback(
     (
       accessToken?: string,
       refreshToken?: string,
       user?: { id: string; name: string; phone: string; role?: string; location?: UserLocation },
     ) => {
-      if (user?.id && userId && user.id !== userId) {
-        setFavoritesStr(JSON.stringify([]))
-      }
       setAccessToken(accessToken)
       setRefreshToken(refreshToken)
       setUserId(user?.id)
@@ -121,13 +129,11 @@ export const AuthProvider: FC<PropsWithChildren<AuthProviderProps>> = ({ childre
     [
       setAccessToken,
       setRefreshToken,
-      setFavoritesStr,
       setUserPhone,
       setUserId,
       setUserName,
       setUserRole,
       setUserLocationStr,
-      userId,
       setIsGuestStr,
     ],
   )
@@ -156,10 +162,10 @@ export const AuthProvider: FC<PropsWithChildren<AuthProviderProps>> = ({ childre
     setUserPhone(undefined)
     setUserRole(undefined)
     setUserLocationStr(undefined)
-    setFavoritesStr(JSON.stringify([]))
+    setFavorites([])
     setIsGuestStr("false")
     
-    // Clear React Query cache to remove user-specific queries (e.g. notifications, private listings)
+    // Clear React Query cache to remove user-specific queries
     queryClient.clear()
 
     // Deregister user session in OneSignal
@@ -167,7 +173,6 @@ export const AuthProvider: FC<PropsWithChildren<AuthProviderProps>> = ({ childre
   }, [
     setAccessToken,
     setRefreshToken,
-    setFavoritesStr,
     setUserPhone,
     setUserId,
     setUserName,
@@ -180,13 +185,32 @@ export const AuthProvider: FC<PropsWithChildren<AuthProviderProps>> = ({ childre
   ])
 
   const toggleFavorite = useCallback(
-    (listingId: string) => {
-      const updated = favorites.includes(listingId)
-        ? favorites.filter((id: string) => id !== listingId)
-        : [...favorites, listingId]
-      setFavoritesStr(JSON.stringify(updated))
+    async (listingId: string) => {
+      let previousFavorites: string[] = []
+
+      // Optimistically update local state immediately
+      setFavorites((prev) => {
+        previousFavorites = prev
+        return prev.includes(listingId)
+          ? prev.filter((id: string) => id !== listingId)
+          : [...prev, listingId]
+      })
+
+      // Invalidate favorites list query so FavoritesScreen updates seamlessly
+      queryClient.invalidateQueries({ queryKey: ["userFavorites"] })
+
+      // Call backend API
+      const res = await toggleFavoriteApi(listingId)
+
+      if (res.kind === "failure") {
+        // Rollback state on error
+        setFavorites(previousFavorites)
+      } else {
+        // Sync with authoritative backend favorite IDs
+        setFavorites(res.favoriteIds)
+      }
     },
-    [favorites, setFavoritesStr],
+    [queryClient],
   )
 
   const isFavorite = useCallback(

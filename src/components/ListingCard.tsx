@@ -155,7 +155,7 @@ export const ListingCard = memo(function ListingCard(props: ListingCardProps) {
               { backgroundColor: "rgba(255, 255, 255, 0.85)", left: spacing.xs },
             ]}
           >
-            <Ionicons name="star" size={12} color={colors.palette.primary} />
+            <Ionicons name="star" size={s(12)} color={colors.palette.primary} />
             <Text
               text={String(rating)}
               size="xxs"
@@ -171,7 +171,7 @@ export const ListingCard = memo(function ListingCard(props: ListingCardProps) {
         >
           <Ionicons
             name={favorited ? "heart" : "heart-outline"}
-            size={18}
+            size={s(18)}
             color={favorited ? colors.palette.error : colors.palette.onSurfaceVariant}
           />
         </TouchableOpacity>
@@ -243,7 +243,11 @@ export const ListingCard = memo(function ListingCard(props: ListingCardProps) {
         {/* Location & Time Row */}
         <View style={[$row, { justifyContent: "space-between", marginVertical: spacing.xxs }]}>
           <View style={$row}>
-            <Ionicons name="location-outline" size={14} color={colors.palette.onSurfaceVariant} />
+            <Ionicons
+              name="location-outline"
+              size={s(14)}
+              color={colors.palette.onSurfaceVariant}
+            />
             <Text
               text={locationName}
               size="xxs"
@@ -280,7 +284,7 @@ export const ListingCard = memo(function ListingCard(props: ListingCardProps) {
                     text={(() => {
                       const unitStr = unit
                         ? quantity && quantity > 1
-                          ? ` / ${quantity} ${unit}`
+                          ? ` / ${quantity} (${unit})`
                           : ` / ${unit}`
                         : ""
                       return priceType === "NEGOTIABLE"
@@ -378,7 +382,7 @@ const $favButton: ViewStyle = {
   top: vs(8),
   right: s(8),
   width: s(28),
-  height: vs(28),
+  height: s(28),
   borderRadius: s(14),
   justifyContent: "center",
   alignItems: "center",
