@@ -196,18 +196,29 @@ export const AuthProvider: FC<PropsWithChildren<AuthProviderProps>> = ({ childre
           : [...prev, listingId]
       })
 
-      // Invalidate favorites list query so FavoritesScreen updates seamlessly
-      queryClient.invalidateQueries({ queryKey: ["userFavorites"] })
+      // Optimistically update React Query cache if removing from favorites list
+      const previousQueryData = queryClient.getQueryData<any[]>(["userFavorites"])
+      if (previousFavorites.includes(listingId)) {
+        queryClient.setQueryData<any[]>(["userFavorites"], (oldData) => {
+          if (!Array.isArray(oldData)) return oldData
+          return oldData.filter((item: any) => item?._id !== listingId)
+        })
+      }
 
       // Call backend API
       const res = await toggleFavoriteApi(listingId)
 
       if (res.kind === "failure") {
-        // Rollback state on error
+        // Rollback local state & React Query cache on error
         setFavorites(previousFavorites)
+        if (previousQueryData !== undefined) {
+          queryClient.setQueryData(["userFavorites"], previousQueryData)
+        }
       } else {
         // Sync with authoritative backend favorite IDs
         setFavorites(res.favoriteIds)
+        // Invalidate React Query so FavoritesScreen refetches fresh populated listings from backend
+        queryClient.invalidateQueries({ queryKey: ["userFavorites"] })
       }
     },
     [queryClient],
