@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "416592314426",
+    "project_id": "souk-el-fellah-4ef5e",
+    "storage_bucket": "souk-el-fellah-4ef5e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:416592314426:android:35c893ca5e79ff6579f503",
+        "android_client_info": {
+          "package_name": "com.soukelfellah"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDzL2kshFd715LJK2MiL0eVtquvsZEhibs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

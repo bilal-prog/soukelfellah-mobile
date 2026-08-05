@@ -4,17 +4,16 @@ import {
   View,
   ScrollView,
   TouchableOpacity,
-  Image,
   Alert,
   ActivityIndicator,
   Modal,
   FlatList,
 } from "react-native"
-import * as ImagePicker from "expo-image-picker"
 import { Ionicons } from "@expo/vector-icons"
 
 import { Button } from "@/components/Button"
 import { GuestPlaceholder } from "@/components/GuestPlaceholder"
+import { ListingImageManager } from "@/components/ListingImageManager"
 import { Screen } from "@/components/Screen"
 import { Text } from "@/components/Text"
 import { TextField } from "@/components/TextField"
@@ -56,8 +55,8 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
   const [price, setPrice] = useState("")
   const [quantity, setQuantity] = useState("")
   const [address, setAddress] = useState(userLocation?.address || "")
-  const [images, setImages] = useState<string[]>([])
-  const [imageIds, setImageIds] = useState<string[]>([])
+  const [imageItems, setImageItems] = useState<{ _id: string; url: string }[]>([])
+  const [uploadingCount, setUploadingCount] = useState(0)
 
   const [titleError, setTitleError] = useState("")
   const [priceError, setPriceError] = useState("")
@@ -273,104 +272,55 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
     setStep(2)
   }
 
-  const uploadImage = (localUri: string) => {
-    const filename = localUri.split("/").pop() || "upload.jpg"
-    const match = /\.(\w+)$/.exec(filename)
-    const type = match ? `image/${match[1]}` : `image/jpeg`
+  const handleAddPhotos = useCallback(
+    async (uris: string[]) => {
+      setUploadingCount(uris.length)
+      for (const uri of uris) {
+        const filename = uri.split("/").pop() || "upload.jpg"
+        const match = /\.(\w+)$/.exec(filename)
+        const type = match ? `image/${match[1]}` : `image/jpeg`
 
-    uploadImageMutation.mutate(
-      { fileUri: localUri, fileName: filename, mimeType: type },
-      {
-        onSuccess: (fileData) => {
+        try {
+          const fileData = await uploadImageMutation.mutateAsync({
+            fileUri: uri,
+            fileName: filename,
+            mimeType: type,
+          })
           if (fileData) {
-            setImages((prev) => [...prev, fileData.url])
-            setImageIds((prev) => [...prev, fileData._id])
+            setImageItems((prev) => [...prev, { _id: fileData._id, url: fileData.url }])
           }
-        },
-        onError: (err: any) => {
+        } catch (err: any) {
           Alert.alert(
             translate("addListing:uploadErrorTitle"),
-            err.message || translate("addListing:uploadErrorMsg"),
+            err?.message || translate("addListing:uploadErrorMsg"),
           )
-        },
-      },
-    )
-  }
+        } finally {
+          setUploadingCount((c) => Math.max(0, c - 1))
+        }
+      }
+    },
+    [uploadImageMutation],
+  )
 
-  const handleLaunchCamera = async () => {
-    const permissionResult = await ImagePicker.requestCameraPermissionsAsync()
-    if (permissionResult.granted === false) {
-      Alert.alert(
-        translate("addListing:cameraPermissionDeniedTitle"),
-        translate("addListing:cameraPermissionDeniedMsg"),
-      )
-      return
-    }
+  const handleRemovePhoto = useCallback((index: number) => {
+    setImageItems((prev) => prev.filter((_, i) => i !== index))
+  }, [])
 
-    const result = await ImagePicker.launchCameraAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      quality: 0.8,
+  const handleReorderPhotos = useCallback((newUrls: string[]) => {
+    setImageItems((prev) => {
+      const map = new Map(prev.map((item) => [item.url, item]))
+      return newUrls.map((url) => map.get(url)).filter(Boolean) as { _id: string; url: string }[]
     })
+  }, [])
 
-    if (result.canceled || !result.assets?.[0]) return
-    uploadImage(result.assets[0].uri)
-  }
-
-  const handleLaunchLibrary = async () => {
-    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync()
-    if (permissionResult.granted === false) {
-      Alert.alert(
-        translate("addListing:permissionDeniedTitle"),
-        translate("addListing:permissionDeniedMsg"),
-      )
-      return
-    }
-
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      quality: 0.8,
+  const handleSetPrincipalPhoto = useCallback((index: number) => {
+    setImageItems((prev) => {
+      if (index <= 0 || index >= prev.length) return prev
+      const selected = prev[index]
+      const rest = prev.filter((_, i) => i !== index)
+      return [selected, ...rest]
     })
-
-    if (result.canceled || !result.assets?.[0]) return
-    uploadImage(result.assets[0].uri)
-  }
-
-  const handlePickImage = () => {
-    if (images.length >= 5) {
-      Alert.alert(
-        translate("addListing:photoLimitErrorTitle"),
-        translate("addListing:photoLimitErrorMsg"),
-      )
-      return
-    }
-
-    Alert.alert(
-      translate("addListing:addPhotoSourceTitle"),
-      "",
-      [
-        {
-          text: translate("addListing:cameraOption"),
-          onPress: handleLaunchCamera,
-        },
-        {
-          text: translate("addListing:galleryOption"),
-          onPress: handleLaunchLibrary,
-        },
-        {
-          text: translate("addListing:cancelOption"),
-          style: "cancel",
-        },
-      ],
-      { cancelable: true },
-    )
-  }
-
-  const removePhoto = (index: number) => {
-    setImages(images.filter((_, i) => i !== index))
-    setImageIds(imageIds.filter((_, i) => i !== index))
-  }
+  }, [])
 
   const handlePublish = useCallback(() => {
     setTitleError("")
@@ -457,7 +407,7 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
       condition: selectedCat === "EQUIPMENT" ? condition : undefined,
       purpose,
       listingDirection,
-      images: imageIds,
+      images: imageItems.map((item) => item._id),
       location: {
         address,
         region: selectedRegion?.name || undefined,
@@ -481,8 +431,7 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
               setPrice("")
               setQuantity("")
               setAddress("")
-              setImages([])
-              setImageIds([])
+              setImageItems([])
               setSelectedRegion(null)
               setSelectedProvince(null)
               setModel("")
@@ -514,7 +463,7 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
     price,
     quantity,
     address,
-    imageIds,
+    imageItems,
     selectedCat,
     selectedRegion,
     selectedProvince,
@@ -623,41 +572,16 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
                 <Text tx="addListing:photoLimit" size="xxs" style={styles.photoLimitText} />
               </View>
 
-              <TouchableOpacity
-                activeOpacity={0.9}
-                onPress={handlePickImage}
-                style={styles.uploadBox}
-                disabled={uploadImageMutation.isPending}
-              >
-                {uploadImageMutation.isPending ? (
-                  <ActivityIndicator color={colors.palette.primary} size="large" />
-                ) : (
-                  <>
-                    <Ionicons name="camera-outline" size={40} color={colors.palette.primary} />
-                    <Text
-                      tx="addListing:uploadPlaceholder"
-                      size="xs"
-                      style={styles.photoLimitText}
-                    />
-                  </>
-                )}
-              </TouchableOpacity>
-
-              {images.length > 0 && (
-                <View style={styles.previewGrid}>
-                  {images.map((imgUrl, index) => (
-                    <View key={index} style={styles.previewWrapper}>
-                      <Image source={{ uri: imgUrl }} style={styles.previewImage} />
-                      <TouchableOpacity
-                        onPress={() => removePhoto(index)}
-                        style={styles.deletePreviewBtn}
-                      >
-                        <Ionicons name="close" size={14} color="white" />
-                      </TouchableOpacity>
-                    </View>
-                  ))}
-                </View>
-              )}
+              <ListingImageManager
+                images={imageItems.map((item) => item.url)}
+                onAddPhotos={handleAddPhotos}
+                onRemovePhoto={handleRemovePhoto}
+                onReorderPhotos={handleReorderPhotos}
+                onSetPrincipalPhoto={handleSetPrincipalPhoto}
+                maxPhotos={5}
+                isUploading={uploadingCount > 0}
+                uploadingCount={uploadingCount}
+              />
             </View>
 
             {/* General Fields Form */}
