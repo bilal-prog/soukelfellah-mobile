@@ -154,7 +154,7 @@ export const NotificationsScreen: FC<AppStackScreenProps<"Notifications">> = mem
         </View>
 
         {loading ? (
-          <View style={$styles.flex1}>
+          <View style={{ flex: 1 }}>
             <ListItemSkeleton count={8} />
           </View>
         ) : notifications.length === 0 ? (
