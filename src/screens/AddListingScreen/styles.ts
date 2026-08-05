@@ -1,6 +1,5 @@
 import { ViewStyle, TextStyle, ImageStyle } from "react-native"
 
-import { fontSizes } from "@/theme/fontSizes"
 import type { Theme } from "@/theme/types"
 import { s, vs } from "@/utils/scaling"
 

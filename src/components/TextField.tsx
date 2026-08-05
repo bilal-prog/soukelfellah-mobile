@@ -12,7 +12,6 @@ import {
 
 import { isRTL } from "@/localization"
 import { translate } from "@/localization/translate"
-import { fontSizes } from "@/theme/fontSizes"
 import { useAppTheme } from "@/theme/context"
 import { $styles } from "@/theme/styles"
 import type { ThemedStyle, ThemedStyleArray } from "@/theme/types"
