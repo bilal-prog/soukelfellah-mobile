@@ -6,6 +6,7 @@ import { useQueryClient } from "@tanstack/react-query"
 
 import { Screen } from "@/components/Screen"
 import { Text } from "@/components/Text"
+import { ListItemSkeleton } from "@/components/Skeletons"
 import { translate } from "@/localization/translate"
 import { AppStackScreenProps } from "@/navigation/navigationTypes"
 import {
@@ -152,9 +153,7 @@ export const NotificationsScreen: FC<AppStackScreenProps<"Notifications">> = mem
         </View>
 
         {loading ? (
-          <View style={styles.center}>
-            <ActivityIndicator size="large" color={colors.tint} />
-          </View>
+          <ListItemSkeleton count={5} />
         ) : notifications.length === 0 ? (
           <View style={styles.center}>
             <Ionicons

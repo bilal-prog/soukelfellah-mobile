@@ -1,11 +1,12 @@
 import React, { FC, memo, useCallback } from "react"
-import { View, TouchableOpacity, ActivityIndicator, FlatList } from "react-native"
+import { View, TouchableOpacity, FlatList } from "react-native"
 import { Ionicons } from "@expo/vector-icons"
 import { useQuery } from "@tanstack/react-query"
 
 import { GuestPlaceholder } from "@/components/GuestPlaceholder"
 import { Screen } from "@/components/Screen"
 import { Text } from "@/components/Text"
+import { ListingFeedSkeleton } from "@/components/Skeletons"
 import { useAuth } from "@/context/AuthContext"
 import type { MainTabScreenProps } from "@/navigation/navigationTypes"
 import { getUserFavorites } from "@/services/api/modules"
@@ -81,7 +82,7 @@ export const FavoritesScreen: FC<FavoritesScreenProps> = memo(function Favorites
 
       {/* Main content using FlatList */}
       {isLoading ? (
-        <ActivityIndicator size="large" color={colors.palette.primary} style={{ marginTop: 20 }} />
+        <ListingFeedSkeleton count={3} />
       ) : (
         <FlatList
           data={favoritedListings}

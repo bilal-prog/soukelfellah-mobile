@@ -6,6 +6,7 @@ import { useFocusEffect } from "@react-navigation/native"
 import { Screen } from "@/components/Screen"
 import { Text } from "@/components/Text"
 import { NotificationIconButton } from "@/components/NotificationIconButton"
+import { ListingFeedSkeleton } from "@/components/Skeletons"
 import type { MainTabScreenProps } from "@/navigation/navigationTypes"
 import {
   useCategoriesQuery,
@@ -30,7 +31,7 @@ export const HomeScreen: FC<HomeScreenProps> = memo(function HomeScreen(props) {
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | undefined>(undefined)
 
   // Fetch reference categories via React Query
-  const { data: categories, refetch: refetchCategories } = useCategoriesQuery()
+  const { data: categories, isLoading: isCategoriesLoading, refetch: refetchCategories } = useCategoriesQuery()
 
   // Fetch paginated feed listings using useInfiniteQuery under the hood
   const {
@@ -106,15 +107,14 @@ export const HomeScreen: FC<HomeScreenProps> = memo(function HomeScreen(props) {
         categories={categories}
         selectedCategoryId={selectedCategoryId}
         onSelectCategory={setSelectedCategoryId}
+        isLoading={isCategoriesLoading}
       />
     )
-  }, [styles, categories, selectedCategoryId])
+  }, [styles, categories, selectedCategoryId, isCategoriesLoading])
 
   const renderEmptyState = useCallback(() => {
     if (isLoading) {
-      return (
-        <ActivityIndicator size="large" color={colors.palette.primary} style={{ marginTop: 40 }} />
-      )
+      return <ListingFeedSkeleton count={3} />
     }
     return (
       <View style={{ alignItems: "center", marginTop: 40 }}>

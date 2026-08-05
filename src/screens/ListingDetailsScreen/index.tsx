@@ -17,6 +17,7 @@ import { Ionicons } from "@expo/vector-icons"
 
 import { Screen } from "@/components/Screen"
 import { Text } from "@/components/Text"
+import { ListingDetailsSkeleton } from "@/components/Skeletons"
 import { useAuth } from "@/context/AuthContext"
 import { isRTL } from "@/localization"
 import { translate } from "@/localization/translate"
@@ -220,11 +221,7 @@ export const ListingDetailsScreen: FC<ListingDetailsScreenProps> = memo(
     }, [checkAuthAndExecute, listing, listingId, isOwner, trackMessage])
 
     if (isLoading) {
-      return (
-        <View style={styles.loaderContainer}>
-          <ActivityIndicator size="large" color={colors.palette.primary} />
-        </View>
-      )
+      return <ListingDetailsSkeleton />
     }
 
     return (

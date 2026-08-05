@@ -4,6 +4,7 @@ import { Ionicons } from "@expo/vector-icons"
 import { useNavigation } from "@react-navigation/native"
 
 import { CategoryCard } from "@/components/CategoryCard"
+import { CategoryListSkeleton } from "@/components/Skeletons"
 import { Text } from "@/components/Text"
 import { ApiCategory } from "@/services/api/modules"
 import { useAppTheme } from "@/theme/context"
@@ -13,21 +14,15 @@ export interface HomeHeaderProps {
   categories?: ApiCategory[]
   selectedCategoryId?: string
   onSelectCategory?: (id: string | undefined) => void
+  isLoading?: boolean
 }
-
-const defaultMockCategories: ApiCategory[] = [
-  { _id: "mock-cat-1", name: "Produce", slug: "produce", icon: undefined },
-  { _id: "mock-cat-2", name: "Machinery", slug: "machinery", icon: undefined },
-  { _id: "mock-cat-3", name: "Livestock", slug: "livestock", icon: undefined },
-  { _id: "mock-cat-4", name: "Fertilizers", slug: "fertilizers", icon: undefined },
-  { _id: "mock-cat-5", name: "Seeds", slug: "seeds", icon: undefined },
-]
 
 export const HomeHeader = memo(function HomeHeader({
   styles,
   categories,
   selectedCategoryId,
   onSelectCategory,
+  isLoading,
 }: HomeHeaderProps) {
   const { theme } = useAppTheme()
   const colors = theme.colors
@@ -59,7 +54,7 @@ export const HomeHeader = memo(function HomeHeader({
     return false
   }
 
-  const displayCategories = categories && categories.length > 0 ? categories : defaultMockCategories
+  const showSkeleton = isLoading || !categories
 
   return (
     <View>
@@ -74,33 +69,36 @@ export const HomeHeader = memo(function HomeHeader({
       {/* Categories Carousel */}
       <View style={styles.categoriesContainer}>
         <Text tx="home:categoriesTitle" preset="subheading" style={styles.sectionTitle} />
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.categoriesScroll}
-        >
-          {displayCategories.map((cat) => {
-            const isSelected = selectedCategoryId === cat._id
-            return (
-              <CategoryCard
-                key={cat._id}
-                label={cat.name}
-                icon={hasIconFile(cat.icon) ? cat.icon : getCategoryEmoji(cat.slug)}
-                selected={isSelected}
-                onPress={() => {
-                  if (onSelectCategory) {
-                    onSelectCategory(isSelected ? undefined : cat._id)
-                  }
-                }}
-              />
-            )
-          })}
-        </ScrollView>
+        {showSkeleton ? (
+          <CategoryListSkeleton />
+        ) : (
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.categoriesScroll}
+          >
+            {categories.map((cat) => {
+              const isSelected = selectedCategoryId === cat._id
+              return (
+                <CategoryCard
+                  key={cat._id}
+                  label={cat.name}
+                  icon={hasIconFile(cat.icon) ? cat.icon : getCategoryEmoji(cat.slug)}
+                  selected={isSelected}
+                  onPress={() => {
+                    if (onSelectCategory) {
+                      onSelectCategory(isSelected ? undefined : cat._id)
+                    }
+                  }}
+                />
+              )
+            })}
+          </ScrollView>
+        )}
       </View>
 
       {/* Listings Section Header */}
       <View style={styles.sectionHeader}>
-        {/* <Text tx="home:recentTitle" preset="subheading" style={styles.sectionTitle} /> */}
         <TouchableOpacity onPress={handleSearchPress}>
           <Text tx="home:viewAll" size="xs" style={styles.viewAllText} preset="bold" />
         </TouchableOpacity>
