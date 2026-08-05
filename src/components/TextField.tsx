@@ -210,7 +210,7 @@ const $inputStyle: ThemedStyle<TextStyle> = ({ colors, typography, spacing }) =>
   alignSelf: "stretch",
   fontFamily: typography.primary.normal,
   color: colors.text,
-  fontSize: fontSizes.fs16,
+  fontSize: vs(17),
   height: vs(34),
   paddingVertical: 0,
   paddingHorizontal: 0,

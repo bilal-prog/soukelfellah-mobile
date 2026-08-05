@@ -283,7 +283,6 @@ export const $styles = (theme: Theme) => ({
 
   segmentText: {
     color: theme.colors.palette.onSurfaceVariant,
-    fontSize: fontSizes.fs13,
     fontWeight: "500",
   } as TextStyle,
 

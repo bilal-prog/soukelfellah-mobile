@@ -90,6 +90,12 @@ const $sizeStyles = {
     lineHeight: vs(25),
     // backgroundColor: "purple",
   } satisfies TextStyle, // label-md
+
+  xxxs: {
+    fontSize: vs(10),
+    lineHeight: vs(20),
+    // backgroundColor: "purple",
+  } satisfies TextStyle, // label-md
 }
 
 const $fontWeightStyles = Object.entries(typography.primary).reduce((acc, [weight, fontFamily]) => {
