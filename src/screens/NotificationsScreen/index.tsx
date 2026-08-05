@@ -130,7 +130,7 @@ export const NotificationsScreen: FC<AppStackScreenProps<"Notifications">> = mem
     const loading = isLoading && notifications.length === 0
 
     return (
-      <Screen preset="fixed" safeAreaEdges={["top"]} contentContainerStyle={styles.container}>
+      <Screen preset="fixed" safeAreaEdges={["top"]} style={styles.container}>
         <View style={styles.header}>
           <View style={styles.headerLeft}>
             <TouchableOpacity onPress={handleGoBack} style={styles.backButton}>
@@ -154,7 +154,9 @@ export const NotificationsScreen: FC<AppStackScreenProps<"Notifications">> = mem
         </View>
 
         {loading ? (
-          <ListItemSkeleton count={5} />
+          <View style={$styles.flex1}>
+            <ListItemSkeleton count={8} />
+          </View>
         ) : notifications.length === 0 ? (
           <View style={styles.center}>
             <Ionicons

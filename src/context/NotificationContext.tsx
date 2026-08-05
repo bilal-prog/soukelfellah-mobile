@@ -43,7 +43,8 @@ export const NotificationProvider = ({ children }: { children: ReactNode }) => {
       // If the user hasn't granted native push permissions, fallback to showing
       // the notification in our InAppBanner since OneSignal won't show it.
       const hasPermission = await OneSignal.Notifications.getPermissionAsync()
-      if (!hasPermission && payload) {
+      if (!hasPermission && payload && false) {
+        // remove false to enable in app notification
         setNotification({
           title: payload.title,
           body: payload.message || payload.body || "",
