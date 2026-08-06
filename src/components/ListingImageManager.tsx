@@ -236,13 +236,13 @@ export const ListingImageManager: FC<ListingImageManagerProps> = memo(function L
                 <View style={$reorderBar}>
                   {index > 0 && (
                     <TouchableOpacity onPress={() => handleMoveLeft(index)} style={$arrowBtn}>
-                      <Ionicons name="chevron-back" size={s(16)} color="#FFFFFF" />
+                      <Ionicons name="chevron-forward" size={s(16)} color="#FFFFFF" />
                     </TouchableOpacity>
                   )}
                   <View style={{ flex: 1 }} />
                   {index < images.length - 1 && (
                     <TouchableOpacity onPress={() => handleMoveRight(index)} style={$arrowBtn}>
-                      <Ionicons name="chevron-forward" size={s(16)} color="#FFFFFF" />
+                      <Ionicons name="chevron-back" size={s(16)} color="#FFFFFF" />
                     </TouchableOpacity>
                   )}
                 </View>
