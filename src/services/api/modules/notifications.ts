@@ -31,19 +31,39 @@ export interface ApiNotificationsResponse {
  * Fetch a list of notifications for the logged-in user.
  */
 export const getNotifications = async (limit = 20, offset = 0) => {
-  const response = await apiClient.get<ApiNotificationsResponse>("/api/notifications", {
+  const response = await apiClient.get<any>("/api/notifications", {
     limit,
     offset,
   })
 
   if (!response.ok) {
-    return { kind: "failure", error: response.problem } as const
+    return { kind: "failure", error: response.data || response.problem } as const
+  }
+
+  const raw = response.data
+  let notificationsList: ApiNotification[] = []
+  let metaData: ApiMeta | undefined = undefined
+
+  if (Array.isArray(raw)) {
+    notificationsList = raw
+  } else if (Array.isArray(raw?.data)) {
+    notificationsList = raw.data
+    metaData = raw.meta || raw.pagination
+  } else if (Array.isArray(raw?.notifications)) {
+    notificationsList = raw.notifications
+    metaData = raw.meta || raw.pagination
+  } else if (Array.isArray(raw?.data?.notifications)) {
+    notificationsList = raw.data.notifications
+    metaData = raw.data.meta || raw.meta || raw.data.pagination
+  } else if (Array.isArray(raw?.data?.items)) {
+    notificationsList = raw.data.items
+    metaData = raw.data.meta || raw.meta
   }
 
   return {
     kind: "ok",
-    notifications: response.data?.data || [],
-    meta: response.data?.meta,
+    notifications: notificationsList,
+    meta: metaData,
   } as const
 }
 
@@ -62,11 +82,22 @@ export const markNotificationRead = async (id?: string) => {
  * Fetch the current unread count of notifications.
  */
 export const getUnreadNotificationsCount = async () => {
-  const response = await apiClient.get<{ count: number }>("/api/notifications/unread-count")
+  const response = await apiClient.get<any>("/api/notifications/unread-count")
   if (!response.ok) {
     return { kind: "failure", error: response.problem } as const
   }
-  return { kind: "ok", count: response.data?.count || 0 } as const
+  const raw = response.data
+  const count =
+    typeof raw?.count === "number"
+      ? raw.count
+      : typeof raw?.unreadCount === "number"
+      ? raw.unreadCount
+      : typeof raw?.data?.count === "number"
+      ? raw.data.count
+      : typeof raw?.data?.unreadCount === "number"
+      ? raw.data.unreadCount
+      : 0
+  return { kind: "ok", count } as const
 }
 
 /**
@@ -79,3 +110,4 @@ export const deleteNotification = async (id: string) => {
   }
   return { kind: "ok" } as const
 }
+

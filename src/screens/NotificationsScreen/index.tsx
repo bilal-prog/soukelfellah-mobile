@@ -34,9 +34,12 @@ export const NotificationsScreen: FC<AppStackScreenProps<"Notifications">> = mem
     const { data, isFetching, refetch, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
       useInfiniteNotificationsQuery(LIMIT)
 
-    // Flat list of notifications computed dynamically
+    // Flat list of notifications computed dynamically and safely filtered
     const notifications = useMemo(() => {
-      return data?.pages.flatMap((page) => page.notifications) || []
+      if (!data?.pages) return []
+      return data.pages
+        .flatMap((page) => (Array.isArray(page?.notifications) ? page.notifications : []))
+        .filter((n): n is ApiNotification => Boolean(n && n._id))
     }, [data])
 
     const markReadMutation = useMarkNotificationReadMutation()
@@ -130,7 +133,12 @@ export const NotificationsScreen: FC<AppStackScreenProps<"Notifications">> = mem
     const loading = isLoading && notifications.length === 0
 
     return (
-      <Screen preset="fixed" safeAreaEdges={["top"]} style={styles.container}>
+      <Screen
+        preset="fixed"
+        safeAreaEdges={["top", "bottom"]}
+        style={styles.container}
+        contentContainerStyle={{ flex: 1 }}
+      >
         <View style={styles.header}>
           <View style={styles.headerLeft}>
             <TouchableOpacity onPress={handleGoBack} style={styles.backButton}>
@@ -154,7 +162,7 @@ export const NotificationsScreen: FC<AppStackScreenProps<"Notifications">> = mem
         </View>
 
         {loading ? (
-          <View style={{ flex: 1 }}>
+          <View style={styles.loadingContainer}>
             <ListItemSkeleton count={8} />
           </View>
         ) : notifications.length === 0 ? (

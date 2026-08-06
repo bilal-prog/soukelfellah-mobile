@@ -13,10 +13,7 @@ export const $styles = (theme: Theme) => ({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingBottom: vs(12),
-    backgroundColor: theme.isDark
-      ? theme.colors.palette.surfaceContainer
-      : theme.colors.palette.surfaceContainerLowest,
+    backgroundColor: theme.colors.palette.surface,
     borderBottomWidth: 1,
     borderBottomColor: theme.colors.separator,
     paddingHorizontal: s(24),
@@ -41,6 +38,10 @@ export const $styles = (theme: Theme) => ({
     fontWeight: "600",
     color: theme.colors.tint,
   } as TextStyle,
+
+  loadingContainer: {
+    width: "100%",
+  } as ViewStyle,
 
   center: {
     flex: 1,
