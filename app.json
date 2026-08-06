@@ -33,7 +33,7 @@
       ]
     },
     "entitlements": {
-      "aps-environment": "development"
+      "aps-environment": "production"
     }
   },
   "web": {
@@ -71,7 +71,7 @@
     [
       "onesignal-expo-plugin",
       {
-        "mode": "development"
+        "mode": "production"
       }
     ],
     "expo-secure-store",

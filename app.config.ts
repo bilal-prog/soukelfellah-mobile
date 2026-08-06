@@ -1,4 +1,4 @@
-import { ExpoConfig, ConfigContext } from "@expo/config"
+import { ExpoConfig, ConfigContext } from "expo/config"
 
 /**
  * Use tsx/cjs here so we can use TypeScript for our Config Plugins
@@ -15,12 +15,34 @@ import "tsx/cjs"
  * https://docs.expo.dev/workflow/configuration/#configuration-resolution-rules
  */
 module.exports = ({ config }: ConfigContext): Partial<ExpoConfig> => {
+  const easProfile = process.env.EAS_BUILD_PROFILE || process.env.NODE_ENV || "development"
+  const isProduction = easProfile === "production"
+  const mode = isProduction ? "production" : "development"
+  const apsEnvironment = isProduction ? "production" : "development"
+
   const existingPlugins = config.plugins ?? []
+
+  const updatedPlugins = existingPlugins.map((plugin) => {
+    if (Array.isArray(plugin) && plugin[0] === "onesignal-expo-plugin") {
+      return [
+        "onesignal-expo-plugin",
+        {
+          ...((plugin[1] as object) || {}),
+          mode,
+        },
+      ] as [string, any]
+    }
+    return plugin
+  })
 
   return {
     ...config,
     ios: {
       ...config.ios,
+      entitlements: {
+        ...(config.ios?.entitlements || {}),
+        "aps-environment": apsEnvironment,
+      },
       // This privacyManifests is to get you started.
       // See Expo's guide on apple privacy manifests here:
       // https://docs.expo.dev/guides/apple-privacy/
@@ -36,6 +58,6 @@ module.exports = ({ config }: ConfigContext): Partial<ExpoConfig> => {
         ],
       },
     },
-    plugins: [...existingPlugins],
+    plugins: updatedPlugins,
   }
 }
