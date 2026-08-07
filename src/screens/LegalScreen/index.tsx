@@ -1,5 +1,5 @@
 import React, { FC, useState, memo, useCallback } from "react"
-import { View, TouchableOpacity, ScrollView, StyleSheet } from "react-native"
+import { View, TouchableOpacity, ScrollView, StyleSheet, ActivityIndicator } from "react-native"
 import { Ionicons } from "@expo/vector-icons"
 import i18n from "i18next"
 
@@ -9,6 +9,7 @@ import { isRTL } from "@/localization"
 import { getLegalContent, LegalTabType } from "@/localization/legalContent"
 import { AppStackScreenProps } from "@/navigation/navigationTypes"
 import { useAppTheme } from "@/theme/context"
+import { useSettingsQuery } from "@/services/api/hooks"
 import { s, vs } from "@/utils/scaling"
 
 interface LegalScreenProps extends AppStackScreenProps<"Legal"> {}
@@ -17,10 +18,12 @@ export const LegalScreen: FC<LegalScreenProps> = memo(function LegalScreen({ nav
   const { theme } = useAppTheme()
   const colors = theme.colors
 
+  const { data: settings, isLoading } = useSettingsQuery()
+
   const initialTab: LegalTabType = route.params?.type || "cgu"
   const [activeTab, setActiveTab] = useState<LegalTabType>(initialTab)
 
-  const doc = getLegalContent(i18n.language, activeTab)
+  const doc = getLegalContent(i18n.language, activeTab, settings)
 
   const handleGoBack = useCallback(() => {
     navigation.goBack()
@@ -123,48 +126,54 @@ export const LegalScreen: FC<LegalScreenProps> = memo(function LegalScreen({ nav
       </View>
 
       {/* Document Content */}
-      <ScrollView
-        contentContainerStyle={styles.contentContainer}
-        showsVerticalScrollIndicator={false}
-      >
-        <View style={styles.docHeader}>
-          <Text style={[styles.docTitle, { color: colors.text }]} size="lg" preset="bold">
-            {doc.title}
-          </Text>
-          <View style={styles.dateRow}>
-            <Text
-              tx="legal:lastUpdated"
-              style={[styles.dateLabel, { color: colors.palette.onSurfaceVariant }]}
-              size="xs"
-            />
-            <Text style={[styles.dateValue, { color: colors.palette.onSurfaceVariant }]} size="xs">
-              {" "}
-              {doc.lastUpdated}
-            </Text>
-          </View>
+      {isLoading ? (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color={colors.palette.primary} />
         </View>
-
-        {doc.sections.map((section, idx) => (
-          <View
-            key={idx}
-            style={[
-              styles.sectionCard,
-              { backgroundColor: colors.palette.surfaceContainerHigh || "rgba(0,0,0,0.03)" },
-            ]}
-          >
-            <Text
-              style={[styles.sectionTitle, { color: colors.palette.primary }]}
-              size="sm"
-              preset="bold"
-            >
-              {section.title}
+      ) : (
+        <ScrollView
+          contentContainerStyle={styles.contentContainer}
+          showsVerticalScrollIndicator={false}
+        >
+          <View style={styles.docHeader}>
+            <Text style={[styles.docTitle, { color: colors.text }]} size="lg" preset="bold">
+              {doc.title}
             </Text>
-            <Text style={[styles.sectionContent, { color: colors.text }]} size="xs">
-              {section.content}
-            </Text>
+            <View style={styles.dateRow}>
+              <Text
+                tx="legal:lastUpdated"
+                style={[styles.dateLabel, { color: colors.palette.onSurfaceVariant }]}
+                size="xs"
+              />
+              <Text style={[styles.dateValue, { color: colors.palette.onSurfaceVariant }]} size="xs">
+                {" "}
+                {doc.lastUpdated}
+              </Text>
+            </View>
           </View>
-        ))}
-      </ScrollView>
+
+          {doc.sections.map((section, idx) => (
+            <View
+              key={idx}
+              style={[
+                styles.sectionCard,
+                { backgroundColor: colors.palette.surfaceContainerHigh || "rgba(0,0,0,0.03)" },
+              ]}
+            >
+              <Text
+                style={[styles.sectionTitle, { color: colors.palette.primary }]}
+                size="sm"
+                preset="bold"
+              >
+                {section.title}
+              </Text>
+              <Text style={[styles.sectionContent, { color: colors.text }]} size="xs">
+                {section.content}
+              </Text>
+            </View>
+          ))}
+        </ScrollView>
+      )}
     </Screen>
   )
 })
@@ -239,6 +248,12 @@ const styles = StyleSheet.create({
   sectionContent: {
     lineHeight: vs(22),
     opacity: 0.9,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingVertical: vs(40),
   },
 })
 

@@ -251,8 +251,42 @@ export const legalContent: Record<string, Record<LegalTabType, LegalDocument>> =
   },
 }
 
-export function getLegalContent(language: string, type: LegalTabType): LegalDocument {
+export interface DynamicLegalSettings {
+  phone?: string
+  contactEmail?: string
+  supportEmail?: string
+}
+
+export function getLegalContent(
+  language: string,
+  type: LegalTabType,
+  settings?: DynamicLegalSettings,
+): LegalDocument {
   const langKey = language === "ar" || language === "ary" ? "ar" : "fr"
   const docGroup = legalContent[langKey] || legalContent.fr
-  return docGroup[type] || docGroup.cgu
+  const doc = docGroup[type] || docGroup.cgu
+
+  if (!settings) return doc
+
+  const { phone, contactEmail, supportEmail } = settings
+
+  return {
+    ...doc,
+    sections: doc.sections.map((sec) => {
+      let content = sec.content
+      if (contactEmail) {
+        content = content.replace(/contact@soukelfellah\.ma/g, contactEmail)
+      }
+      if (supportEmail) {
+        content = content.replace(/support@soukelfellah\.ma/g, supportEmail)
+      }
+      if (phone) {
+        content = content
+          .replace(/\+212 5 22 00 00 00/g, phone)
+          .replace(/00 00 00 22 5 212\+/g, phone)
+      }
+      return { ...sec, content }
+    }),
+  }
 }
+

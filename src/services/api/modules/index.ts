@@ -5,4 +5,4 @@ export * from "./notifications"
 export * from "./reports"
 export * from "./appVersions"
 export * from "./favorites"
-
+export * from "./settings"

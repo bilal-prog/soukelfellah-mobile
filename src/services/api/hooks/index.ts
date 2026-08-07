@@ -26,6 +26,7 @@ import {
   trackListingCall,
   trackListingMessage,
   trackListingView,
+  getSettings,
 } from "../modules"
 
 const extractErrorMessage = (error: any): string => {
@@ -340,3 +341,19 @@ export const useReportListingMutation = () => {
     },
   })
 }
+
+// --- Settings Hook ---
+
+export const useSettingsQuery = (options?: { enabled?: boolean }) => {
+  return useQuery({
+    queryKey: ["settings"],
+    queryFn: async () => {
+      const res = await getSettings()
+      if (res.kind === "failure") throw new Error(extractErrorMessage(res.error))
+      return res.settings
+    },
+    staleTime: 1000 * 60 * 15, // cache for 15 minutes
+    ...options,
+  })
+}
+
