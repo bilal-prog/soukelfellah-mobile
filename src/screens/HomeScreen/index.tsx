@@ -52,9 +52,6 @@ export const HomeScreen: FC<HomeScreenProps> = memo(function HomeScreen(props) {
     categoryId: selectedCategoryId,
     longitude: userLng,
     latitude: userLat,
-    region: !userLng ? userLocation?.region : undefined,
-    province: !userLng ? userLocation?.province : undefined,
-    commune: !userLng ? userLocation?.commune : undefined,
   })
 
   // Flatten the page queries returned by useInfiniteQuery
