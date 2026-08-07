@@ -118,7 +118,7 @@ export const legalContent: Record<string, Record<LegalTabType, LegalDocument>> =
         {
           title: "1. Éditeur de l'Application",
           content:
-            "L'application Souk El Fellah est éditée et exploitée par l'équipe Souk El Fellah SARL, société de droit marocain dédiée aux technologies agricoles, enregistrée au Registre du Commerce du Maroc.",
+            "L'application Souk El Fellah est un projet indépendant développé et géré par l'équipe Souk El Fellah, dédié au secteur et aux technologies agricoles au Maroc.",
         },
         {
           title: "2. Contact et Support",
@@ -234,12 +234,12 @@ export const legalContent: Record<string, Record<LegalTabType, LegalDocument>> =
         {
           title: "1. ناشر التطبيق",
           content:
-            "تطبيق سوق الفلاح يتم تطويره وإدارته من طرف شركة سوق الفلاح ش.م.م، وهي شركة مسجلة بالمركب التجاري بالمملكة المغربية ومخصصة للتكنولوجيات الفلاحية.",
+            "تطبيق سوق الفلاح هو مشروع مستقل يتم تطويره وإدارته من طرف فريق سوق الفلاح، وهو مخصص لخدمة وتطوير القطاع الفلاحي بالمملكة المغربية.",
         },
         {
           title: "2. التواصل والدعم الفني",
           content:
-            "البريد الإلكتروني للاتصال: contact@soukelfellah.ma\nالدعم الفني: support@soukelfellah.ma\nالهاتف: 00 00 00 22 5 212+\nالمقر الاجتماعي: الدار البيضاء، المغرب.",
+            "البريد الإلكتروني للاتصال: contact@soukelfellah.ma\nالدعم الفني: support@soukelfellah.ma\nالهاتف: \u200E+212 5 22 00 00 00\u200E\nالمقر الاجتماعي: الدار البيضاء، المغرب.",
         },
         {
           title: "3. الاستضافة والبنية التحتية",
@@ -262,7 +262,7 @@ export function getLegalContent(
   type: LegalTabType,
   settings?: DynamicLegalSettings,
 ): LegalDocument {
-  const langKey = language === "ar" || language === "ary" ? "ar" : "fr"
+  const langKey = ["ar", "ary"].includes(language) ? "ar" : "fr"
   const docGroup = legalContent[langKey] || legalContent.fr
   const doc = docGroup[type] || docGroup.cgu
 
@@ -281,12 +281,12 @@ export function getLegalContent(
         content = content.replace(/support@soukelfellah\.ma/g, supportEmail)
       }
       if (phone) {
+        const formattedPhone = `\u200E${phone.trim()}\u200E`
         content = content
-          .replace(/\+212 5 22 00 00 00/g, phone)
-          .replace(/00 00 00 22 5 212\+/g, phone)
+          .replace(/\u200E?\+212 5 22 00 00 00\u200E?/g, formattedPhone)
+          .replace(/00 00 00 22 5 212\+/g, formattedPhone)
       }
       return { ...sec, content }
     }),
   }
 }
-
