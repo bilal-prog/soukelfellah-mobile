@@ -10,6 +10,7 @@ import { translate } from "@/localization/translate"
 import type { MainTabScreenProps } from "@/navigation/navigationTypes"
 import { useListingsQuery, useCategoriesQuery, useLocationsQuery } from "@/services/api/hooks"
 import { useAppTheme } from "@/theme/context"
+import { useAuth } from "@/context/AuthContext"
 
 import { SearchHeader } from "./components/SearchHeader"
 import { SearchListingItem } from "./components/SearchListingItem"
@@ -25,6 +26,7 @@ export const SearchScreen: FC<SearchScreenProps> = memo(function SearchScreen(pr
   const styles = $styles(theme)
   const $bottomContainerInsets = useSafeAreaInsetsStyle(["bottom"])
   const { navigation } = props
+  const { userLocation } = useAuth()
 
   const [query, setQuery] = useState("")
   const [debouncedQuery, setDebouncedQuery] = useState("")
@@ -53,6 +55,12 @@ export const SearchScreen: FC<SearchScreenProps> = memo(function SearchScreen(pr
   }, [query, minPrice, maxPrice])
 
   const searchParams = useMemo(() => {
+    const selectedCoords =
+      (selectedCommune && selectedCommune._id !== "all" && selectedCommune.coordinates?.coordinates) ||
+      (selectedProvince && selectedProvince._id !== "all" && selectedProvince.coordinates?.coordinates) ||
+      (selectedRegion && selectedRegion._id !== "all" && selectedRegion.coordinates?.coordinates) ||
+      userLocation?.coordinates?.coordinates
+
     return {
       search: debouncedQuery.trim() || undefined,
       categoryId: selectedCat !== "all" ? selectedCat : undefined,
@@ -62,6 +70,8 @@ export const SearchScreen: FC<SearchScreenProps> = memo(function SearchScreen(pr
       province:
         selectedProvince && selectedProvince._id !== "all" ? selectedProvince.name : undefined,
       commune: selectedCommune && selectedCommune._id !== "all" ? selectedCommune.name : undefined,
+      longitude: selectedCoords?.[0],
+      latitude: selectedCoords?.[1],
     }
   }, [
     debouncedQuery,
@@ -71,6 +81,7 @@ export const SearchScreen: FC<SearchScreenProps> = memo(function SearchScreen(pr
     selectedRegion,
     selectedProvince,
     selectedCommune,
+    userLocation,
   ])
 
   const { data: apiListings, isLoading } = useListingsQuery(searchParams)

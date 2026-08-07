@@ -10,6 +10,7 @@ import { ListingFeedSkeleton } from "@/components/Skeletons"
 import type { MainTabScreenProps } from "@/navigation/navigationTypes"
 import { useCategoriesQuery, useInfiniteListingsQuery } from "@/services/api/hooks"
 import { useAppTheme } from "@/theme/context"
+import { useAuth } from "@/context/AuthContext"
 
 import { $styles } from "./styles"
 import { HomeListingItem } from "./components/HomeListingItem"
@@ -23,9 +24,14 @@ export const HomeScreen: FC<HomeScreenProps> = memo(function HomeScreen(props) {
   const colors = theme.colors
   const styles = $styles(theme)
   const { navigation } = props
+  const { userLocation } = useAuth()
 
   // Category filter state
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | undefined>(undefined)
+
+  // User registered location coordinates for 2dsphere proximity sorting
+  const userLng = userLocation?.coordinates?.coordinates?.[0]
+  const userLat = userLocation?.coordinates?.coordinates?.[1]
 
   // Fetch reference categories via React Query
   const {
@@ -44,6 +50,11 @@ export const HomeScreen: FC<HomeScreenProps> = memo(function HomeScreen(props) {
     refetch: refetchListings,
   } = useInfiniteListingsQuery({
     categoryId: selectedCategoryId,
+    longitude: userLng,
+    latitude: userLat,
+    region: !userLng ? userLocation?.region : undefined,
+    province: !userLng ? userLocation?.province : undefined,
+    commune: !userLng ? userLocation?.commune : undefined,
   })
 
   // Flatten the page queries returned by useInfiniteQuery

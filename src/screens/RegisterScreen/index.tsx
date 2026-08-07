@@ -135,6 +135,7 @@ export const RegisterScreen: FC<RegisterScreenProps> = memo(function RegisterScr
         region: selectedRegion?.name || "",
         province: selectedProvince?.name || "",
         commune: selectedCommune?.name || undefined,
+        coordinates: selectedCommune?.coordinates || selectedProvince?.coordinates || selectedRegion?.coordinates || undefined,
       },
     }
 

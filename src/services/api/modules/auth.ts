@@ -20,6 +20,10 @@ export interface UserLocation {
   province?: string
   commune?: string
   village?: string
+  coordinates?: {
+    type: "Point"
+    coordinates: [number, number]
+  }
 }
 
 export interface ApiUser {
