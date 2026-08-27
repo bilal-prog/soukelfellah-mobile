@@ -1,3 +1,5 @@
+import Config from "@/config"
+
 export type LegalTabType = "cgu" | "cgv" | "privacy" | "mentions"
 
 export interface LegalSection {
@@ -266,9 +268,9 @@ export function getLegalContent(
   const docGroup = legalContent[langKey] || legalContent.fr
   const doc = docGroup[type] || docGroup.cgu
 
-  if (!settings) return doc
-
-  const { phone, contactEmail, supportEmail } = settings
+  const phone = settings?.phone || Config.SUPPORT_PHONE
+  const contactEmail = settings?.contactEmail
+  const supportEmail = settings?.supportEmail
 
   return {
     ...doc,

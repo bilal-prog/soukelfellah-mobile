@@ -236,6 +236,7 @@ const en = {
     title: "Listing Details",
     memberSince: "Member since",
     productInfo: "Product Information",
+    phoneUnavailable: "Phone number is unavailable for this seller.",
     specs: {
       model: "Model",
       hours: "Working Hours",

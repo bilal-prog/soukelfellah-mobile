@@ -240,6 +240,7 @@ const fr: Translations = {
     title: "Détails de l'annonce",
     memberSince: "Membre depuis",
     productInfo: "Informations sur le produit",
+    phoneUnavailable: "Le numéro de téléphone n'est pas disponible pour ce vendeur.",
     specs: {
       model: "Modèle",
       hours: "Heures de travail",

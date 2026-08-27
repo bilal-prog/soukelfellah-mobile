@@ -9,6 +9,7 @@ import { TextField } from "@/components/TextField"
 import Config from "@/config"
 import { isRTL } from "@/localization"
 import { translate } from "@/localization/translate"
+import { useSettingsQuery } from "@/services/api/hooks"
 import type { AppStackScreenProps } from "@/navigation/navigationTypes"
 import { fontSizes } from "@/theme/fontSizes"
 import { useAppTheme } from "@/theme/context"
@@ -22,6 +23,8 @@ export const ForgotPasswordScreen: FC<ForgotPasswordScreenProps> = memo(
   function ForgotPasswordScreen({ navigation, route }) {
     const { theme } = useAppTheme()
     const colors = theme.colors
+
+    const { data: settings } = useSettingsQuery()
 
     const initialPhone = route.params?.phone || ""
     const [phone, setPhone] = useState(initialPhone)
@@ -43,7 +46,7 @@ export const ForgotPasswordScreen: FC<ForgotPasswordScreenProps> = memo(
       setPhoneError("")
 
       const message = `السلام عليكم، أريد إعادة تعيين كلمة السر لحسابي رقم: ${phone.trim()}`
-      const targetPhone = Config.SUPPORT_WHATSAPP || "212722957826"
+      const targetPhone = settings?.phone || Config.SUPPORT_WHATSAPP || "212722957826"
       const nativeUrl = `whatsapp://send?phone=${targetPhone}&text=${encodeURIComponent(message)}`
       const webUrl = `https://wa.me/${targetPhone}?text=${encodeURIComponent(message)}`
 
@@ -58,16 +61,17 @@ export const ForgotPasswordScreen: FC<ForgotPasswordScreenProps> = memo(
         console.warn("Failed to open WhatsApp URL:", err)
         Alert.alert(translate("common:error"), "Could not open WhatsApp. Please try again.")
       }
-    }, [phone])
+    }, [phone, settings])
 
     const handleCallSupport = useCallback(async () => {
-      const telUrl = `tel:${Config.SUPPORT_PHONE || "+212722957826"}`
+      const targetPhone = settings?.phone || Config.SUPPORT_PHONE || "+212722957826"
+      const telUrl = `tel:${targetPhone}`
       try {
         await Linking.openURL(telUrl)
       } catch (err) {
         console.warn("Failed to open Phone dialer:", err)
       }
-    }, [])
+    }, [settings])
 
     return (
       <Screen preset="scroll" safeAreaEdges={["top", "bottom"]} style={styles.screen}>

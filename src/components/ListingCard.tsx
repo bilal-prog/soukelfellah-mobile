@@ -96,6 +96,10 @@ export const ListingCard = memo(function ListingCard(props: ListingCardProps) {
 
   const handleCall = useCallback(() => {
     checkAuthAndExecute(() => {
+      if (!phone || phone === "0600000000") {
+        Alert.alert(translate("common:warning"), translate("listingDetails:phoneUnavailable"))
+        return
+      }
       if (!isOwner && id) {
         trackListingCall(id).catch(() => {})
       }
@@ -105,10 +109,14 @@ export const ListingCard = memo(function ListingCard(props: ListingCardProps) {
 
   const handleWhatsapp = useCallback(() => {
     checkAuthAndExecute(() => {
+      const waPhone = whatsapp || phone
+      if (!waPhone || waPhone === "0600000000") {
+        Alert.alert(translate("common:warning"), translate("listingDetails:phoneUnavailable"))
+        return
+      }
       if (!isOwner && id) {
         trackListingMessage(id).catch(() => {})
       }
-      const waPhone = whatsapp || phone
       const formattedPhone = waPhone.startsWith("0") ? `+212${waPhone.slice(1)}` : waPhone
       const message = `${translate("common:whatsappMessage")}"${title}"`
       Linking.openURL(`whatsapp://send?phone=${formattedPhone}&text=${encodeURIComponent(message)}`)

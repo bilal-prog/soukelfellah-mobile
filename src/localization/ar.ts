@@ -238,6 +238,7 @@ const ar: Translations = {
     title: "تفاصيل الإعلان",
     memberSince: "عضو منذ",
     productInfo: "معلومات المنتج",
+    phoneUnavailable: "رقم هاتف البائع غير متوفر حالياً.",
     specs: {
       model: "الموديل",
       hours: "ساعات العمل",

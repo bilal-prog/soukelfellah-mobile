@@ -198,20 +198,28 @@ export const ListingDetailsScreen: FC<ListingDetailsScreenProps> = memo(
 
     const handleCall = useCallback(() => {
       checkAuthAndExecute(() => {
+        const phone = typeof listing?.sellerId === "object" ? listing.sellerId?.phone : undefined
+        if (!phone) {
+          Alert.alert(translate("common:warning"), translate("listingDetails:phoneUnavailable"))
+          return
+        }
         if (!isOwner && listingId) {
           trackCall(listingId)
         }
-        const phone = typeof listing.sellerId === "object" ? listing.sellerId?.phone : "0661234567"
         Linking.openURL(`tel:${phone}`)
       })
     }, [checkAuthAndExecute, listing, listingId, isOwner, trackCall])
 
     const handleWhatsapp = useCallback(() => {
       checkAuthAndExecute(() => {
+        const phone = typeof listing?.sellerId === "object" ? listing.sellerId?.phone : undefined
+        if (!phone) {
+          Alert.alert(translate("common:warning"), translate("listingDetails:phoneUnavailable"))
+          return
+        }
         if (!isOwner && listingId) {
           trackMessage(listingId)
         }
-        const phone = typeof listing.sellerId === "object" ? listing.sellerId?.phone : "0661234567"
         const formattedPhone = phone.startsWith("0") ? `+212${phone.slice(1)}` : phone
         const message = `${translate("common:whatsappMessage")}"${listing.title}"`
         Linking.openURL(

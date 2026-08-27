@@ -238,6 +238,7 @@ const ary: Translations = {
     title: "تفاصيل الإعلان",
     memberSince: "عضو منذ",
     productInfo: "معلومات على المنتوج",
+    phoneUnavailable: "نمرة الهاتف د البائع ما كايناتش ف الوقت الحالي.",
     specs: {
       model: "الموديل",
       hours: "ساعات العمل",
