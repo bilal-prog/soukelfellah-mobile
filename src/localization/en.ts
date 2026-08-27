@@ -41,6 +41,9 @@ const en = {
     views: "views",
     hoursUnit: "hours",
     noResults: "No results found",
+    sessionExpiredTitle: "Session Expired",
+    sessionExpiredMsg: "Your session has expired. Please log in again.",
+    preparingPhotos: "Preparing photos...",
   },
   welcome: {
     title: "Welcome to Souk El Fellah",

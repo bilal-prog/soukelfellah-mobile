@@ -43,6 +43,9 @@ const ar: Translations = {
     views: "مشاهدة",
     hoursUnit: "ساعة",
     noResults: "لم يتم العثور على نتائج",
+    sessionExpiredTitle: "انتهت الجلسة",
+    sessionExpiredMsg: "انتهت صلاحية الجلسة. يرجى تسجيل الدخول من جديد.",
+    preparingPhotos: "جاري تحضير الصور...",
   },
   welcome: {
     title: "مرحباً بك في سوق الفلاح",

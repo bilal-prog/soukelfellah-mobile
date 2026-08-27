@@ -43,6 +43,9 @@ const ary: Translations = {
     views: "مشاهدة",
     hoursUnit: "ساعة",
     noResults: "ما لقينا حتى نتيجة",
+    sessionExpiredTitle: "تسالاوات الجلسة",
+    sessionExpiredMsg: "تسالات الجلسة ديالك. عاود دخل من جديد.",
+    preparingPhotos: "جاري تحضير الصور...",
   },
   welcome: {
     title: "مرحبا بك في سوق الفلاح",
@@ -343,7 +346,8 @@ const ary: Translations = {
     callBtn: "ولا عيط لينا ديريكت",
     supportNote: "غادي نتأكدو من الحساب ديالك ونساعدوك تختار مودباس جديد بكل سهولة.",
     deleteAccountTitle: "مسح الحساب ديالي",
-    deleteAccountConfirm: "واش متأكد بغيتي تمسح الحساب ديالك نهائياً؟ الإعلانات والمعلومات ديالك كاملين غادي يتمسحو. هاد العملية مايمكنش ترجع فيها.",
+    deleteAccountConfirm:
+      "واش متأكد بغيتي تمسح الحساب ديالك نهائياً؟ الإعلانات والمعلومات ديالك كاملين غادي يتمسحو. هاد العملية مايمكنش ترجع فيها.",
     deleteAccountSuccess: "تم مسح الحساب بنجاح.",
   },
   network: {

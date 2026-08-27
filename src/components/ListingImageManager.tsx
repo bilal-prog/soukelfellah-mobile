@@ -1,4 +1,4 @@
-import React, { FC, memo } from "react"
+import React, { FC, memo, useState, useEffect } from "react"
 import {
   View,
   TouchableOpacity,
@@ -40,8 +40,15 @@ export const ListingImageManager: FC<ListingImageManagerProps> = memo(function L
 }) {
   const { theme } = useAppTheme()
   const { colors } = theme
+  const [isPreparing, setIsPreparing] = useState(false)
 
   const remainingCount = maxPhotos - images.length
+
+  useEffect(() => {
+    if (isUploading) {
+      setIsPreparing(false)
+    }
+  }, [isUploading])
 
   const handleLaunchCamera = async () => {
     const permissionResult = await ImagePicker.requestCameraPermissionsAsync()
@@ -53,14 +60,22 @@ export const ListingImageManager: FC<ListingImageManagerProps> = memo(function L
       return
     }
 
-    const result = await ImagePicker.launchCameraAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      quality: 0.8,
-    })
+    try {
+      setIsPreparing(true)
+      const result = await ImagePicker.launchCameraAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        quality: 0.8,
+      })
 
-    if (result.canceled || !result.assets?.[0]) return
-    onAddPhotos([result.assets[0].uri])
+      if (result.canceled || !result.assets?.[0]) {
+        setIsPreparing(false)
+        return
+      }
+      onAddPhotos([result.assets[0].uri])
+    } catch {
+      setIsPreparing(false)
+    }
   }
 
   const handleLaunchLibrary = async () => {
@@ -73,17 +88,27 @@ export const ListingImageManager: FC<ListingImageManagerProps> = memo(function L
       return
     }
 
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsMultipleSelection: true,
-      selectionLimit: remainingCount > 0 ? remainingCount : 1,
-      quality: 0.8,
-    })
+    try {
+      setIsPreparing(true)
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsMultipleSelection: true,
+        selectionLimit: remainingCount > 0 ? remainingCount : 1,
+        quality: 0.8,
+      })
 
-    if (result.canceled || !result.assets || result.assets.length === 0) return
-    const uris = result.assets.map((asset) => asset.uri).filter(Boolean)
-    if (uris.length > 0) {
-      onAddPhotos(uris)
+      if (result.canceled || !result.assets || result.assets.length === 0) {
+        setIsPreparing(false)
+        return
+      }
+      const uris = result.assets.map((asset) => asset.uri).filter(Boolean)
+      if (uris.length > 0) {
+        onAddPhotos(uris)
+      } else {
+        setIsPreparing(false)
+      }
+    } catch {
+      setIsPreparing(false)
     }
   }
 
@@ -135,12 +160,14 @@ export const ListingImageManager: FC<ListingImageManagerProps> = memo(function L
     onReorderPhotos(updated)
   }
 
+  const isLoading = isUploading || isPreparing
+
   return (
     <View style={$container}>
       {/* Upload Trigger Area */}
       <TouchableOpacity
         onPress={handlePickImage}
-        disabled={isUploading || images.length >= maxPhotos}
+        disabled={isLoading || images.length >= maxPhotos}
         style={[
           $uploadBox,
           {
@@ -150,11 +177,17 @@ export const ListingImageManager: FC<ListingImageManagerProps> = memo(function L
           },
         ]}
       >
-        {isUploading ? (
+        {isLoading ? (
           <View style={$uploadingState}>
             <ActivityIndicator size="large" color={colors.palette.primary} />
             <Text
-              text={uploadingCount > 1 ? `${uploadingCount} ...` : "..."}
+              text={
+                isPreparing
+                  ? translate("common:preparingPhotos")
+                  : uploadingCount > 1
+                  ? `${uploadingCount} ...`
+                  : "..."
+              }
               size="xs"
               style={{ color: colors.text, marginTop: vs(6) }}
             />

@@ -43,6 +43,9 @@ const fr: Translations = {
     days: "jours",
     views: "vues",
     hoursUnit: "heures",
+    sessionExpiredTitle: "Session expirée",
+    sessionExpiredMsg: "Votre session a expiré. Veuillez vous reconnecter.",
+    preparingPhotos: "Préparation des photos...",
     noResults: "Aucun résultat trouvé",
   },
   welcome: {

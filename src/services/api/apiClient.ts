@@ -29,85 +29,119 @@ apiClient.addRequestTransform((request) => {
   }
 })
 
+let onUnauthorizedCallback: (() => void) | null = null
+
+export const setUnauthorizedHandler = (handler: (() => void) | null) => {
+  onUnauthorizedCallback = handler
+}
+
+export const notifyUnauthorized = () => {
+  if (onUnauthorizedCallback) {
+    onUnauthorizedCallback()
+  }
+}
+
 apiClient.axiosInstance.interceptors.response.use(
   async (response) => {
     const originalRequest = response.config as any
-    if (
-      response.status === 401 &&
-      originalRequest &&
-      !originalRequest._retry &&
-      !originalRequest.url?.includes("/api/auth/")
-    ) {
-      originalRequest._retry = true
-      const refreshToken = loadString("AuthProvider.refreshToken")
-      if (refreshToken) {
-        try {
-          // Attempt to call refresh token endpoint
-          const refreshRes = await create({ baseURL: Config.API_URL }).post<any>(
-            "/api/auth/refresh",
-            { refreshToken },
-          )
-          const newAccessToken = refreshRes.data?.data?.accessToken
-          if (refreshRes.ok && newAccessToken) {
-            const { saveString } = require("@/utils/storage")
-            saveString("AuthProvider.accessToken", newAccessToken)
-            setAuthToken(newAccessToken)
+    const isAuthRoute =
+      originalRequest?.url?.includes("/api/auth/login") ||
+      originalRequest?.url?.includes("/api/auth/register")
 
-            // Set header on retried request config
-            originalRequest.headers = originalRequest.headers || {}
-            originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`
-            originalRequest.headers["authorization"] = `Bearer ${newAccessToken}`
-            if (originalRequest.headers.set) {
-              originalRequest.headers.set("Authorization", `Bearer ${newAccessToken}`)
-              originalRequest.headers.set("authorization", `Bearer ${newAccessToken}`)
+    if (response.status === 401 && originalRequest && !isAuthRoute) {
+      if (originalRequest.url?.includes("/api/auth/refresh")) {
+        notifyUnauthorized()
+        return response
+      }
+
+      if (!originalRequest._retry) {
+        originalRequest._retry = true
+        const refreshToken = loadString("AuthProvider.refreshToken")
+        if (refreshToken) {
+          try {
+            // Attempt to call refresh token endpoint
+            const refreshRes = await create({ baseURL: Config.API_URL }).post<any>(
+              "/api/auth/refresh",
+              { refreshToken },
+            )
+            const newAccessToken = refreshRes.data?.data?.accessToken
+            if (refreshRes.ok && newAccessToken) {
+              const { saveString } = require("@/utils/storage")
+              saveString("AuthProvider.accessToken", newAccessToken)
+              setAuthToken(newAccessToken)
+
+              // Set header on retried request config
+              originalRequest.headers = originalRequest.headers || {}
+              originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`
+              originalRequest.headers["authorization"] = `Bearer ${newAccessToken}`
+              if (originalRequest.headers.set) {
+                originalRequest.headers.set("Authorization", `Bearer ${newAccessToken}`)
+                originalRequest.headers.set("authorization", `Bearer ${newAccessToken}`)
+              }
+
+              const retryResponse = await apiClient.axiosInstance(originalRequest)
+              if (retryResponse.status === 401) {
+                notifyUnauthorized()
+              }
+              return retryResponse
             }
-
-            return apiClient.axiosInstance(originalRequest)
+          } catch (e) {
+            // Token refresh failed
           }
-        } catch (e) {
-          // Token refresh failed
         }
+        notifyUnauthorized()
+      } else {
+        notifyUnauthorized()
       }
     }
     return response
   },
   async (error) => {
     const originalRequest = error.config as any
-    if (
-      error.response?.status === 401 &&
-      originalRequest &&
-      !originalRequest._retry &&
-      !originalRequest.url?.includes("/api/auth/")
-    ) {
-      originalRequest._retry = true
-      const refreshToken = loadString("AuthProvider.refreshToken")
-      if (refreshToken) {
-        try {
-          // Attempt to call refresh token endpoint
-          const refreshRes = await create({ baseURL: Config.API_URL }).post<any>(
-            "/api/auth/refresh",
-            { refreshToken },
-          )
-          const newAccessToken = refreshRes.data?.data?.accessToken
-          if (refreshRes.ok && newAccessToken) {
-            const { saveString } = require("@/utils/storage")
-            saveString("AuthProvider.accessToken", newAccessToken)
-            setAuthToken(newAccessToken)
+    const isAuthRoute =
+      originalRequest?.url?.includes("/api/auth/login") ||
+      originalRequest?.url?.includes("/api/auth/register")
 
-            // Set header on retried request config
-            originalRequest.headers = originalRequest.headers || {}
-            originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`
-            originalRequest.headers["authorization"] = `Bearer ${newAccessToken}`
-            if (originalRequest.headers.set) {
-              originalRequest.headers.set("Authorization", `Bearer ${newAccessToken}`)
-              originalRequest.headers.set("authorization", `Bearer ${newAccessToken}`)
+    if (error.response?.status === 401 && originalRequest && !isAuthRoute) {
+      if (originalRequest.url?.includes("/api/auth/refresh")) {
+        notifyUnauthorized()
+        return Promise.reject(error)
+      }
+
+      if (!originalRequest._retry) {
+        originalRequest._retry = true
+        const refreshToken = loadString("AuthProvider.refreshToken")
+        if (refreshToken) {
+          try {
+            // Attempt to call refresh token endpoint
+            const refreshRes = await create({ baseURL: Config.API_URL }).post<any>(
+              "/api/auth/refresh",
+              { refreshToken },
+            )
+            const newAccessToken = refreshRes.data?.data?.accessToken
+            if (refreshRes.ok && newAccessToken) {
+              const { saveString } = require("@/utils/storage")
+              saveString("AuthProvider.accessToken", newAccessToken)
+              setAuthToken(newAccessToken)
+
+              // Set header on retried request config
+              originalRequest.headers = originalRequest.headers || {}
+              originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`
+              originalRequest.headers["authorization"] = `Bearer ${newAccessToken}`
+              if (originalRequest.headers.set) {
+                originalRequest.headers.set("Authorization", `Bearer ${newAccessToken}`)
+                originalRequest.headers.set("authorization", `Bearer ${newAccessToken}`)
+              }
+
+              return apiClient.axiosInstance(originalRequest)
             }
-
-            return apiClient.axiosInstance(originalRequest)
+          } catch (e) {
+            // Token refresh failed
           }
-        } catch (e) {
-          // Token refresh failed
         }
+        notifyUnauthorized()
+      } else {
+        notifyUnauthorized()
       }
     }
     return Promise.reject(error)

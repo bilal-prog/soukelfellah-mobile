@@ -156,6 +156,7 @@ export const uploadListingImage = async (
       headers: {
         "Content-Type": "multipart/form-data",
       },
+      timeout: 120000,
     },
   )
 

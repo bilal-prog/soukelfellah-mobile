@@ -12,9 +12,12 @@ import { useMMKVString } from "react-native-mmkv"
 import { OneSignal } from "react-native-onesignal"
 import { useQueryClient } from "@tanstack/react-query"
 
+import { Alert } from "react-native"
 import { socketClient } from "@/services/socket/socketClient"
 import { useLogoutMutation } from "@/services/api/hooks"
 import { UserLocation, getFavoriteIds, toggleFavoriteApi } from "@/services/api/modules"
+import { setUnauthorizedHandler } from "@/services/api/apiClient"
+import { translate } from "@/localization/translate"
 
 export type AuthContextType = {
   isAuthenticated: boolean
@@ -183,6 +186,18 @@ export const AuthProvider: FC<PropsWithChildren<AuthProviderProps>> = ({ childre
     queryClient,
     logoutMutation,
   ])
+
+  // Automatically handle session expiration (401 response when refresh fails)
+  useEffect(() => {
+    setUnauthorizedHandler(() => {
+      logout()
+      Alert.alert(translate("common:sessionExpiredTitle"), translate("common:sessionExpiredMsg"))
+    })
+
+    return () => {
+      setUnauthorizedHandler(null)
+    }
+  }, [logout])
 
   const toggleFavorite = useCallback(
     async (listingId: string) => {
