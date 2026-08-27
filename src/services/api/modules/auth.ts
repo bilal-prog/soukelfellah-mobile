@@ -122,3 +122,15 @@ export const changePassword = async (currentPassword: string, newPassword: strin
   return { kind: "ok", data: response.data } as const
 }
 
+
+export const requestDeleteAccount = async (phone: string, reason?: string) => {
+  const response = await apiClient.post<{ success: boolean; message: string }>(
+    "/api/users/delete-account-request",
+    { phone, reason },
+  )
+  if (!response.ok) {
+    const errorData = response.data as any
+    return { kind: "failure", error: errorData?.message || response.problem } as const
+  }
+  return { kind: "ok", data: response.data } as const
+}

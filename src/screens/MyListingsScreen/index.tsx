@@ -4,6 +4,7 @@ import { Ionicons } from "@expo/vector-icons"
 import { useFocusEffect } from "@react-navigation/native"
 
 import { ChangePasswordModal } from "@/components/ChangePasswordModal"
+import { DeleteAccountModal } from "@/components/DeleteAccountModal"
 import { GuestPlaceholder } from "@/components/GuestPlaceholder"
 import { Screen } from "@/components/Screen"
 import { Text } from "@/components/Text"
@@ -13,7 +14,6 @@ import { translate } from "@/localization/translate"
 import type { MainTabScreenProps } from "@/navigation/navigationTypes"
 import { useListingsQuery, useMarkListingSoldMutation } from "@/services/api/hooks"
 import { useAppTheme } from "@/theme/context"
-import { deleteAccount } from "@/services/api/modules/auth"
 
 import { MyListingItem } from "./components/MyListingItem"
 import { MyListingsEmptyState } from "./components/MyListingsEmptyState"
@@ -35,6 +35,7 @@ export const MyListingsScreen: FC<MyListingsScreenProps> = memo(function MyListi
 
   const [activeTab, setActiveTab] = useState<"active" | "paused" | "sold" | "rejected">("active")
   const [isChangePasswordVisible, setIsChangePasswordVisible] = useState(false)
+  const [isDeleteAccountVisible, setIsDeleteAccountVisible] = useState(false)
 
   // Query database listings belonging to this seller matching the selected tab status
   const {
@@ -78,26 +79,8 @@ export const MyListingsScreen: FC<MyListingsScreenProps> = memo(function MyListi
   }, [logout])
 
   const handleDeleteAccount = useCallback(() => {
-    Alert.alert(
-      translate("forgotPassword:deleteAccountTitle"),
-      translate("forgotPassword:deleteAccountConfirm"),
-      [
-        { text: translate("common:cancel"), style: "cancel" },
-        {
-          text: translate("common:delete"),
-          style: "destructive",
-          onPress: async () => {
-            const res = await deleteAccount()
-            if (res.kind === "ok") {
-              await logout()
-            } else {
-              Alert.alert(translate("common:error"), res.error || "Could not delete account")
-            }
-          },
-        },
-      ],
-    )
-  }, [logout])
+    setIsDeleteAccountVisible(true)
+  }, [])
 
   const handleDelete = useCallback((_id: string) => {
     Alert.alert(translate("myListings:deleteTitle"), translate("myListings:deleteNotSupported"))
@@ -230,6 +213,14 @@ export const MyListingsScreen: FC<MyListingsScreenProps> = memo(function MyListi
       <ChangePasswordModal
         visible={isChangePasswordVisible}
         onClose={() => setIsChangePasswordVisible(false)}
+      />
+
+      {/* Delete Account Request Modal */}
+      <DeleteAccountModal
+        visible={isDeleteAccountVisible}
+        onClose={() => setIsDeleteAccountVisible(false)}
+        userPhone={userPhone || ""}
+        onSuccessLogout={logout}
       />
     </Screen>
   )
