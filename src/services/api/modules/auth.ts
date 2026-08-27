@@ -126,7 +126,7 @@ export const changePassword = async (currentPassword: string, newPassword: strin
 export const requestDeleteAccount = async (phone: string, reason?: string) => {
   const response = await apiClient.post<{ success: boolean; message: string }>(
     "/api/users/delete-account-request",
-    { phone, reason },
+    { phone, reason, source: "mobile_app" },
   )
   if (!response.ok) {
     const errorData = response.data as any
