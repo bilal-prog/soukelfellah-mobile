@@ -121,11 +121,14 @@ const ary: Translations = {
     sortBy: "ترتيب",
   },
   addListing: {
+    atLeastOnePhoto: "عافاك زيد على الأقل تصويرة واحدة للإعلان",
     title: "إضافة إعلان جديد",
+    produceCategory: "المنتجات الفلاحية",
+    produceCategoryDesc: "منتج فلاحي (فواكه، خضر، بذور...)",
+    equipmentCategory: "المعدات والتجهيزات",
+    equipmentCategoryDesc: "معدات / آلات (جرار، مضخة، مقطورة...)",
     step1Title: "شنو بغيتي تبيع؟",
-    produceCategory: "منتوجات فلاحية",
-    equipmentCategory: "آليات ومعدات",
-    step2Title: "ضيف صور",
+                step2Title: "ضيف صور",
     photoLimit: "بحد أقصى 5 صور",
     uploadPlaceholder: "اضغط هنا باش تختار الصور",
     listingTitleLabel: "عنوان الإعلان",
@@ -367,6 +370,14 @@ const ary: Translations = {
     minLength: "المودباس خاص يكون فيه على الأقل 6 د الحروف",
     currentRequired: "دخل المودباس القديم الأول",
   },
+  editProfile: {
+    title: "تعديل البروفايل",
+    fullName: "السمية الكاملة",
+    phone: "نمرة التليفون",
+    phoneLocked: "نمرة التليفون ما يمكنش تبدلها.",
+    submit: "حفظ التغييرات",
+    success: "تحدث البروفايل بنجاح!",
+  }
 }
 
 export default ary

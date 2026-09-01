@@ -121,11 +121,14 @@ const ar: Translations = {
     sortBy: "ترتيب",
   },
   addListing: {
+    atLeastOnePhoto: "يرجى إضافة صورة واحدة على الأقل للإعلان",
     title: "إضافة إعلان جديد",
+    produceCategory: "المنتجات الفلاحية",
+    produceCategoryDesc: "منتج فلاحي (فواكه، خضر، بذور...)",
+    equipmentCategory: "المعدات والتجهيزات",
+    equipmentCategoryDesc: "معدات / آلات (جرار، مضخة، مقطورة...)",
     step1Title: "ماذا تريد أن تبيع؟",
-    produceCategory: "منتجات فلاحية",
-    equipmentCategory: "آليات ومعدات",
-    step2Title: "إضافة صور",
+                    step2Title: "إضافة صور",
     photoLimit: "5 صور كحد أقصى",
     uploadPlaceholder: "اضغط هنا لاختيار الصور",
     listingTitleLabel: "عنوان الإعلان",
@@ -363,6 +366,14 @@ const ar: Translations = {
     mismatch: "كلمات السر غير متطابقة",
     minLength: "يجب أن تتكون كلمة السر من 6 أحرف على الأقل",
     currentRequired: "يرجى إدخال كلمة السر الحالية",
+  },
+  editProfile: {
+    title: "تعديل الملف الشخصي",
+    fullName: "الاسم الكامل",
+    phone: "رقم الهاتف",
+    phoneLocked: "رقم الهاتف لا يمكن تغييره.",
+    submit: "حفظ التغييرات",
+    success: "تم تحديث الملف الشخصي بنجاح!",
   },
 }
 

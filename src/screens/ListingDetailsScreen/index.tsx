@@ -34,6 +34,7 @@ import { useAppTheme } from "@/theme/context"
 import { $styles } from "./styles"
 import { useSafeAreaInsetsStyle } from "@/utils/useSafeAreaInsetsStyle"
 import { formatFullAddress } from "@/utils/formatAddress"
+import { formatListingDate } from "@/utils/formatDate"
 import { s, vs } from "@/utils/scaling"
 
 interface ListingDetailsScreenProps extends AppStackScreenProps<"ListingDetails"> {}
@@ -341,17 +342,8 @@ export const ListingDetailsScreen: FC<ListingDetailsScreenProps> = memo(
                   <>
                     <Text
                       text={(() => {
-                        const unitName =
-                          listing.listingType !== "EQUIPMENT"
-                            ? typeof listing.unitId === "object"
-                              ? listing.unitId?.name
-                              : listing.unit || ""
-                            : ""
-                        const unitDisplay = unitName
-                          ? listing.quantity && listing.quantity > 1
-                            ? ` / ${listing.quantity} (${unitName})`
-                            : ` / ${unitName}`
-                          : ""
+                        const unitName = typeof listing.unitId === "object" ? (listing.unitId?.darijaName || listing.unitId?.name) : (listing.unit || listing.unitId || "")
+                        const unitDisplay = unitName ? ` / ${unitName}` : ""
                         return `${listing.price} ${translate("common:currency")}${unitDisplay}`
                       })()}
                       preset="display"
@@ -411,6 +403,21 @@ export const ListingDetailsScreen: FC<ListingDetailsScreenProps> = memo(
                   size="xs"
                   style={styles.locationText}
                 />
+                {Boolean(listing.createdAt) && (
+                  <View style={{ flexDirection: "row", alignItems: "center", marginLeft: s(10) }}>
+                    <Ionicons
+                      name="time-outline"
+                      size={s(14)}
+                      color={colors.palette.onSurfaceVariant}
+                      style={{ marginRight: s(3) }}
+                    />
+                    <Text
+                      text={formatListingDate(listing.createdAt)}
+                      size="xs"
+                      style={styles.locationText}
+                    />
+                  </View>
+                )}
               </View>
             </View>
 
@@ -449,72 +456,91 @@ export const ListingDetailsScreen: FC<ListingDetailsScreenProps> = memo(
             </View>
 
             {/* Specs Bento Grid */}
-            {listing.listingType === "EQUIPMENT" ? (
-              <View style={styles.specsGrid}>
-                <View style={styles.specBox}>
-                  <Ionicons name="calendar-outline" size={s(20)} color={colors.palette.primary} />
-                  <Text tx="listingDetails:specs.model" size="xxs" style={styles.locationText} />
-                  <Text
-                    text={listing.modelYear || translate("common:notSpecified")}
-                    preset="bold"
-                    size="xs"
-                  />
-                </View>
-                <View style={styles.specBox}>
-                  <Ionicons name="time-outline" size={s(20)} color={colors.palette.primary} />
-                  <Text tx="listingDetails:specs.hours" size="xxs" style={styles.locationText} />
-                  <Text
-                    text={
-                      listing.hours
-                        ? isNaN(Number(listing.hours))
-                          ? String(listing.hours)
-                          : `${listing.hours} ${translate("common:hoursUnit")}`
-                        : translate("common:notSpecified")
-                    }
-                    preset="bold"
-                    size="xs"
-                  />
-                </View>
-                {listing.condition && (
+            {(() => {
+              const cat = typeof listing?.categoryId === "object" ? listing.categoryId : {}
+              const slug = (cat?.slug || "").toLowerCase()
+              const name = (cat?.name || "").toLowerCase()
+              const isEquipCat =
+                slug.includes("معدات") ||
+                slug.includes("equip") ||
+                slug.includes("mach") ||
+                slug.includes("tracteur") ||
+                slug.includes("جرار") ||
+                name.includes("معدات") ||
+                name.includes("equip") ||
+                name.includes("mach") ||
+                name.includes("جرارات") ||
+                name.includes("جرار") ||
+                name.includes("آلات")
+
+              if (isEquipCat) {
+                if (!listing.modelYear && !listing.hours && !listing.condition) return null
+                return (
+                  <View style={styles.specsGrid}>
+                    {!!listing.modelYear && (
+                      <View style={styles.specBox}>
+                        <Ionicons name="calendar-outline" size={s(20)} color={colors.palette.primary} />
+                        <Text tx="listingDetails:specs.model" size="xxs" style={styles.locationText} />
+                        <Text text={String(listing.modelYear)} preset="bold" size="xs" />
+                      </View>
+                    )}
+                    {!!listing.hours && (
+                      <View style={styles.specBox}>
+                        <Ionicons name="time-outline" size={s(20)} color={colors.palette.primary} />
+                        <Text tx="listingDetails:specs.hours" size="xxs" style={styles.locationText} />
+                        <Text
+                          text={
+                            isNaN(Number(listing.hours))
+                              ? String(listing.hours)
+                              : `${listing.hours} ${translate("common:hoursUnit")}`
+                          }
+                          preset="bold"
+                          size="xs"
+                        />
+                      </View>
+                    )}
+                    {!!listing.condition && (
+                      <View style={styles.specBox}>
+                        <Ionicons
+                          name="shield-checkmark-outline"
+                          size={s(20)}
+                          color={colors.palette.primary}
+                        />
+                        <Text tx="addListing:conditionLabel" size="xxs" style={styles.locationText} />
+                        <Text
+                          text={
+                            listing.condition === "NEW"
+                              ? translate("addListing:conditionNew")
+                              : translate("addListing:conditionUsed")
+                          }
+                          preset="bold"
+                          size="xs"
+                        />
+                      </View>
+                    )}
+                  </View>
+                )
+              }
+
+              const uName =
+                typeof listing?.unitId === "object"
+                  ? (listing.unitId?.darijaName || listing.unitId?.name)
+                  : (listing?.unit || "")
+              if (!listing?.quantity && !uName) return null
+              return (
+                <View style={styles.specsGrid}>
                   <View style={styles.specBox}>
-                    <Ionicons
-                      name="shield-checkmark-outline"
-                      size={s(20)}
-                      color={colors.palette.primary}
-                    />
-                    <Text tx="addListing:conditionLabel" size="xxs" style={styles.locationText} />
+                    <Ionicons name="cube-outline" size={s(20)} color={colors.palette.primary} />
+                    <Text tx="addListing:quantityLabel" size="xxs" style={styles.locationText} />
                     <Text
-                      text={
-                        listing.condition === "NEW"
-                          ? translate("addListing:conditionNew")
-                          : translate("addListing:conditionUsed")
-                      }
+                      text={listing?.quantity ? `${listing.quantity} ${uName}`.trim() : uName}
                       preset="bold"
                       size="xs"
                     />
                   </View>
-                )}
-              </View>
-            ) : (
-              (() => {
-                const uName =
-                  typeof listing.unitId === "object" ? listing.unitId?.name : listing.unit || ""
-                if (!listing.quantity && !uName) return null
-                return (
-                  <View style={styles.specsGrid}>
-                    <View style={styles.specBox}>
-                      <Ionicons name="cube-outline" size={s(20)} color={colors.palette.primary} />
-                      <Text tx="addListing:quantityLabel" size="xxs" style={styles.locationText} />
-                      <Text
-                        text={listing.quantity ? `${listing.quantity} (${uName})`.trim() : uName}
-                        preset="bold"
-                        size="xs"
-                      />
-                    </View>
-                  </View>
-                )
-              })()
-            )}
+                </View>
+              )
+            })()}
 
             {/* Description Section */}
             <View style={styles.descSection}>

@@ -4,6 +4,7 @@ import { Ionicons } from "@expo/vector-icons"
 import { useFocusEffect } from "@react-navigation/native"
 
 import { ChangePasswordModal } from "@/components/ChangePasswordModal"
+import { EditProfileModal } from "@/components/EditProfileModal"
 import { DeleteAccountModal } from "@/components/DeleteAccountModal"
 import { GuestPlaceholder } from "@/components/GuestPlaceholder"
 import { Screen } from "@/components/Screen"
@@ -35,6 +36,7 @@ export const MyListingsScreen: FC<MyListingsScreenProps> = memo(function MyListi
 
   const [activeTab, setActiveTab] = useState<"active" | "paused" | "sold" | "rejected">("active")
   const [isChangePasswordVisible, setIsChangePasswordVisible] = useState(false)
+  const [isEditProfileVisible, setIsEditProfileVisible] = useState(false)
   const [isDeleteAccountVisible, setIsDeleteAccountVisible] = useState(false)
 
   // Query database listings belonging to this seller matching the selected tab status
@@ -171,6 +173,10 @@ export const MyListingsScreen: FC<MyListingsScreenProps> = memo(function MyListi
             <Ionicons name="log-out-outline" size={vs(26)} color={colors.palette.error} />
           </TouchableOpacity>
 
+          <TouchableOpacity onPress={() => setIsEditProfileVisible(true)}>
+            <Ionicons name="create-outline" size={vs(26)} color={colors.palette.primary} />
+          </TouchableOpacity>
+
           <TouchableOpacity onPress={() => setIsChangePasswordVisible(true)}>
             <Ionicons name="key-outline" size={vs(26)} color={colors.palette.primary} />
           </TouchableOpacity>
@@ -210,6 +216,11 @@ export const MyListingsScreen: FC<MyListingsScreenProps> = memo(function MyListi
       )}
 
       {/* Change Password Modal */}
+      <EditProfileModal
+        visible={isEditProfileVisible}
+        onClose={() => setIsEditProfileVisible(false)}
+      />
+
       <ChangePasswordModal
         visible={isChangePasswordVisible}
         onClose={() => setIsChangePasswordVisible(false)}

@@ -16,17 +16,18 @@ export const SearchListingItem = memo(function SearchListingItem({
     <ListingCard
       id={item?._id}
       title={item.title}
+      categoryName={typeof item.categoryId === "object" ? item.categoryId?.name : undefined}
+      productTypeName={typeof item.productTypeId === "object" ? item.productTypeId?.name : undefined}
       price={item.price}
       priceType={item.priceType}
       purpose={item.purpose}
       listingDirection={item.listingDirection}
+      listingType={item.listingType}
       quantity={item.quantity}
       unit={
-        item.listingType !== "EQUIPMENT"
-          ? typeof item.unitId === "object"
-            ? item.unitId?.name
-            : item.unit || undefined
-          : undefined
+        typeof item.unitId === "object"
+          ? (item.unitId?.darijaName || item.unitId?.name)
+          : (item.unit || item.unitId || undefined)
       }
       locationName={formatFullAddress(item.location)}
       imageUri={typeof item.images[0] === "object" ? item.images[0]?.url : item.images[0]}

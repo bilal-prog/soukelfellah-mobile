@@ -134,3 +134,32 @@ export const requestDeleteAccount = async (phone: string, reason?: string) => {
   }
   return { kind: "ok", data: response.data } as const
 }
+
+
+export interface UpdateProfileParams {
+  firstName?: string
+  lastName?: string
+  whatsappNumber?: string
+  location?: {
+    address?: string
+    region?: string
+    province?: string
+    commune?: string
+    coordinates?: {
+      type: string
+      coordinates: [number, number]
+    }
+  }
+}
+
+export const updateProfile = async (params: UpdateProfileParams) => {
+  const response = await apiClient.put<{ success: boolean; message: string; data: ApiUser }>(
+    "/api/users/profile",
+    params,
+  )
+  if (!response.ok) {
+    const errorData = response.data as any
+    return { kind: "failure", error: errorData?.message || response.problem } as const
+  }
+  return { kind: "ok", data: response.data!.data } as const
+}

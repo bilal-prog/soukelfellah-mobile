@@ -25,10 +25,13 @@ import { Text } from "./Text"
 export interface ListingCardProps {
   id: string
   title: string
+  categoryName?: string
+  productTypeName?: string
   price?: number
   priceType?: "FIXED" | "NEGOTIABLE" | "CONTACT"
   purpose?: "SELL" | "RENT"
   listingDirection?: "SELL" | "BUY"
+  listingType?: "PRODUCT" | "EQUIPMENT"
   quantity?: number
   unit?: string
   locationName: string
@@ -46,11 +49,13 @@ export const ListingCard = memo(function ListingCard(props: ListingCardProps) {
   const {
     id,
     title,
+    categoryName,
+    productTypeName,
     price,
     priceType = "FIXED",
     purpose = "SELL",
     listingDirection = "SELL",
-    quantity,
+    listingType = "PRODUCT",
     unit,
     locationName,
     imageUri,
@@ -149,6 +154,30 @@ export const ListingCard = memo(function ListingCard(props: ListingCardProps) {
           />
         )}
 
+        {/* Category Overlay Pill Badge */}
+        <View
+          style={{
+            position: "absolute",
+            top: s(8),
+            left: s(8),
+            backgroundColor: listingType === "EQUIPMENT" ? "rgba(64, 46, 26, 0.9)" : "rgba(15, 82, 56, 0.9)",
+            paddingHorizontal: s(8),
+            paddingVertical: vs(4),
+            borderRadius: s(8),
+            zIndex: 10,
+          }}
+        >
+          <Text
+            text={
+              listingType === "EQUIPMENT"
+                ? `🚜 ${translate("addListing:equipmentCategory")}`
+                : `🌾 ${translate("addListing:produceCategory")}`
+            }
+            size="xxs"
+            style={{ color: "white", fontWeight: "bold" }}
+          />
+        </View>
+
         {/* Badges */}
         {isNew && (
           <View style={[$badge, { backgroundColor: colors.palette.error, right: spacing.xs }]}>
@@ -175,7 +204,21 @@ export const ListingCard = memo(function ListingCard(props: ListingCardProps) {
         {/* Favorite Icon */}
         <TouchableOpacity
           onPress={handleFavoritePress}
-          style={[$favButton, { backgroundColor: "rgba(255, 255, 255, 0.85)" }]}
+          style={[
+            $favButton,
+            {
+              position: "absolute",
+              top: s(8),
+              right: s(8),
+              backgroundColor: "rgba(255, 255, 255, 0.9)",
+              elevation: 4,
+              shadowColor: "#000",
+              shadowOffset: { width: 0, height: 1 },
+              shadowOpacity: 0.15,
+              shadowRadius: 2,
+              zIndex: 20,
+            },
+          ]}
         >
           <Ionicons
             name={favorited ? "heart" : "heart-outline"}
@@ -187,6 +230,17 @@ export const ListingCard = memo(function ListingCard(props: ListingCardProps) {
 
       {/* Info Content */}
       <View style={$infoContent}>
+        {(productTypeName || categoryName) && (
+          <Text
+            text={(productTypeName || categoryName)}
+            size="xxs"
+            style={{
+              color: colors.palette.tertiary,
+              fontWeight: "bold",
+              marginBottom: scale(2),
+            }}
+          />
+        )}
         <View
           style={[
             $row,
@@ -290,11 +344,7 @@ export const ListingCard = memo(function ListingCard(props: ListingCardProps) {
                   {price}{" "}
                   <Text
                     text={(() => {
-                      const unitStr = unit
-                        ? quantity && quantity > 1
-                          ? ` / ${quantity} (${unit})`
-                          : ` / ${unit}`
-                        : ""
+                      const unitStr = unit ? ` / ${unit}` : ""
                       return priceType === "NEGOTIABLE"
                         ? `${translate("common:currency")}${unitStr} (${translate("addListing:priceTypeNegotiable")})`
                         : `${translate("common:currency")}${unitStr}`

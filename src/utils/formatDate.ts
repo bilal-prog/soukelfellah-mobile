@@ -68,7 +68,7 @@ export const formatListingDate = (dateStr: string) => {
     } else if (date.getTime() >= yesterdayStart.getTime()) {
       return translate("common:yesterday")
     } else {
-      return formatDate(dateStr)
+      return formatDate(dateStr, "dd/MM/yyyy")
     }
   } catch {
     return dateStr

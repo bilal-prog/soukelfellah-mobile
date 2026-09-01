@@ -122,11 +122,14 @@ const fr: Translations = {
     sortBy: "Trier par",
   },
   addListing: {
+    atLeastOnePhoto: "Veuillez ajouter au moins une photo pour l'annonce",
     title: "Nouvelle Annonce",
-    step1Title: "Que voulez-vous vendre ?",
     produceCategory: "Produits Agricoles",
-    equipmentCategory: "Matériel & Équipement",
-    step2Title: "Ajouter des photos",
+    produceCategoryDesc: "Produit agricole (fruits, légumes, semences...)",
+    equipmentCategory: "Équipements et Matériels",
+    equipmentCategoryDesc: "Matériels / Équipements (tracteur, pompe, remorque...)",
+    step1Title: "Que voulez-vous vendre ?",
+                step2Title: "Ajouter des photos",
     photoLimit: "Maximum 5 photos",
     uploadPlaceholder: "Appuyez ici pour choisir les photos",
     listingTitleLabel: "Titre de l'annonce",
@@ -366,6 +369,14 @@ const fr: Translations = {
     mismatch: "Les mots de passe ne correspondent pas",
     minLength: "Le mot de passe doit comporter au moins 6 caractères",
     currentRequired: "Veuillez saisir votre mot de passe actuel",
+  },
+  editProfile: {
+    title: "Modifier le profil",
+    fullName: "Nom complet",
+    phone: "Numéro de téléphone",
+    phoneLocked: "Le numéro de téléphone ne peut pas être modifié.",
+    submit: "Enregistrer les modifications",
+    success: "Profil mis à jour avec succès !",
   },
 }
 

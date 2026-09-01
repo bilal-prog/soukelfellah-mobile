@@ -81,6 +81,13 @@ export const $styles = (theme: Theme) => ({
     borderColor: theme.colors.palette.outlineVariant,
   } as ViewStyle,
 
+  categoryDescText: {
+    textAlign: "center",
+    width: "100%",
+    color: theme.colors.palette.onSurfaceVariant,
+    marginTop: vs(4),
+  } as TextStyle,
+
   categoryText: {
     textAlign: "center",
     width: "100%",

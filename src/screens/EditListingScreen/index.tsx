@@ -198,54 +198,49 @@ export const EditListingScreen: FC<EditListingScreenProps> = memo(
       }
     }, [listing, dbCommunes])
 
-    const productCategories = useMemo(() => {
-      return (
-        categories?.filter((c) => {
-          const slug = c.slug?.toLowerCase() || ""
-          const name = c.name?.toLowerCase() || ""
-          const isEquip =
-            slug.includes("equip") ||
-            slug.includes("mach") ||
-            slug.includes("معدات") ||
-            name.includes("معدات") ||
-            name.includes("equip") ||
-            name.includes("mach")
-          return !isEquip
-        }) || []
-      )
-    }, [categories])
+  const isEquipCategory = useCallback((c: any) => {
+    if (!c) return false
+    const slug = (c.slug || "").toLowerCase()
+    const name = (c.name || "").toLowerCase()
+    return (
+      slug.includes("equip") ||
+      slug.includes("mach") ||
+      slug.includes("معدات") ||
+      slug.includes("أراض") ||
+      slug.includes("أراضي") ||
+      slug.includes("مزارع") ||
+      slug.includes("أسمدة") ||
+      slug.includes("land") ||
+      slug.includes("farm") ||
+      name.includes("معدات") ||
+      name.includes("أراض") ||
+      name.includes("أراضي") ||
+      name.includes("مزارع") ||
+      name.includes("مزرعة") ||
+      name.includes("ارض") ||
+      name.includes("أسمدة") ||
+      name.includes("equip") ||
+      name.includes("mach") ||
+      name.includes("تجهيزات")
+    )
+  }, [])
 
-    const filteredProductTypes = useMemo(() => {
-      if (selectedCat === "EQUIPMENT") {
-        const equipCat = categories?.find((c) => {
-          const slug = c.slug?.toLowerCase() || ""
-          const name = c.name?.toLowerCase() || ""
-          return (
-            slug.includes("equip") ||
-            slug.includes("mach") ||
-            slug.includes("معدات") ||
-            name.includes("معدات") ||
-            name.includes("equip") ||
-            name.includes("mach")
-          )
-        })
+  const availableCategories = useMemo(() => {
+    if (selectedCat === "EQUIPMENT") {
+      return categories?.filter((c) => isEquipCategory(c)) || []
+    }
+    return categories?.filter((c) => !isEquipCategory(c)) || []
+  }, [categories, selectedCat, isEquipCategory])
 
-        const targetCatId = selectedCategory?._id || equipCat?._id
+  const isEquipmentCategory = useMemo(() => {
+    if (!selectedCategory) return false
+    const slug = selectedCategory.slug?.toLowerCase() || ""
+    const name = selectedCategory.name?.toLowerCase() || ""
+    return slug.includes("معدات") || name.includes("معدات") || slug.includes("equip")
+  }, [selectedCategory])
 
-        if (!targetCatId) return productTypes || []
-
-        return (
-          productTypes?.filter((p) => {
-            const pCatId =
-              typeof p.categoryId === "object" && p.categoryId !== null
-                ? (p.categoryId as any)._id
-                : p.categoryId
-            return pCatId === targetCatId
-          }) || []
-        )
-      }
-
-      if (!selectedCategory) return []
+  const filteredProductTypes = useMemo(() => {
+    if (selectedCategory) {
       return (
         productTypes?.filter((p) => {
           const pCatId =
@@ -255,7 +250,25 @@ export const EditListingScreen: FC<EditListingScreenProps> = memo(
           return pCatId === selectedCategory?._id
         }) || []
       )
-    }, [productTypes, categories, selectedCategory, selectedCat])
+    }
+
+    if (selectedCat === "EQUIPMENT") {
+      const equipCatIds = categories
+        ?.filter((c) => isEquipCategory(c))
+        .map((c) => c._id)
+      return (
+        productTypes?.filter((p) => {
+          const pCatId =
+            typeof p.categoryId === "object" && p.categoryId !== null
+              ? (p.categoryId as any)._id
+              : p.categoryId
+          return equipCatIds?.includes(pCatId)
+        }) || []
+      )
+    }
+
+    return []
+  }, [productTypes, categories, selectedCategory, selectedCat, isEquipCategory])
 
     const mappedAllowedUnits = useMemo(() => {
       if (!selectedProductType) return []
@@ -605,9 +618,8 @@ export const EditListingScreen: FC<EditListingScreenProps> = memo(
 
               {/* General Fields Form */}
               <View style={styles.formGroup}>
-                {/* Category Selector (only for PRODUCT listings) */}
-                {selectedCat === "PRODUCT" && (
-                  <View style={styles.inputField}>
+                {/* Category Selector */}
+                <View style={styles.inputField}>
                     <Text tx="addListing:categoryRequired" size="xxs" style={styles.selectLabel} />
                     <TouchableOpacity
                       onPress={() => setIsCategoryModalVisible(true)}
@@ -637,7 +649,6 @@ export const EditListingScreen: FC<EditListingScreenProps> = memo(
                       />
                     ) : null}
                   </View>
-                )}
 
                 {/* Product Type Selector */}
                 <View style={styles.inputField}>
@@ -680,16 +691,15 @@ export const EditListingScreen: FC<EditListingScreenProps> = memo(
                   ) : null}
                 </View>
 
-                {/* Unit Selector (only for PRODUCT listings) */}
-                {selectedCat === "PRODUCT" && (
-                  <View style={styles.inputField}>
+                {/* Unit Selector */}
+                <View style={styles.inputField}>
                     <Text tx="addListing:unitRequired" size="xxs" style={styles.selectLabel} />
                     <TouchableOpacity
                       onPress={() => {
-                        if (!selectedProductType) {
+                        if (!selectedCategory) {
                           Alert.alert(
                             translate("addListing:missingInfoTitle"),
-                            translate("addListing:selectProductTypePlaceholder"),
+                            translate("addListing:selectCategoryPlaceholder"),
                           )
                           return
                         }
@@ -721,7 +731,6 @@ export const EditListingScreen: FC<EditListingScreenProps> = memo(
                       />
                     ) : null}
                   </View>
-                )}
 
                 <View style={styles.inputField}>
                   <Text
@@ -924,7 +933,7 @@ export const EditListingScreen: FC<EditListingScreenProps> = memo(
                   )}
                 </View>
 
-                {selectedCat === "EQUIPMENT" && (
+                {isEquipmentCategory && (
                   <>
                     <View style={[styles.quantityPriceRow, { marginTop: 12 }]}>
                       <View style={styles.inputWrapperHalf}>
@@ -945,43 +954,45 @@ export const EditListingScreen: FC<EditListingScreenProps> = memo(
                       </View>
                     </View>
 
-                    <View style={{ marginTop: 12 }}>
-                      <Text tx="addListing:conditionLabel" size="xxs" style={styles.selectLabel} />
-                      <View style={styles.segmentRow}>
-                        <TouchableOpacity
-                          style={[
-                            styles.segmentButton,
-                            condition === "NEW" && styles.segmentButtonActive,
-                          ]}
-                          onPress={() => setCondition("NEW")}
-                        >
-                          <Text
-                            tx="addListing:conditionNew"
-                            size="xs"
+                    {isEquipmentCategory && (
+                      <View style={{ marginTop: 12 }}>
+                        <Text tx="addListing:conditionLabel" size="xxs" style={styles.selectLabel} />
+                        <View style={styles.segmentRow}>
+                          <TouchableOpacity
                             style={[
-                              styles.segmentText,
-                              condition === "NEW" && styles.segmentTextActive,
+                              styles.segmentButton,
+                              condition === "NEW" && styles.segmentButtonActive,
                             ]}
-                          />
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                          style={[
-                            styles.segmentButton,
-                            condition === "USED" && styles.segmentButtonActive,
-                          ]}
-                          onPress={() => setCondition("USED")}
-                        >
-                          <Text
-                            tx="addListing:conditionUsed"
-                            size="xs"
+                            onPress={() => setCondition("NEW")}
+                          >
+                            <Text
+                              tx="addListing:conditionNew"
+                              size="xs"
+                              style={[
+                                styles.segmentText,
+                                condition === "NEW" && styles.segmentTextActive,
+                              ]}
+                            />
+                          </TouchableOpacity>
+                          <TouchableOpacity
                             style={[
-                              styles.segmentText,
-                              condition === "USED" && styles.segmentTextActive,
+                              styles.segmentButton,
+                              condition === "USED" && styles.segmentButtonActive,
                             ]}
-                          />
-                        </TouchableOpacity>
+                            onPress={() => setCondition("USED")}
+                          >
+                            <Text
+                              tx="addListing:conditionUsed"
+                              size="xs"
+                              style={[
+                                styles.segmentText,
+                                condition === "USED" && styles.segmentTextActive,
+                              ]}
+                            />
+                          </TouchableOpacity>
+                        </View>
                       </View>
-                    </View>
+                    )}
                   </>
                 )}
 
@@ -1097,7 +1108,7 @@ export const EditListingScreen: FC<EditListingScreenProps> = memo(
                   preset="primary"
                   style={styles.submitBtn}
                   onPress={handlePublish}
-                  disabled={isLoading}
+                  disabled={isLoading || !selectedRegion || !selectedProvince || !address || !address.trim() || imageItems.length === 0}
                 >
                   {isLoading ? (
                     <ActivityIndicator color="white" />
@@ -1261,7 +1272,7 @@ export const EditListingScreen: FC<EditListingScreenProps> = memo(
                 </TouchableOpacity>
               </View>
               <FlatList
-                data={productCategories}
+                data={availableCategories}
                 keyExtractor={(item: any) => item?._id}
                 renderItem={({ item }: any) => (
                   <TouchableOpacity

@@ -8,10 +8,10 @@ export const formatFullAddress = (location: any): string => {
   if (!location) return ""
 
   const parts: string[] = []
-  if (location.address) parts.push(location.address.trim())
-  if (location.commune) parts.push(location.commune.trim())
-  if (location.province) parts.push(location.province.trim())
   if (location.region) parts.push(location.region.trim())
+  if (location.province) parts.push(location.province.trim())
+  if (location.commune) parts.push(location.commune.trim())
+  if (location.address) parts.push(location.address.trim())
 
   // De-duplicate segments to avoid repetitive layouts (e.g. "Sidi Bennour, Sidi Bennour")
   const uniqueParts: string[] = []

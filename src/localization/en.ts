@@ -119,11 +119,14 @@ const en = {
     sortBy: "Sort By",
   },
   addListing: {
+    atLeastOnePhoto: "Please add at least one photo for the listing",
     title: "Add New Listing",
-    step1Title: "What do you want to sell?",
     produceCategory: "Agricultural Products",
-    equipmentCategory: "Machinery & Equipment",
-    step2Title: "Add Photos",
+    produceCategoryDesc: "Agricultural product (fruits, vegetables, seeds...)",
+    equipmentCategory: "Equipment & Machinery",
+    equipmentCategoryDesc: "Equipment / Machinery (tractor, pump, trailer...)",
+    step1Title: "What do you want to sell?",
+                step2Title: "Add Photos",
     photoLimit: "Maximum 5 photos",
     uploadPlaceholder: "Tap here to choose photos",
     listingTitleLabel: "Listing Title",
@@ -362,6 +365,14 @@ const en = {
     mismatch: "New passwords do not match",
     minLength: "New password must be at least 6 characters",
     currentRequired: "Please enter your current password",
+  },
+  editProfile: {
+    title: "Edit Profile",
+    fullName: "Full Name",
+    phone: "Phone Number",
+    phoneLocked: "Phone number cannot be modified.",
+    submit: "Save Changes",
+    success: "Profile updated successfully!",
   },
 }
 

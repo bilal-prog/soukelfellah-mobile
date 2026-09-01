@@ -152,74 +152,90 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
     }
   }, [userLocation?.commune, dbCommunes, selectedCommune])
 
-  const productCategories = useMemo(() => {
+  const isEquipCategory = useCallback((c: any) => {
+    if (!c) return false
+    const slug = (c.slug || "").toLowerCase()
+    const name = (c.name || "").toLowerCase()
     return (
-      categories?.filter((c) => {
-        const slug = c.slug?.toLowerCase() || ""
-        const name = c.name?.toLowerCase() || ""
-        const isEquip =
-          slug.includes("equip") ||
-          slug.includes("mach") ||
-          slug.includes("معدات") ||
-          name.includes("معدات") ||
-          name.includes("equip") ||
-          name.includes("mach")
-        return !isEquip
-      }) || []
+      slug.includes("equip") ||
+      slug.includes("mach") ||
+      slug.includes("معدات") ||
+      slug.includes("أراض") ||
+      slug.includes("أراضي") ||
+      slug.includes("مزارع") ||
+      slug.includes("أسمدة") ||
+      slug.includes("land") ||
+      slug.includes("farm") ||
+      name.includes("معدات") ||
+      name.includes("أراض") ||
+      name.includes("أراضي") ||
+      name.includes("مزارع") ||
+      name.includes("مزرعة") ||
+      name.includes("ارض") ||
+      name.includes("أسمدة") ||
+      name.includes("equip") ||
+      name.includes("mach") ||
+      name.includes("تجهيزات")
     )
-  }, [categories])
+  }, [])
+
+  const availableCategories = useMemo(() => {
+    if (selectedCat === "EQUIPMENT") {
+      return categories?.filter((c) => isEquipCategory(c)) || []
+    }
+    return categories?.filter((c) => !isEquipCategory(c)) || []
+  }, [categories, selectedCat, isEquipCategory])
+
+  const isEquipmentCategory = useMemo(() => {
+    if (!selectedCategory) return false
+    const slug = selectedCategory.slug?.toLowerCase() || ""
+    const name = selectedCategory.name?.toLowerCase() || ""
+    return slug.includes("معدات") || name.includes("معدات") || slug.includes("equip")
+  }, [selectedCategory])
 
   const filteredProductTypes = useMemo(() => {
-    if (selectedCat === "EQUIPMENT") {
-      const equipCat = categories?.find((c) => {
-        const slug = c.slug?.toLowerCase() || ""
-        const name = c.name?.toLowerCase() || ""
-        return (
-          slug.includes("equip") ||
-          slug.includes("mach") ||
-          slug.includes("معدات") ||
-          name.includes("معدات") ||
-          name.includes("equip") ||
-          name.includes("mach")
-        )
-      })
-
-      const targetCatId = selectedCategory?._id || equipCat?._id
-
-      if (!targetCatId) return productTypes || []
-
+    if (selectedCategory) {
       return (
         productTypes?.filter((p) => {
           const pCatId =
             typeof p.categoryId === "object" && p.categoryId !== null
               ? (p.categoryId as any)._id
               : p.categoryId
-          return pCatId === targetCatId
+          return pCatId === selectedCategory?._id
         }) || []
       )
     }
 
-    if (!selectedCategory) return []
-    return (
-      productTypes?.filter((p) => {
-        const pCatId =
-          typeof p.categoryId === "object" && p.categoryId !== null
-            ? (p.categoryId as any)._id
-            : p.categoryId
-        return pCatId === selectedCategory?._id
-      }) || []
-    )
-  }, [productTypes, categories, selectedCategory, selectedCat])
+    if (selectedCat === "EQUIPMENT") {
+      const equipCatIds = categories
+        ?.filter((c) => isEquipCategory(c))
+        .map((c) => c._id)
+      return (
+        productTypes?.filter((p) => {
+          const pCatId =
+            typeof p.categoryId === "object" && p.categoryId !== null
+              ? (p.categoryId as any)._id
+              : p.categoryId
+          return equipCatIds?.includes(pCatId)
+        }) || []
+      )
+    }
+
+    return []
+  }, [productTypes, categories, selectedCategory, selectedCat, isEquipCategory])
 
   const mappedAllowedUnits = useMemo(() => {
-    if (!selectedProductType) return []
+    if (!selectedProductType || !selectedProductType.allowedUnits || selectedProductType.allowedUnits.length === 0) {
+      return units || []
+    }
     const allowed = selectedProductType.allowedUnits || []
-    return allowed
+    const filtered = allowed
       .map((u: any) => {
         if (typeof u === "object" && u !== null) return u
         return units?.find((unitItem: any) => unitItem._id === u)
       })
       .filter(Boolean)
+    return filtered.length > 0 ? filtered : units || []
   }, [selectedProductType, units])
 
   const handleGoBack = useCallback(() => {
@@ -232,40 +248,14 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
 
   const selectCategory = (type: "PRODUCT" | "EQUIPMENT") => {
     setSelectedCat(type)
+    setSelectedCategory(null)
+    setSelectedProductType(null)
+    setSelectedUnit(null)
     if (type === "EQUIPMENT") {
       setCondition("USED")
-      // Auto-resolve Category and Unit for Equipment
-      const equipCat = categories?.find((c) => {
-        const slug = c.slug?.toLowerCase() || ""
-        const name = c.name?.toLowerCase() || ""
-        return (
-          slug.includes("equip") ||
-          slug.includes("mach") ||
-          slug.includes("معدات") ||
-          name.includes("معدات") ||
-          name.includes("equip") ||
-          name.includes("mach")
-        )
-      })
-      if (equipCat) {
-        setSelectedCategory(equipCat)
-      }
-      const pieceUnit = units?.find(
-        (u) =>
-          u.name.toLowerCase().includes("piece") ||
-          u.name.toLowerCase().includes("حبة") ||
-          u.name.toLowerCase().includes("راس"),
-      )
-      if (pieceUnit) {
-        setSelectedUnit(pieceUnit)
-      }
-      setSelectedProductType(null) // Let the user select the equipment type (Tractor, Pump, Plow)
     } else {
       setCondition(undefined)
       setPurpose("SELL")
-      setSelectedCategory(null)
-      setSelectedProductType(null)
-      setSelectedUnit(null)
     }
     setCategoryError("")
     setProductTypeError("")
@@ -547,6 +537,11 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
                   preset="bold"
                   style={styles.categoryText}
                 />
+                <Text
+                  tx="addListing:produceCategoryDesc"
+                  size="xxs"
+                  style={styles.categoryDescText}
+                />
               </TouchableOpacity>
 
               {/* Machinery/Equipment button */}
@@ -566,6 +561,11 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
                   size="xs"
                   preset="bold"
                   style={styles.categoryText}
+                />
+                <Text
+                  tx="addListing:equipmentCategoryDesc"
+                  size="xxs"
+                  style={styles.categoryDescText}
                 />
               </TouchableOpacity>
             </View>
@@ -595,9 +595,8 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
 
             {/* General Fields Form */}
             <View style={styles.formGroup}>
-              {/* Category Selector (only for PRODUCT listings) */}
-              {selectedCat === "PRODUCT" && (
-                <View style={styles.inputField}>
+              {/* Category Selector */}
+              <View style={styles.inputField}>
                   <Text tx="addListing:categoryRequired" size="xxs" style={styles.selectLabel} />
                   <TouchableOpacity
                     onPress={() => setIsCategoryModalVisible(true)}
@@ -627,7 +626,6 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
                     />
                   ) : null}
                 </View>
-              )}
 
               {/* Product Type Selector */}
               <View style={styles.inputField}>
@@ -670,16 +668,15 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
                 ) : null}
               </View>
 
-              {/* Unit Selector (only for PRODUCT listings) */}
-              {selectedCat === "PRODUCT" && (
-                <View style={styles.inputField}>
+              {/* Unit Selector */}
+              <View style={styles.inputField}>
                   <Text tx="addListing:unitRequired" size="xxs" style={styles.selectLabel} />
                   <TouchableOpacity
                     onPress={() => {
-                      if (!selectedProductType) {
+                      if (!selectedCategory) {
                         Alert.alert(
                           translate("addListing:missingInfoTitle"),
-                          translate("addListing:selectProductTypePlaceholder"),
+                          translate("addListing:selectCategoryPlaceholder"),
                         )
                         return
                       }
@@ -711,7 +708,6 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
                     />
                   ) : null}
                 </View>
-              )}
 
               <View style={styles.inputField}>
                 <Text tx="addListing:listingDirectionLabel" size="xxs" style={styles.selectLabel} />
@@ -900,7 +896,7 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
                 )}
               </View>
 
-              {selectedCat === "EQUIPMENT" && (
+              {isEquipmentCategory && (
                 <>
                   <View style={[styles.quantityPriceRow, { marginTop: 12 }]}>
                     <View style={styles.inputWrapperHalf}>
@@ -921,7 +917,8 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
                     </View>
                   </View>
 
-                  <View style={{ marginTop: 12 }}>
+                  {isEquipmentCategory && (
+                    <View style={{ marginTop: 12 }}>
                     <Text tx="addListing:conditionLabel" size="xxs" style={styles.selectLabel} />
                     <View style={styles.segmentRow}>
                       <TouchableOpacity
@@ -958,6 +955,7 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
                       </TouchableOpacity>
                     </View>
                   </View>
+                  )}
                 </>
               )}
 
@@ -1073,7 +1071,7 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
                 preset="primary"
                 style={styles.submitBtn}
                 onPress={handlePublish}
-                disabled={isLoading}
+                disabled={isLoading || !selectedRegion || !selectedProvince || !address || !address.trim() || imageItems.length === 0}
               >
                 {isLoading ? (
                   <ActivityIndicator color="white" />
@@ -1237,7 +1235,7 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
               </TouchableOpacity>
             </View>
             <FlatList
-              data={productCategories}
+              data={availableCategories}
               keyExtractor={(item: any) => item?._id}
               renderItem={({ item }: any) => (
                 <TouchableOpacity
