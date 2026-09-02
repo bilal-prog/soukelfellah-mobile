@@ -67,13 +67,31 @@ const AppStack = () => {
 
 
 
+
+const linking = {
+  prefixes: ["soukelfellah://", "https://soukelfellah.ma"],
+  config: {
+    screens: {
+      ListingDetails: "annonce/:listingId",
+      MainTabs: {
+        screens: {
+          Home: "",
+          Listings: "annonces",
+          Favorites: "favoris",
+          Profile: "mon-compte",
+        },
+      },
+    },
+  },
+}
+
 export const AppNavigator = (props: NavigationProps) => {
   const { navigationTheme } = useAppTheme()
 
   useBackButtonHandler((routeName) => ["Welcome", "MainTabs"].includes(routeName))
 
   return (
-    <NavigationContainer ref={navigationRef} theme={navigationTheme} {...props}>
+    <NavigationContainer ref={navigationRef} theme={navigationTheme} linking={linking} {...props}>
       <AppStack />
     </NavigationContainer>
   )
