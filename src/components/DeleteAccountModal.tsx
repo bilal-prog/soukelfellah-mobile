@@ -19,6 +19,8 @@ import { requestDeleteAccount } from "@/services/api/modules/auth"
 import { useAppTheme } from "@/theme/context"
 import { s, vs } from "@/utils/scaling"
 
+import { useSafeAreaInsetsStyle } from "@/utils/useSafeAreaInsetsStyle"
+
 interface DeleteAccountModalProps {
   visible: boolean
   onClose: () => void
@@ -26,13 +28,13 @@ interface DeleteAccountModalProps {
   onSuccessLogout: () => Promise<void> | void
 }
 
-const PRESET_REASONS = [
-  "J'ai déjà vendu mes produits sur la plateforme",
-  "Problème technique / Difficulté d'utilisation",
-  "Trop d'appels / de messages non désirés",
-  "Je n'utilise plus l'application",
-  "Autre raison",
-]
+const PRESET_REASON_KEYS = [
+  "deleteAccountModal:reason1",
+  "deleteAccountModal:reason2",
+  "deleteAccountModal:reason3",
+  "deleteAccountModal:reason4",
+  "deleteAccountModal:reasonOther",
+] as const
 
 export const DeleteAccountModal: FC<DeleteAccountModalProps> = memo(function DeleteAccountModal({
   visible,
@@ -42,14 +44,15 @@ export const DeleteAccountModal: FC<DeleteAccountModalProps> = memo(function Del
 }) {
   const { theme } = useAppTheme()
   const colors = theme.colors
+  const $bottomContainerInsets = useSafeAreaInsetsStyle(["bottom"])
 
-  const [selectedReason, setSelectedReason] = useState<string>(PRESET_REASONS[0])
+  const [selectedReasonKey, setSelectedReasonKey] = useState<string>(PRESET_REASON_KEYS[0])
   const [customReason, setCustomReason] = useState("")
   const [errorMsg, setErrorMsg] = useState("")
   const [isLoading, setIsLoading] = useState(false)
 
   const resetForm = useCallback(() => {
-    setSelectedReason(PRESET_REASONS[0])
+    setSelectedReasonKey(PRESET_REASON_KEYS[0])
     setCustomReason("")
     setErrorMsg("")
     setIsLoading(false)
@@ -64,10 +67,12 @@ export const DeleteAccountModal: FC<DeleteAccountModalProps> = memo(function Del
     setErrorMsg("")
     setIsLoading(true)
 
-    const finalReason =
-      selectedReason === "Autre raison"
-        ? customReason.trim() || "Autre raison"
-        : selectedReason + (customReason.trim() ? ` (${customReason.trim()})` : "")
+    const translatedReason = translate(selectedReasonKey as any)
+    const isOther = selectedReasonKey === "deleteAccountModal:reasonOther"
+
+    const finalReason = isOther
+      ? customReason.trim() || translatedReason
+      : translatedReason + (customReason.trim() ? ` (${customReason.trim()})` : "")
 
     try {
       const res = await requestDeleteAccount(userPhone, finalReason)
@@ -76,10 +81,10 @@ export const DeleteAccountModal: FC<DeleteAccountModalProps> = memo(function Del
       if (res.kind === "ok") {
         Alert.alert(
           translate("addListing:successTitle"),
-          "Votre demande de suppression a bien été transmise à notre équipe. Elle sera traitée sous 48h.",
+          translate("deleteAccountModal:successMsg"),
           [
             {
-              text: "OK",
+              text: translate("common:ok"),
               onPress: async () => {
                 handleClose()
                 await onSuccessLogout()
@@ -94,7 +99,7 @@ export const DeleteAccountModal: FC<DeleteAccountModalProps> = memo(function Del
       setIsLoading(false)
       setErrorMsg(err.message || translate("common:error"))
     }
-  }, [userPhone, selectedReason, customReason, handleClose, onSuccessLogout])
+  }, [userPhone, selectedReasonKey, customReason, handleClose, onSuccessLogout])
 
   if (!visible) return null
 
@@ -114,7 +119,7 @@ export const DeleteAccountModal: FC<DeleteAccountModalProps> = memo(function Del
           onPress={handleClose}
         />
 
-        <View style={[styles.card, { backgroundColor: colors.background }]}>
+        <View style={[styles.card, { backgroundColor: colors.background }, $bottomContainerInsets]}>
           {/* Top Close Button */}
           <TouchableOpacity onPress={handleClose} style={styles.closeBtn}>
             <Ionicons name="close" size={s(22)} color={colors.palette.onSurfaceVariant} />
@@ -135,30 +140,30 @@ export const DeleteAccountModal: FC<DeleteAccountModalProps> = memo(function Del
             </View>
 
             {/* Title */}
-            <Text text="Demande de Suppression" preset="bold" size="lg" style={styles.title} />
+            <Text tx="deleteAccountModal:title" preset="bold" size="lg" style={styles.title} />
 
             <Text
-              text="Expliquez-nous la raison de votre départ afin d'améliorer la plateforme."
+              tx="deleteAccountModal:subtitle"
               size="xs"
               style={[styles.subtitle, { color: colors.palette.onSurfaceVariant }]}
             />
 
             {/* Form Content */}
             <View style={styles.form}>
-              <Text text="Sélectionnez un motif :" preset="bold" size="xs" style={styles.label} />
+              <Text tx="deleteAccountModal:selectReasonLabel" preset="bold" size="xs" style={styles.label} />
 
               <View style={styles.reasonsList}>
-                {PRESET_REASONS.map((item) => {
-                  const isSelected = selectedReason === item
+                {PRESET_REASON_KEYS.map((key) => {
+                  const isSelected = selectedReasonKey === key
                   return (
                     <TouchableOpacity
-                      key={item}
+                      key={key}
                       style={[
                         styles.reasonChip,
                         { borderColor: isSelected ? colors.palette.primary : "rgba(0,0,0,0.12)" },
                         isSelected && { backgroundColor: colors.palette.primary + "12" },
                       ]}
-                      onPress={() => setSelectedReason(item)}
+                      onPress={() => setSelectedReasonKey(key)}
                     >
                       <Ionicons
                         name={isSelected ? "radio-button-on" : "radio-button-off"}
@@ -166,7 +171,7 @@ export const DeleteAccountModal: FC<DeleteAccountModalProps> = memo(function Del
                         color={isSelected ? colors.palette.primary : colors.palette.onSurfaceVariant}
                       />
                       <Text
-                        text={item}
+                        tx={key as any}
                         size="xs"
                         style={[
                           styles.reasonText,
@@ -180,7 +185,7 @@ export const DeleteAccountModal: FC<DeleteAccountModalProps> = memo(function Del
 
               {/* Custom comment input */}
               <View style={styles.commentContainer}>
-                <Text text="Remarques ou détails (optionnel) :" size="xs" style={styles.label} />
+                <Text tx="deleteAccountModal:commentLabel" size="xs" style={styles.label} />
                 <TextInput
                   style={[
                     styles.textArea,
@@ -192,7 +197,7 @@ export const DeleteAccountModal: FC<DeleteAccountModalProps> = memo(function Del
                   ]}
                   multiline
                   numberOfLines={3}
-                  placeholder="Partagez vos remarques..."
+                  placeholder={translate("deleteAccountModal:commentPlaceholder")}
                   placeholderTextColor={colors.palette.onSurfaceVariant}
                   value={customReason}
                   onChangeText={setCustomReason}
@@ -221,7 +226,7 @@ export const DeleteAccountModal: FC<DeleteAccountModalProps> = memo(function Del
                   <ActivityIndicator color="white" size="small" />
                 ) : (
                   <Text
-                    text="Confirmer la demande"
+                    tx="deleteAccountModal:submitBtn"
                     style={styles.submitBtnText}
                     size="md"
                     preset="bold"

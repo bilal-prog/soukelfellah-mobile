@@ -116,6 +116,19 @@ export const LoginScreen: FC<LoginScreenProps> = memo(function LoginScreen(props
     navigation.navigate("Register")
   }, [navigation])
 
+  const renderPasswordRightAccessory = useCallback(
+    (iconProps: any) => (
+      <TouchableOpacity onPress={togglePasswordVisibility} style={iconProps.style}>
+        <Ionicons
+          name={isPasswordVisible ? "eye-off-outline" : "eye-outline"}
+          size={s(20)}
+          color={colors.palette.onSurfaceVariant}
+        />
+      </TouchableOpacity>
+    ),
+    [isPasswordVisible, togglePasswordVisibility, colors],
+  )
+
   return (
     <Screen
       preset="scroll"
@@ -165,18 +178,7 @@ export const LoginScreen: FC<LoginScreenProps> = memo(function LoginScreen(props
               helper={passwordError}
               status={passwordError ? "error" : undefined}
               LeftAccessory={LockIcon}
-              RightAccessory={useCallback(
-                (iconProps: any) => (
-                  <TouchableOpacity onPress={togglePasswordVisibility} style={iconProps.style}>
-                    <Ionicons
-                      name={isPasswordVisible ? "eye-off-outline" : "eye-outline"}
-                      size={s(20)}
-                      color={colors.palette.onSurfaceVariant}
-                    />
-                  </TouchableOpacity>
-                ),
-                [isPasswordVisible, togglePasswordVisibility],
-              )}
+              RightAccessory={renderPasswordRightAccessory}
               containerStyle={styles.inputGroup}
             />
 

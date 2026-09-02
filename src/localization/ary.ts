@@ -377,7 +377,21 @@ const ary: Translations = {
     phoneLocked: "نمرة التليفون ما يمكنش تبدلها.",
     submit: "حفظ التغييرات",
     success: "تحدث البروفايل بنجاح!",
-  }
+  },
+  deleteAccountModal: {
+    title: "طلب مسح الحساب",
+    subtitle: "عافاك قولينا سبب العلاش باغي تمشي باش نحسنو المنصة.",
+    selectReasonLabel: "اختار سبب:",
+    reason1: "بعت المنتجات ديالي فالموقع",
+    reason2: "مشكل تقني / صعوبة فالاستعمال",
+    reason3: "بزاف د المكالمات / الميساجات المزعجة",
+    reason4: "مابقيتش كنستعمل التطبيق",
+    reasonOther: "سبب آخر",
+    commentLabel: "ملاحظات ولا تفاصيل (اختياري):",
+    commentPlaceholder: "شارك الملاحظات ديالك...",
+    submitBtn: "تأكيد الطلب",
+    successMsg: "تم إرسال طلب المسح للفريق ديالنا بنجاح. غادي يتعالج فظرف 48 ساعة.",
+  },
 }
 
 export default ary

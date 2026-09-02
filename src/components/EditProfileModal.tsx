@@ -21,6 +21,7 @@ import { updateProfile } from "@/services/api/modules/auth"
 import { useLocationsQuery } from "@/services/api/hooks"
 import { useAppTheme } from "@/theme/context"
 import { s, vs } from "@/utils/scaling"
+import { useSafeAreaInsetsStyle } from "@/utils/useSafeAreaInsetsStyle"
 
 interface EditProfileModalProps {
   visible: boolean
@@ -33,6 +34,7 @@ export const EditProfileModal: FC<EditProfileModalProps> = memo(function EditPro
 }) {
   const { theme } = useAppTheme()
   const colors = theme.colors
+  const $bottomContainerInsets = useSafeAreaInsetsStyle(["bottom"])
 
   const { userName, userPhone, userLocation, updateProfileState } = useAuth()
 
@@ -93,7 +95,11 @@ export const EditProfileModal: FC<EditProfileModalProps> = memo(function EditPro
       region: selectedRegion?.name || "",
       province: selectedProvince?.name || "",
       commune: selectedCommune?.name || undefined,
-      coordinates: selectedCommune?.coordinates || selectedProvince?.coordinates || selectedRegion?.coordinates || undefined,
+      coordinates:
+        selectedCommune?.coordinates ||
+        selectedProvince?.coordinates ||
+        selectedRegion?.coordinates ||
+        undefined,
     }
 
     setIsLoading(true)
@@ -116,7 +122,33 @@ export const EditProfileModal: FC<EditProfileModalProps> = memo(function EditPro
       setIsLoading(false)
       setErrorMsg(err.message || translate("common:error"))
     }
-  }, [fullName, address, selectedRegion, selectedProvince, selectedCommune, updateProfileState, onClose])
+  }, [
+    fullName,
+    address,
+    selectedRegion,
+    selectedProvince,
+    selectedCommune,
+    updateProfileState,
+    onClose,
+  ])
+
+  const renderPersonIcon = useCallback(
+    (props: TextFieldAccessoryProps) => (
+      <View style={props.style}>
+        <Ionicons name="person-outline" size={s(20)} color={colors.palette.onSurfaceVariant} />
+      </View>
+    ),
+    [colors],
+  )
+
+  const renderLocationIcon = useCallback(
+    (props: TextFieldAccessoryProps) => (
+      <View style={props.style}>
+        <Ionicons name="location-outline" size={s(20)} color={colors.palette.onSurfaceVariant} />
+      </View>
+    ),
+    [colors],
+  )
 
   if (!visible) return null
 
@@ -162,14 +194,7 @@ export const EditProfileModal: FC<EditProfileModalProps> = memo(function EditPro
                   setFullName(val)
                   if (errorMsg) setErrorMsg("")
                 }}
-                LeftAccessory={useCallback(
-                  (props: TextFieldAccessoryProps) => (
-                    <View style={props.style}>
-                      <Ionicons name="person-outline" size={s(20)} color={colors.palette.onSurfaceVariant} />
-                    </View>
-                  ),
-                  [colors],
-                )}
+                LeftAccessory={renderPersonIcon}
               />
 
               {/* Disabled Phone Number Field */}
@@ -178,14 +203,27 @@ export const EditProfileModal: FC<EditProfileModalProps> = memo(function EditPro
                   {translate("login:phone")}
                 </Text>
                 <View style={styles.disabledInputRow}>
-                  <Ionicons name="call-outline" size={s(18)} color={colors.palette.onSurfaceVariant} />
+                  <Ionicons
+                    name="call-outline"
+                    size={s(18)}
+                    color={colors.palette.onSurfaceVariant}
+                  />
                   <Text text={userPhone || ""} style={styles.disabledPhoneText} size="sm" />
-                  <Ionicons name="lock-closed" size={s(16)} color={colors.palette.error} style={{ marginLeft: "auto" }} />
+                  <Ionicons
+                    name="lock-closed"
+                    size={s(16)}
+                    color={colors.palette.error}
+                    style={{ marginLeft: "auto" }}
+                  />
                 </View>
                 <Text
                   tx="editProfile:phoneLocked"
                   size="xxs"
-                  style={{ color: colors.palette.onSurfaceVariant, marginTop: 4, fontStyle: "italic" }}
+                  style={{
+                    color: colors.palette.onSurfaceVariant,
+                    marginTop: 4,
+                    fontStyle: "italic",
+                  }}
                 />
               </View>
 
@@ -199,10 +237,18 @@ export const EditProfileModal: FC<EditProfileModalProps> = memo(function EditPro
                   style={styles.selectTrigger}
                 >
                   <Text
-                    text={selectedRegion ? selectedRegion.name : translate("addListing:selectRegionPlaceholder")}
+                    text={
+                      selectedRegion
+                        ? selectedRegion.name
+                        : translate("addListing:selectRegionPlaceholder")
+                    }
                     style={styles.selectValueText}
                   />
-                  <Ionicons name="chevron-down" size={s(20)} color={colors.palette.onSurfaceVariant} />
+                  <Ionicons
+                    name="chevron-down"
+                    size={s(20)}
+                    color={colors.palette.onSurfaceVariant}
+                  />
                 </TouchableOpacity>
               </View>
 
@@ -225,10 +271,18 @@ export const EditProfileModal: FC<EditProfileModalProps> = memo(function EditPro
                   style={styles.selectTrigger}
                 >
                   <Text
-                    text={selectedProvince ? selectedProvince.name : translate("addListing:selectProvincePlaceholder")}
+                    text={
+                      selectedProvince
+                        ? selectedProvince.name
+                        : translate("addListing:selectProvincePlaceholder")
+                    }
                     style={styles.selectValueText}
                   />
-                  <Ionicons name="chevron-down" size={s(20)} color={colors.palette.onSurfaceVariant} />
+                  <Ionicons
+                    name="chevron-down"
+                    size={s(20)}
+                    color={colors.palette.onSurfaceVariant}
+                  />
                 </TouchableOpacity>
               </View>
 
@@ -251,10 +305,18 @@ export const EditProfileModal: FC<EditProfileModalProps> = memo(function EditPro
                   style={styles.selectTrigger}
                 >
                   <Text
-                    text={selectedCommune ? selectedCommune.name : translate("addListing:selectCommunePlaceholder")}
+                    text={
+                      selectedCommune
+                        ? selectedCommune.name
+                        : translate("addListing:selectCommunePlaceholder")
+                    }
                     style={styles.selectValueText}
                   />
-                  <Ionicons name="chevron-down" size={s(20)} color={colors.palette.onSurfaceVariant} />
+                  <Ionicons
+                    name="chevron-down"
+                    size={s(20)}
+                    color={colors.palette.onSurfaceVariant}
+                  />
                 </TouchableOpacity>
               </View>
 
@@ -264,20 +326,17 @@ export const EditProfileModal: FC<EditProfileModalProps> = memo(function EditPro
                 placeholder={translate("addListing:addressPlaceholder")}
                 value={address}
                 onChangeText={setAddress}
-                LeftAccessory={useCallback(
-                  (props: TextFieldAccessoryProps) => (
-                    <View style={props.style}>
-                      <Ionicons name="location-outline" size={s(20)} color={colors.palette.onSurfaceVariant} />
-                    </View>
-                  ),
-                  [colors],
-                )}
+                LeftAccessory={renderLocationIcon}
               />
 
               {Boolean(errorMsg) && (
                 <View style={[styles.errorCard, { backgroundColor: colors.palette.error + "15" }]}>
                   <Ionicons name="alert-circle-outline" size={s(18)} color={colors.palette.error} />
-                  <Text text={errorMsg} size="xxs" style={[styles.errorText, { color: colors.palette.error }]} />
+                  <Text
+                    text={errorMsg}
+                    size="xxs"
+                    style={[styles.errorText, { color: colors.palette.error }]}
+                  />
                 </View>
               )}
 
@@ -285,12 +344,24 @@ export const EditProfileModal: FC<EditProfileModalProps> = memo(function EditPro
                 preset="primary"
                 style={styles.submitBtn}
                 onPress={handleSubmit}
-                disabled={isLoading || !fullName.trim() || !selectedRegion || !selectedProvince || !address || !address.trim()}
+                disabled={
+                  isLoading ||
+                  !fullName.trim() ||
+                  !selectedRegion ||
+                  !selectedProvince ||
+                  !address ||
+                  !address.trim()
+                }
               >
                 {isLoading ? (
                   <ActivityIndicator color="white" size="small" />
                 ) : (
-                  <Text tx="editProfile:submit" style={styles.submitBtnText} size="md" preset="bold" />
+                  <Text
+                    tx="editProfile:submit"
+                    style={styles.submitBtnText}
+                    size="md"
+                    preset="bold"
+                  />
                 )}
               </Button>
             </View>
@@ -299,8 +370,8 @@ export const EditProfileModal: FC<EditProfileModalProps> = memo(function EditPro
 
         {/* Region Selection Modal */}
         <Modal visible={isRegionModalVisible} animationType="slide" transparent>
-          <View style={[styles.modalOverlay, ]}>
-            <View style={styles.modalContent}>
+          <View style={[styles.modalOverlay]}>
+            <View style={[styles.modalContent, $bottomContainerInsets]}>
               <View style={styles.modalHeader}>
                 <Text tx="addListing:selectRegionPlaceholder" preset="bold" size="sm" />
                 <TouchableOpacity onPress={() => setIsRegionModalVisible(false)}>
@@ -308,7 +379,11 @@ export const EditProfileModal: FC<EditProfileModalProps> = memo(function EditPro
                 </TouchableOpacity>
               </View>
               {isFetchingRegions ? (
-                <ActivityIndicator size="small" color={colors.palette.primary} style={{ margin: 20 }} />
+                <ActivityIndicator
+                  size="small"
+                  color={colors.palette.primary}
+                  style={{ margin: 20 }}
+                />
               ) : (
                 <FlatList
                   data={dbRegions || []}
@@ -334,16 +409,25 @@ export const EditProfileModal: FC<EditProfileModalProps> = memo(function EditPro
 
         {/* Province Selection Modal */}
         <Modal visible={isProvinceModalVisible} animationType="slide" transparent>
-          <View style={[styles.modalOverlay, ]}>
-            <View style={styles.modalContent}>
+          <View style={[styles.modalOverlay]}>
+            <View style={[styles.modalContent, $bottomContainerInsets]}>
               <View style={styles.modalHeader}>
-                <Text tx="addListing:selectProvincePlaceholder" preset="bold" size="sm" style={{ textAlign: "left", flex: 1 }} />
+                <Text
+                  tx="addListing:selectProvincePlaceholder"
+                  preset="bold"
+                  size="sm"
+                  style={{ textAlign: "left", flex: 1 }}
+                />
                 <TouchableOpacity onPress={() => setIsProvinceModalVisible(false)}>
                   <Ionicons name="close" size={s(24)} color={colors.text} />
                 </TouchableOpacity>
               </View>
               {isFetchingProvinces ? (
-                <ActivityIndicator size="small" color={colors.palette.primary} style={{ margin: 20 }} />
+                <ActivityIndicator
+                  size="small"
+                  color={colors.palette.primary}
+                  style={{ margin: 20 }}
+                />
               ) : (
                 <FlatList
                   data={dbProvinces || []}
@@ -368,16 +452,25 @@ export const EditProfileModal: FC<EditProfileModalProps> = memo(function EditPro
 
         {/* Commune Selection Modal */}
         <Modal visible={isCommuneModalVisible} animationType="slide" transparent>
-          <View style={[styles.modalOverlay, ]}>
-            <View style={styles.modalContent}>
+          <View style={[styles.modalOverlay]}>
+            <View style={[styles.modalContent, $bottomContainerInsets]}>
               <View style={styles.modalHeader}>
-                <Text tx="addListing:selectCommunePlaceholder" preset="bold" size="sm" style={{ textAlign: "left", flex: 1 }} />
+                <Text
+                  tx="addListing:selectCommunePlaceholder"
+                  preset="bold"
+                  size="sm"
+                  style={{ textAlign: "left", flex: 1 }}
+                />
                 <TouchableOpacity onPress={() => setIsCommuneModalVisible(false)}>
                   <Ionicons name="close" size={s(24)} color={colors.text} />
                 </TouchableOpacity>
               </View>
               {isFetchingCommunes ? (
-                <ActivityIndicator size="small" color={colors.palette.primary} style={{ margin: 20 }} />
+                <ActivityIndicator
+                  size="small"
+                  color={colors.palette.primary}
+                  style={{ margin: 20 }}
+                />
               ) : (
                 <FlatList
                   data={[{ _id: "none", name: translate("common:none") }, ...(dbCommunes || [])]}
@@ -402,7 +495,6 @@ export const EditProfileModal: FC<EditProfileModalProps> = memo(function EditPro
             </View>
           </View>
         </Modal>
-
       </KeyboardAvoidingView>
     </Modal>
   )

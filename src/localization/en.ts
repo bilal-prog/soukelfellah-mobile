@@ -374,6 +374,20 @@ const en = {
     submit: "Save Changes",
     success: "Profile updated successfully!",
   },
+  deleteAccountModal: {
+    title: "Account Deletion Request",
+    subtitle: "Please explain the reason for your departure to help us improve the platform.",
+    selectReasonLabel: "Select a reason:",
+    reason1: "I already sold my products on the platform",
+    reason2: "Technical issue / Difficulty of use",
+    reason3: "Too many unwanted calls / messages",
+    reason4: "I no longer use the application",
+    reasonOther: "Other reason",
+    commentLabel: "Remarks or details (optional):",
+    commentPlaceholder: "Share your feedback...",
+    submitBtn: "Confirm Request",
+    successMsg: "Your deletion request has been sent to our team. It will be processed within 48 hours.",
+  },
 }
 
 

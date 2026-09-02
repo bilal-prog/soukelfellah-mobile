@@ -378,6 +378,20 @@ const fr: Translations = {
     submit: "Enregistrer les modifications",
     success: "Profil mis à jour avec succès !",
   },
+  deleteAccountModal: {
+    title: "Demande de suppression",
+    subtitle: "Expliquez-nous la raison de votre départ afin d'améliorer la plateforme.",
+    selectReasonLabel: "Sélectionnez un motif :",
+    reason1: "J'ai déjà vendu mes produits sur la plateforme",
+    reason2: "Problème technique / Difficulté d'utilisation",
+    reason3: "Trop d'appels / de messages non désirés",
+    reason4: "Je n'utilise plus l'application",
+    reasonOther: "Autre raison",
+    commentLabel: "Remarques ou détails (optionnel) :",
+    commentPlaceholder: "Partagez vos remarques...",
+    submitBtn: "Confirmer la demande",
+    successMsg: "Votre demande de suppression a bien été transmise à notre équipe. Elle sera traitée sous 48h.",
+  },
 }
 
 
