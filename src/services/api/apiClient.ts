@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/react-native"
 import { create, ApisauceInstance } from "apisauce"
 
 import Config from "@/config"
@@ -47,6 +48,19 @@ apiClient.axiosInstance.interceptors.response.use(
     const isAuthRoute =
       originalRequest?.url?.includes("/api/auth/login") ||
       originalRequest?.url?.includes("/api/auth/register")
+
+    if (response.status >= 500) {
+      Sentry.captureException(new Error(`API Error ${response.status}: ${originalRequest?.url}`), {
+        tags: {
+          api_endpoint: originalRequest?.url,
+          api_method: originalRequest?.method?.toUpperCase(),
+          api_status: response.status,
+        },
+        extra: {
+          responseData: response.data,
+        },
+      })
+    }
 
     if (response.status === 401 && originalRequest && !isAuthRoute) {
       if (originalRequest.url?.includes("/api/auth/refresh")) {
@@ -101,6 +115,20 @@ apiClient.axiosInstance.interceptors.response.use(
     const isAuthRoute =
       originalRequest?.url?.includes("/api/auth/login") ||
       originalRequest?.url?.includes("/api/auth/register")
+
+    const status = error.response?.status
+    if (!status || status >= 500) {
+      Sentry.captureException(error, {
+        tags: {
+          api_endpoint: originalRequest?.url,
+          api_method: originalRequest?.method?.toUpperCase(),
+          api_status: status || "NETWORK_ERROR",
+        },
+        extra: {
+          responseData: error.response?.data,
+        },
+      })
+    }
 
     if (error.response?.status === 401 && originalRequest && !isAuthRoute) {
       if (originalRequest.url?.includes("/api/auth/refresh")) {
