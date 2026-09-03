@@ -2,7 +2,7 @@ import React, { FC, useState, memo, useCallback } from "react"
 import { View, TouchableOpacity, Linking, StyleSheet, Alert } from "react-native"
 import { Ionicons } from "@expo/vector-icons"
 
-import { Button } from "@/components/Button"
+// import { Button } from "@/components/Button"
 import { Screen } from "@/components/Screen"
 import { Text } from "@/components/Text"
 import { TextField } from "@/components/TextField"
@@ -63,15 +63,15 @@ export const ForgotPasswordScreen: FC<ForgotPasswordScreenProps> = memo(
       }
     }, [phone, settings])
 
-    const handleCallSupport = useCallback(async () => {
-      const targetPhone = settings?.phone || Config.SUPPORT_PHONE || "+212663389779"
-      const telUrl = `tel:${targetPhone}`
-      try {
-        await Linking.openURL(telUrl)
-      } catch (err) {
-        console.warn("Failed to open Phone dialer:", err)
-      }
-    }, [settings])
+    // const handleCallSupport = useCallback(async () => {
+    //   const targetPhone = settings?.phone || Config.SUPPORT_PHONE || "+212663389779"
+    //   const telUrl = `tel:${targetPhone}`
+    //   try {
+    //     await Linking.openURL(telUrl)
+    //   } catch (err) {
+    //     console.warn("Failed to open Phone dialer:", err)
+    //   }
+    // }, [settings])
 
     return (
       <Screen preset="scroll" safeAreaEdges={["top", "bottom"]} style={styles.screen}>
@@ -126,12 +126,12 @@ export const ForgotPasswordScreen: FC<ForgotPasswordScreenProps> = memo(
             </TouchableOpacity>
 
             {/* Direct Call Support Button */}
-            <Button
+            {/* <Button
               preset="secondary"
               style={styles.callBtn}
               onPress={handleCallSupport}
               tx="forgotPassword:callBtn"
-            />
+            /> */}
           </View>
 
           {/* Helper Note */}

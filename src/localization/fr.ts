@@ -349,7 +349,7 @@ const fr: Translations = {
     phonePlaceholder: "06 XX XX XX XX",
     whatsappBtn: "Réinitialiser via WhatsApp",
     callBtn: "Ou appeler le support directement",
-    supportNote: "Notre équipe vérifiera votre compte et vous aidera à définir un nouveau mot de passe.",
+    supportNote: "Notre équipe vérifiera votre compte et vous aidera à définir un nouveau mot de passe. Condition importante : Le message WhatsApp doit obligatoirement être envoyé depuis le même numéro de téléphone associé à votre compte.",
     deleteAccountTitle: "Supprimer mon compte",
     deleteAccountConfirm: "Êtes-vous sûr de vouloir supprimer définitivement votre compte ? Toutes vos annonces et vos données seront supprimées. Cette action est irréversible.",
     deleteAccountSuccess: "Compte supprimé avec succès.",

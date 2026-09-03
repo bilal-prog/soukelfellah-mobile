@@ -8,7 +8,6 @@ import {
   ViewStyle,
 } from "react-native"
 
-import { fontSizes } from "@/theme/fontSizes"
 import { useAppTheme } from "@/theme/context"
 import { $styles } from "@/theme/styles"
 import type { ThemedStyle, ThemedStyleArray } from "@/theme/types"
@@ -122,8 +121,8 @@ const $baseViewStyle: ThemedStyle<ViewStyle> = ({ spacing }) => ({
 })
 
 const $baseTextStyle: ThemedStyle<TextStyle> = ({ typography }) => ({
-  fontSize: fontSizes.fs16,
-  lineHeight: vs(20),
+  fontSize: vs(18),
+  lineHeight: vs(30),
   fontFamily: typography.primary.bold,
   textAlign: "center",
   flexShrink: 1,
