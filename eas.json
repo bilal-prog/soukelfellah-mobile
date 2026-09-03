@@ -29,7 +29,8 @@
         "EAS_BUILD_PROFILE": "production",
         "NODE_ENV": "production",
         "EXPO_PUBLIC_API_URL": "https://soukelfellah-backend-git-17880232745.europe-west1.run.app",
-        "EXPO_PUBLIC_ONESIGNAL_APP_ID": "8076bdfe-04cf-44a0-945a-e44d2c6c8437"
+        "EXPO_PUBLIC_ONESIGNAL_APP_ID": "8076bdfe-04cf-44a0-945a-e44d2c6c8437",
+        "EXPO_PUBLIC_SENTRY_DSN": "https://4ebdc6982d58715245de4c846f774c7a@o4512021883846656.ingest.de.sentry.io/4512021962358864"
       }
     }
   },
