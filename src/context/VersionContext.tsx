@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useState, useCallback, Rea
 import { AppState, AppStateStatus } from "react-native"
 
 import { AppVersion, getAppVersions } from "@/services/api/modules/appVersions"
+import { getSettings } from "@/services/api/modules/settings"
 import { evaluateAppStatus, getCurrentAppInfo } from "@/utils/versionCheck"
 
 interface VersionContextData {
@@ -27,6 +28,16 @@ export const VersionProvider = ({ children }: { children: ReactNode }) => {
   const checkVersion = useCallback(async () => {
     setIsChecking(true)
     try {
+      // 1. Check global maintenance mode from settings first
+      const settingsRes = await getSettings()
+      if (settingsRes.kind === "ok" && settingsRes.settings?.isInMaintenance) {
+        setIsMaintenance(true)
+        setIsForceUpdate(false)
+        setIsOptionalUpdate(false)
+        return
+      }
+
+      // 2. Fallback to platform app-version evaluation
       const appInfo = getCurrentAppInfo()
       const result = await getAppVersions(appInfo.platform)
 
