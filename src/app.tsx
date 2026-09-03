@@ -28,7 +28,13 @@ const sentryDsn =
 
 Sentry.init({
   dsn: sentryDsn,
-  tracesSampleRate: 1.0,
+  ignoreErrors: [
+    "Network Error",
+    "NetworkError",
+    "Failed to fetch",
+    "Aborted",
+  ],
+  tracesSampleRate: __DEV__ ? 1.0 : 0.1,
   debug: __DEV__,
 })
 

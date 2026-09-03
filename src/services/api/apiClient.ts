@@ -117,12 +117,12 @@ apiClient.axiosInstance.interceptors.response.use(
       originalRequest?.url?.includes("/api/auth/register")
 
     const status = error.response?.status
-    if (!status || status >= 500) {
+    if (status && status >= 500) {
       Sentry.captureException(error, {
         tags: {
           api_endpoint: originalRequest?.url,
           api_method: originalRequest?.method?.toUpperCase(),
-          api_status: status || "NETWORK_ERROR",
+          api_status: status,
         },
         extra: {
           responseData: error.response?.data,
