@@ -1,5 +1,4 @@
-allowBuilds:
-  '@bugsnag/cli': set this to true or false
-  '@sentry/cli': true
-  esbuild: true
-  unrs-resolver: true
+onlyBuiltDependencies:
+  - '@sentry/cli'
+  - esbuild
+  - unrs-resolver
