@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider, useQueryClient } from "@tanstack/reac
 import { KeyboardProvider } from "react-native-keyboard-controller"
 import { OneSignal, LogLevel } from "react-native-onesignal"
 import { initialWindowMetrics, SafeAreaProvider } from "react-native-safe-area-context"
+import * as Sentry from "@sentry/react-native"
 
 import { AuthProvider } from "./context/AuthContext"
 import { NotificationProvider, useNotification } from "./context/NotificationContext"
@@ -19,6 +20,17 @@ import { ThemeProvider } from "./theme/context"
 
 import { customFontsToLoad } from "./theme/typography"
 import { loadDateFnsLocale } from "./utils/formatDate"
+
+// Initialize Sentry with EXPO_PUBLIC_SENTRY_DSN from .env.local
+const sentryDsn =
+  process.env.EXPO_PUBLIC_SENTRY_DSN ||
+  "https://4ebdc6982d58715245de4c846f774c7a@o4512021883846656.ingest.de.sentry.io/4512021962358864"
+
+Sentry.init({
+  dsn: sentryDsn,
+  tracesSampleRate: 1.0,
+  debug: __DEV__,
+})
 
 // Enable OneSignal verbose debug logs to trace notifications flow
 OneSignal.Debug.setLogLevel(LogLevel.Verbose)
@@ -34,7 +46,7 @@ if (oneSignalAppId) {
 
 const queryClient = new QueryClient()
 
-export function App() {
+function AppRoot() {
   const [areFontsLoaded, fontLoadError] = useFonts(customFontsToLoad)
   const [isI18nInitialized, setIsI18nInitialized] = useState(false)
 
@@ -145,4 +157,6 @@ function AppContent() {
     </>
   )
 }
+
+export const App = Sentry.wrap(AppRoot)
 export default App

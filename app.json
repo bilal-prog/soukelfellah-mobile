@@ -81,6 +81,13 @@
         "photosPermission": "The app accesses your photos to let you upload pictures for your listing.",
         "cameraPermission": "The app accesses your camera to let you take photos of your items for sale."
       }
+    ],
+    [
+      "@sentry/react-native/expo",
+      {
+        "organization": "soukelfellah",
+        "project": "react-native"
+      }
     ]
   ],
   "experiments": {
