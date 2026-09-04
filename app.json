@@ -11,9 +11,7 @@
   },
   "newArchEnabled": true,
   "jsEngine": "hermes",
-  "assetBundlePatterns": [
-    "**/*"
-  ],
+  "assetBundlePatterns": ["**/*"],
   "android": {
     "icon": "./assets/images/icon.png",
     "package": "com.soukelfellah",
@@ -41,10 +39,7 @@
             "scheme": "soukelfellah"
           }
         ],
-        "category": [
-          "BROWSABLE",
-          "DEFAULT"
-        ]
+        "category": ["BROWSABLE", "DEFAULT"]
       }
     ]
   },
@@ -53,9 +48,7 @@
     "supportsTablet": true,
     "bundleIdentifier": "com.soukelfellah",
     "infoPlist": {
-      "UIBackgroundModes": [
-        "remote-notification"
-      ]
+      "UIBackgroundModes": ["remote-notification"]
     },
     "entitlements": {
       "aps-environment": "production"
@@ -134,9 +127,7 @@
                 "targetName": "OneSignalNotificationServiceExtension",
                 "bundleIdentifier": "com.soukelfellah.OneSignalNotificationServiceExtension",
                 "entitlements": {
-                  "com.apple.security.application-groups": [
-                    "group.com.soukelfellah.onesignal"
-                  ]
+                  "com.apple.security.application-groups": ["group.com.soukelfellah.onesignal"]
                 }
               }
             ]
@@ -146,6 +137,5 @@
       "projectId": "0c1c991b-2626-4a98-82a7-ed7b85d0f123"
     }
   },
-  "owner": "bilal-dev",
-  "expo": {}
+  "owner": "bilal-dev"
 }
