@@ -46,7 +46,7 @@ export const ForgotPasswordScreen: FC<ForgotPasswordScreenProps> = memo(
       setPhoneError("")
 
       const message = `السلام عليكم، أريد إعادة تعيين كلمة السر لحسابي رقم: ${phone.trim()}`
-      const targetPhone = settings?.phone || Config.SUPPORT_WHATSAPP || "212663389779"
+      const targetPhone = settings?.phone || Config.SUPPORT_WHATSAPP || ""
       const nativeUrl = `whatsapp://send?phone=${targetPhone}&text=${encodeURIComponent(message)}`
       const webUrl = `https://wa.me/${targetPhone}?text=${encodeURIComponent(message)}`
 
@@ -64,7 +64,7 @@ export const ForgotPasswordScreen: FC<ForgotPasswordScreenProps> = memo(
     }, [phone, settings])
 
     // const handleCallSupport = useCallback(async () => {
-    //   const targetPhone = settings?.phone || Config.SUPPORT_PHONE || "+212663389779"
+    //   const targetPhone = settings?.phone || Config.SUPPORT_PHONE || ""
     //   const telUrl = `tel:${targetPhone}`
     //   try {
     //     await Linking.openURL(telUrl)

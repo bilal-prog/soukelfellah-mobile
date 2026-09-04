@@ -200,6 +200,60 @@ export const $styles = (theme: Theme) => ({
     gap: s(8),
   } as ViewStyle,
 
+  missingItemCardContainer: {
+    marginTop: vs(24),
+    padding: s(16),
+    backgroundColor: "#f0fdf4",
+    borderWidth: 1,
+    borderColor: "#bbf7d0",
+    borderRadius: s(20),
+  } as ViewStyle,
+  missingItemCardHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: s(12),
+  } as ViewStyle,
+  missingItemIconBox: {
+    width: s(36),
+    height: s(36),
+    borderRadius: s(12),
+    backgroundColor: "#0f5238",
+    alignItems: "center",
+    justifyContent: "center",
+  } as ViewStyle,
+  missingItemTypeRow: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: s(6),
+    marginTop: vs(12),
+  } as ViewStyle,
+  missingTypeChip: {
+    paddingHorizontal: s(10),
+    paddingVertical: vs(6),
+    borderRadius: s(10),
+    backgroundColor: "white",
+    borderWidth: 1,
+    borderColor: "#bbf7d0",
+  } as ViewStyle,
+  missingTypeChipSelected: {
+    backgroundColor: "#0f5238",
+    borderColor: "#0f5238",
+  } as ViewStyle,
+  missingTypeChipText: {
+    color: "#0f5238",
+  } as TextStyle,
+  missingTypeChipTextSelected: {
+    color: "white",
+  } as TextStyle,
+  missingWhatsappBtn: {
+    marginTop: vs(10),
+    height: vs(44),
+    backgroundColor: "#25D366",
+    borderRadius: s(12),
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+  } as ViewStyle,
   submitBtnText: {
     color: "white",
   } as TextStyle,

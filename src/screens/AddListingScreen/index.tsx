@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
   Modal,
   FlatList,
+  Linking,
 } from "react-native"
 import { Ionicons } from "@expo/vector-icons"
 
@@ -28,6 +29,7 @@ import {
   useMeasurementUnitsQuery,
   useUploadListingImageMutation,
   useLocationsQuery,
+  useSettingsQuery,
 } from "@/services/api/hooks"
 import { useAppTheme } from "@/theme/context"
 
@@ -47,7 +49,37 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
 
   const { isAuthenticated, userLocation } = useAuth()
 
-  const [step, setStep] = useState(1) // Step 1: Category, Step 2: Details & Media
+  const [step, setStep] = useState(1)
+  const [missingType, setMissingType] = useState<"CATEGORY" | "PRODUCT_TYPE" | "UNIT" | "OTHER">("CATEGORY")
+  const [missingName, setMissingName] = useState("")
+
+  const handleSendMissingItemWhatsApp = useCallback(() => {
+    const typeLabelMap: Record<string, string> = {
+      CATEGORY: translate("addListing:missingTypeCategory"),
+      PRODUCT_TYPE: translate("addListing:missingTypeProduct"),
+      UNIT: translate("addListing:missingTypeUnit"),
+      OTHER: translate("addListing:missingTypeOther"),
+    }
+    const typeLabel = typeLabelMap[missingType] || translate("addListing:missingTypeCategory")
+    const itemText = missingName.trim() ? missingName.trim() : "..."
+
+    const waPhone = (settings?.phone || "").replace(/\D/g, "");
+    if (!waPhone) return;
+    const msg = `سلام فريق دعم سوق الفلاح 👋\nأود اقتراح إضافة ${typeLabel} :\n"${itemText}"\nوشكراً !`
+    const encodedMsg = encodeURIComponent(msg)
+    const waUrl = `whatsapp://send?phone=${waPhone}&text=${encodedMsg}`
+    const webWaUrl = `https://wa.me/${waPhone}?text=${encodedMsg}`
+
+    Linking.canOpenURL(waUrl)
+      .then((supported) => {
+        if (supported) {
+          return Linking.openURL(waUrl)
+        } else {
+          return Linking.openURL(webWaUrl)
+        }
+      })
+      .catch(() => Linking.openURL(webWaUrl))
+  }, [missingType, missingName]) // Step 1: Category, Step 2: Details & Media
   const [selectedCat, setSelectedCat] = useState<"PRODUCT" | "EQUIPMENT" | null>(null)
 
   // Form fields
@@ -101,6 +133,7 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
   const { data: categories } = useCategoriesQuery()
   const { data: productTypes } = useProductTypesQuery()
   const { data: units } = useMeasurementUnitsQuery()
+  const { data: settings } = useSettingsQuery()
 
   const { data: dbRegions, isFetching: isFetchingRegions } = useLocationsQuery({ type: "region" })
   const { data: dbProvinces, isFetching: isFetchingProvinces } = useLocationsQuery(
@@ -1086,6 +1119,58 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
                   </View>
                 )}
               </Button>
+            </View>
+
+            {/* Missing Category / Product Type / Unit Suggestion Card */}
+            <View style={styles.missingItemCardContainer}>
+              <View style={styles.missingItemCardHeader}>
+                <View style={styles.missingItemIconBox}>
+                  <Ionicons name="chatbubble-ellipses" size={s(20)} color="white" />
+                </View>
+                <View style={{ flex: 1 }}>
+                  <Text tx="addListing:missingItemTitle" preset="bold" size="xs" style={{ color: "#0f5238", textAlign: "left" }} />
+                  <Text tx="addListing:missingItemDesc" size="xxs" style={{ color: "#2d6a4f", marginTop: 2, textAlign: "left" }} />
+                </View>
+              </View>
+
+              <View style={styles.missingItemTypeRow}>
+                {(["CATEGORY", "PRODUCT_TYPE", "UNIT", "OTHER"] as const).map((typeKey) => (
+                  <TouchableOpacity
+                    key={typeKey}
+                    onPress={() => setMissingType(typeKey)}
+                    style={[
+                      styles.missingTypeChip,
+                      missingType === typeKey && styles.missingTypeChipSelected,
+                    ]}
+                  >
+                    <Text
+                      tx={`addListing:missingType${typeKey === "CATEGORY" ? "Category" : typeKey === "PRODUCT_TYPE" ? "Product" : typeKey === "UNIT" ? "Unit" : "Other"}`}
+                      size="xxs"
+                      preset="bold"
+                      style={[
+                        styles.missingTypeChipText,
+                        missingType === typeKey && styles.missingTypeChipTextSelected,
+                      ]}
+                    />
+                  </TouchableOpacity>
+                ))}
+              </View>
+
+              <TextField
+                value={missingName}
+                onChangeText={setMissingName}
+                placeholder={translate("addListing:missingInputPlaceholder")}
+                containerStyle={{ marginTop: 8 }}
+                inputWrapperStyle={{ backgroundColor: "white", borderColor: "#bbf7d0" }}
+              />
+
+              <TouchableOpacity
+                onPress={handleSendMissingItemWhatsApp}
+                style={styles.missingWhatsappBtn}
+              >
+                <Ionicons name="logo-whatsapp" size={s(18)} color="white" />
+                <Text tx="addListing:missingWhatsappBtn" preset="bold" size="xs" style={{ color: "white", marginLeft: 6 }} />
+              </TouchableOpacity>
             </View>
           </View>
         )}
