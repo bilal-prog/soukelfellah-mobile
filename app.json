@@ -21,7 +21,32 @@
       "foregroundImage": "./assets/images/adaptive-icon.png",
       "backgroundColor": "#FFFFFF"
     },
-    "allowBackup": false
+    "allowBackup": false,
+    "intentFilters": [
+      {
+        "action": "VIEW",
+        "autoVerify": true,
+        "data": [
+          {
+            "scheme": "https",
+            "host": "souk-elfellah.ma",
+            "pathPrefix": "/annonce"
+          },
+          {
+            "scheme": "https",
+            "host": "soukelfellah.ma",
+            "pathPrefix": "/annonce"
+          },
+          {
+            "scheme": "soukelfellah"
+          }
+        ],
+        "category": [
+          "BROWSABLE",
+          "DEFAULT"
+        ]
+      }
+    ]
   },
   "ios": {
     "icon": "./assets/images/adaptive-icon.png",
@@ -121,5 +146,6 @@
       "projectId": "0c1c991b-2626-4a98-82a7-ed7b85d0f123"
     }
   },
-  "owner": "bilal-dev"
+  "owner": "bilal-dev",
+  "expo": {}
 }

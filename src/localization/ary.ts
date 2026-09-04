@@ -246,6 +246,9 @@ const ary: Translations = {
     updateSuccess: "تم تحديث الإعلان ديالك بنجاح!",
   },
   listingDetails: {
+    shareProduct: "بارطاجي الإعلان",
+    shareTitle: "سوق الفلاح",
+    shareMessage: "شوف هذا الإعلان ف سوق الفلاح :",
     title: "تفاصيل الإعلان",
     memberSince: "عضو منذ",
     productInfo: "معلومات على المنتوج",

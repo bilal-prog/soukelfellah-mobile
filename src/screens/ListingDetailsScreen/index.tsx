@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   Image,
   Linking,
+  Share,
   ActivityIndicator,
   Alert,
   Modal,
@@ -193,6 +194,20 @@ export const ListingDetailsScreen: FC<ListingDetailsScreenProps> = memo(
       )
     }, [listingId, selectedReason, reportDescription, reportListing])
 
+    const handleSharePress = useCallback(async () => {
+      try {
+        const shareUrl = `https://souk-elfellah.ma/annonce/${listingId}`
+        const message = `${listing.title}\n${shareUrl}`
+        await Share.share({
+          message,
+          url: shareUrl,
+          title: translate("listingDetails:shareTitle"),
+        })
+      } catch (error) {
+        console.warn("Error sharing listing:", error)
+      }
+    }, [listingId, listing])
+
     const handleFavoritePress = useCallback(() => {
       checkAuthAndExecute(() => toggleFavorite(listingId))
     }, [checkAuthAndExecute, toggleFavorite, listingId])
@@ -261,9 +276,9 @@ export const ListingDetailsScreen: FC<ListingDetailsScreenProps> = memo(
                 color={favorited ? colors.palette.error : colors.text}
               />
             </TouchableOpacity>
-            {/* <TouchableOpacity>
+            <TouchableOpacity onPress={handleSharePress}>
               <Ionicons name="share-social-outline" size={s(26)} color={colors.text} />
-            </TouchableOpacity> */}
+            </TouchableOpacity>
           </View>
         </View>
 
@@ -342,7 +357,10 @@ export const ListingDetailsScreen: FC<ListingDetailsScreenProps> = memo(
                   <>
                     <Text
                       text={(() => {
-                        const unitName = typeof listing.unitId === "object" ? (listing.unitId?.darijaName || listing.unitId?.name) : (listing.unit || listing.unitId || "")
+                        const unitName =
+                          typeof listing.unitId === "object"
+                            ? listing.unitId?.darijaName || listing.unitId?.name
+                            : listing.unit || listing.unitId || ""
                         const unitDisplay = unitName ? ` / ${unitName}` : ""
                         return `${listing.price} ${translate("common:currency")}${unitDisplay}`
                       })()}
@@ -479,15 +497,27 @@ export const ListingDetailsScreen: FC<ListingDetailsScreenProps> = memo(
                   <View style={styles.specsGrid}>
                     {!!listing.modelYear && (
                       <View style={styles.specBox}>
-                        <Ionicons name="calendar-outline" size={s(20)} color={colors.palette.primary} />
-                        <Text tx="listingDetails:specs.model" size="xxs" style={styles.locationText} />
+                        <Ionicons
+                          name="calendar-outline"
+                          size={s(20)}
+                          color={colors.palette.primary}
+                        />
+                        <Text
+                          tx="listingDetails:specs.model"
+                          size="xxs"
+                          style={styles.locationText}
+                        />
                         <Text text={String(listing.modelYear)} preset="bold" size="xs" />
                       </View>
                     )}
                     {!!listing.hours && (
                       <View style={styles.specBox}>
                         <Ionicons name="time-outline" size={s(20)} color={colors.palette.primary} />
-                        <Text tx="listingDetails:specs.hours" size="xxs" style={styles.locationText} />
+                        <Text
+                          tx="listingDetails:specs.hours"
+                          size="xxs"
+                          style={styles.locationText}
+                        />
                         <Text
                           text={
                             isNaN(Number(listing.hours))
@@ -506,7 +536,11 @@ export const ListingDetailsScreen: FC<ListingDetailsScreenProps> = memo(
                           size={s(20)}
                           color={colors.palette.primary}
                         />
-                        <Text tx="addListing:conditionLabel" size="xxs" style={styles.locationText} />
+                        <Text
+                          tx="addListing:conditionLabel"
+                          size="xxs"
+                          style={styles.locationText}
+                        />
                         <Text
                           text={
                             listing.condition === "NEW"
@@ -524,8 +558,8 @@ export const ListingDetailsScreen: FC<ListingDetailsScreenProps> = memo(
 
               const uName =
                 typeof listing?.unitId === "object"
-                  ? (listing.unitId?.darijaName || listing.unitId?.name)
-                  : (listing?.unit || "")
+                  ? listing.unitId?.darijaName || listing.unitId?.name
+                  : listing?.unit || ""
               if (!listing?.quantity && !uName) return null
               return (
                 <View style={styles.specsGrid}>

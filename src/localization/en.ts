@@ -244,6 +244,9 @@ const en = {
     updateSuccess: "Your listing has been updated successfully!",
   },
   listingDetails: {
+    shareProduct: "Share listing",
+    shareTitle: "Souk El Fellah",
+    shareMessage: "Check out this listing on Souk El Fellah:",
     title: "Listing Details",
     memberSince: "Member since",
     productInfo: "Product Information",

@@ -246,6 +246,9 @@ const ar: Translations = {
     updateSuccess: "تم تحديث إعلانك بنجاح!",
   },
   listingDetails: {
+    shareProduct: "مشاركة الإعلان",
+    shareTitle: "سوق الفلاح",
+    shareMessage: "اكتشف هذا الإعلان على سوق الفلاح :",
     title: "تفاصيل الإعلان",
     memberSince: "عضو منذ",
     productInfo: "معلومات المنتج",

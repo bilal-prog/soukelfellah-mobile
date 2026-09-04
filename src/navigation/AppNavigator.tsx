@@ -47,8 +47,7 @@ const AppStack = () => {
       {isAuthenticated || isGuest ? (
         <>
           <Stack.Screen name="MainTabs" component={MainTabNavigator} />
-          <Stack.Screen name="ListingDetails" component={ListingDetailsScreen} />
-          <Stack.Screen name="Notifications" component={NotificationsScreen} />
+                    <Stack.Screen name="Notifications" component={NotificationsScreen} />
           <Stack.Screen name="EditListing" component={EditListingScreen} />
         </>
       ) : (
@@ -59,6 +58,7 @@ const AppStack = () => {
           <Stack.Screen name="VerifyPhone" component={VerifyPhoneScreen} />
         </>
       )}
+      <Stack.Screen name="ListingDetails" component={ListingDetailsScreen} />
       <Stack.Screen name="Legal" component={LegalScreen} />
       <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
     </Stack.Navigator>
@@ -69,7 +69,7 @@ const AppStack = () => {
 
 
 const linking = {
-  prefixes: ["soukelfellah://", "https://soukelfellah.ma"],
+  prefixes: ["soukelfellah://", "https://souk-elfellah.ma", "https://soukelfellah.ma"],
   config: {
     screens: {
       ListingDetails: "annonce/:listingId",

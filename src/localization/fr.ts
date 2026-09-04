@@ -248,6 +248,9 @@ const fr: Translations = {
     updateSuccess: "Votre annonce a été mise à jour avec succès !",
   },
   listingDetails: {
+    shareProduct: "Partager l'annonce",
+    shareTitle: "Souk El Fellah",
+    shareMessage: "Découvrez cette annonce sur Souk El Fellah :",
     title: "Détails de l'annonce",
     memberSince: "Membre depuis",
     productInfo: "Informations sur le produit",
