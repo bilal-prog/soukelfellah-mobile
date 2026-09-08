@@ -46,6 +46,9 @@ const ar: Translations = {
     sessionExpiredTitle: "انتهت الجلسة",
     sessionExpiredMsg: "انتهت صلاحية الجلسة. يرجى تسجيل الدخول من جديد.",
     preparingPhotos: "جاري تحضير الصور...",
+    shareApp: "مشاركة التطبيق",
+    shareAppTitle: "سوق الفلاح",
+    shareAppMessage: "اكتشف تطبيق سوق الفلاح، منصتك الأولى لبيع وشراء المعدات الفلاحية، المواشي، والمنتجات الفلاحية بالمغرب بسهولة!",
   },
   welcome: {
     title: "مرحباً بك في سوق الفلاح",

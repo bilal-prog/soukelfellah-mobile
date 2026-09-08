@@ -44,6 +44,9 @@ const en = {
     sessionExpiredTitle: "Session Expired",
     sessionExpiredMsg: "Your session has expired. Please log in again.",
     preparingPhotos: "Preparing photos...",
+    shareApp: "Share App",
+    shareAppTitle: "Souk El Fellah",
+    shareAppMessage: "Discover Souk El Fellah, the premier agricultural marketplace in Morocco! Buy and sell farm equipment, livestock, and produce easily.",
   },
   welcome: {
     title: "Welcome to Souk El Fellah",

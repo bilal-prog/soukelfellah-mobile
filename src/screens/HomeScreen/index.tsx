@@ -11,6 +11,7 @@ import type { MainTabScreenProps } from "@/navigation/navigationTypes"
 import { useCategoriesQuery, useInfiniteListingsQuery } from "@/services/api/hooks"
 import { useAppTheme } from "@/theme/context"
 import { useAuth } from "@/context/AuthContext"
+import { shareApp } from "@/utils/shareApp"
 
 import { $styles } from "./styles"
 import { HomeListingItem } from "./components/HomeListingItem"
@@ -145,7 +146,12 @@ export const HomeScreen: FC<HomeScreenProps> = memo(function HomeScreen(props) {
           <Ionicons name="person-circle-outline" size={s(28)} color={colors.palette.primary} />
         </TouchableOpacity>
         <Text tx="home:title" style={styles.headerTitle} preset="display" />
-        <NotificationIconButton />
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
+          <TouchableOpacity style={styles.headerButton} onPress={shareApp}>
+            <Ionicons name="share-social-outline" size={s(24)} color={colors.palette.primary} />
+          </TouchableOpacity>
+          <NotificationIconButton />
+        </View>
       </View>
 
       {/* Main listings feed using FlatList */}

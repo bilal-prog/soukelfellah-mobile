@@ -15,6 +15,7 @@ import { translate } from "@/localization/translate"
 import type { MainTabScreenProps } from "@/navigation/navigationTypes"
 import { useListingsQuery, useMarkListingSoldMutation } from "@/services/api/hooks"
 import { useAppTheme } from "@/theme/context"
+import { shareApp } from "@/utils/shareApp"
 
 import { MyListingItem } from "./components/MyListingItem"
 import { MyListingsEmptyState } from "./components/MyListingsEmptyState"
@@ -189,6 +190,10 @@ export const MyListingsScreen: FC<MyListingsScreenProps> = memo(function MyListi
         <Text tx="myListings:title" style={styles.headerTitle} size="lg" preset="bold" />
 
         <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
+          <TouchableOpacity onPress={shareApp} style={styles.headerButton}>
+            <Ionicons name="share-social-outline" size={vs(26)} color={colors.palette.primary} />
+          </TouchableOpacity>
+
           <TouchableOpacity
             onPress={() => navigation.navigate("Legal", { type: "cgu" })}
             style={styles.headerButton}

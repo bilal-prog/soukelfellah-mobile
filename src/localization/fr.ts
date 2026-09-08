@@ -47,6 +47,9 @@ const fr: Translations = {
     sessionExpiredMsg: "Votre session a expiré. Veuillez vous reconnecter.",
     preparingPhotos: "Préparation des photos...",
     noResults: "Aucun résultat trouvé",
+    shareApp: "Partager l'application",
+    shareAppTitle: "Souk El Fellah",
+    shareAppMessage: "Découvrez Souk El Fellah, la marketplace agricole de référence au Maroc ! Achetez et vendez facilement du matériel agricole, du bétail et des produits de la ferme.",
   },
   welcome: {
     title: "Bienvenue sur Souk El Fellah",

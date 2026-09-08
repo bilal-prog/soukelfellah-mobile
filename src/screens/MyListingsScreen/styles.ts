@@ -58,6 +58,20 @@ export const $styles = (theme: Theme) => ({
     color: theme.colors.palette.onSurfaceVariant,
   } as TextStyle,
 
+  shareAppButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: s(6),
+    paddingHorizontal: s(12),
+    paddingVertical: vs(8),
+    backgroundColor: theme.colors.palette.primaryContainer,
+    borderRadius: s(20),
+  } as ViewStyle,
+
+  shareAppText: {
+    color: theme.colors.palette.primary,
+  } as TextStyle,
+
   statsSection: {
     paddingHorizontal: s(16),
     marginTop: vs(16),

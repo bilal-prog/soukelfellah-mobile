@@ -5,6 +5,7 @@ import { Ionicons } from "@expo/vector-icons"
 import { Text } from "@/components/Text"
 import { translate } from "@/localization/translate"
 import { useAppTheme } from "@/theme/context"
+import { shareApp } from "@/utils/shareApp"
 import { vs } from "@/utils/scaling"
 
 export interface MyListingsHeaderProps {
@@ -45,6 +46,11 @@ export const MyListingsHeader = memo(function MyListingsHeader(props: MyListings
           <Text text={userName || translate("common:farmer")} preset="bold" size="md" />
           <Text text={userPhone || "06XXXXXXXX"} size="xs" style={styles.profilePhone} />
         </View>
+
+        <TouchableOpacity style={styles.shareAppButton} onPress={shareApp} activeOpacity={0.7}>
+          <Ionicons name="share-social" size={vs(18)} color={colors.palette.primary} />
+          <Text tx="common:shareApp" size="xs" preset="bold" style={styles.shareAppText} />
+        </TouchableOpacity>
       </View>
 
       {/* Statistics Section */}

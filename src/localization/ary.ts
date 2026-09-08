@@ -46,6 +46,9 @@ const ary: Translations = {
     sessionExpiredTitle: "تسالاوات الجلسة",
     sessionExpiredMsg: "تسالات الجلسة ديالك. عاود دخل من جديد.",
     preparingPhotos: "جاري تحضير الصور...",
+    shareApp: "بارطاجي التطبيق",
+    shareAppTitle: "سوق الفلاح",
+    shareAppMessage: "اكتشف تطبيق سوق الفلاح، أول منصة لبيع وشراء المعدات الفلاحية، المواشي والسلع الفلاحية فالمغرب بكل سهولة!",
   },
   welcome: {
     title: "مرحبا بك في سوق الفلاح",
