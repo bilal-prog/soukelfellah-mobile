@@ -2,6 +2,7 @@ import React, { memo } from "react"
 
 import { ListingCard } from "@/components/ListingCard"
 import { formatFullAddress } from "@/utils/formatAddress"
+import { getUnitDisplayName } from "@/utils/unit"
 
 interface SearchListingItemProps {
   item: any
@@ -24,11 +25,7 @@ export const SearchListingItem = memo(function SearchListingItem({
       listingDirection={item.listingDirection}
       listingType={item.listingType}
       quantity={item.quantity}
-      unit={
-        typeof item.unitId === "object"
-          ? (item.unitId?.darijaName || item.unitId?.name)
-          : (item.unit || item.unitId || undefined)
-      }
+      unit={getUnitDisplayName(item.unitId || item.unit)}
       locationName={formatFullAddress(item.location)}
       imageUri={typeof item.images[0] === "object" ? item.images[0]?.url : item.images[0]}
       phone={typeof item.sellerId === "object" ? item.sellerId?.phone : undefined}

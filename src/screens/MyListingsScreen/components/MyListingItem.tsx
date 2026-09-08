@@ -5,6 +5,7 @@ import { Ionicons } from "@expo/vector-icons"
 import { Text } from "@/components/Text"
 import { translate } from "@/localization/translate"
 import { formatListingDate } from "@/utils/formatDate"
+import { getUnitDisplayName } from "@/utils/unit"
 import { s } from "@/utils/scaling"
 
 interface MyListingItemProps {
@@ -26,7 +27,7 @@ export const MyListingItem = memo(function MyListingItem({
 }: MyListingItemProps) {
   const imageUri =
     typeof item.images?.[0] === "object" ? item.images[0]?.url : item.images?.[0] || item.image
-  const unitName = typeof item.unitId === "object" ? (item.unitId?.darijaName || item.unitId?.name) : (item.unit || item.unitId || "")
+  const unitName = getUnitDisplayName(item.unitId || item.unit) || ""
   const unitText = unitName ? unitName : ""
 
   const getCreatedDateText = () => {

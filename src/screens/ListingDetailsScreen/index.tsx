@@ -36,6 +36,7 @@ import { $styles } from "./styles"
 import { useSafeAreaInsetsStyle } from "@/utils/useSafeAreaInsetsStyle"
 import { formatFullAddress } from "@/utils/formatAddress"
 import { formatListingDate } from "@/utils/formatDate"
+import { getUnitDisplayName } from "@/utils/unit"
 import { s, vs } from "@/utils/scaling"
 
 interface ListingDetailsScreenProps extends AppStackScreenProps<"ListingDetails"> {}
@@ -357,10 +358,7 @@ export const ListingDetailsScreen: FC<ListingDetailsScreenProps> = memo(
                   <>
                     <Text
                       text={(() => {
-                        const unitName =
-                          typeof listing.unitId === "object"
-                            ? listing.unitId?.darijaName || listing.unitId?.name
-                            : listing.unit || listing.unitId || ""
+                        const unitName = getUnitDisplayName(listing.unitId || listing.unit)
                         const unitDisplay = unitName ? ` / ${unitName}` : ""
                         return `${listing.price} ${translate("common:currency")}${unitDisplay}`
                       })()}
@@ -556,10 +554,7 @@ export const ListingDetailsScreen: FC<ListingDetailsScreenProps> = memo(
                 )
               }
 
-              const uName =
-                typeof listing?.unitId === "object"
-                  ? listing.unitId?.darijaName || listing.unitId?.name
-                  : listing?.unit || ""
+              const uName = getUnitDisplayName(listing?.unitId || listing?.unit) || ""
               if (!listing?.quantity && !uName) return null
               return (
                 <View style={styles.specsGrid}>

@@ -16,6 +16,7 @@ import { isRTL } from "@/localization"
 import { translate } from "@/localization/translate"
 import { useAppTheme } from "@/theme/context"
 import { formatListingDate } from "@/utils/formatDate"
+import { getUnitDisplayName } from "@/utils/unit"
 import { s, scale, vs } from "@/utils/scaling"
 
 import { trackListingCall, trackListingMessage } from "@/services/api/modules/listings"
@@ -344,7 +345,8 @@ export const ListingCard = memo(function ListingCard(props: ListingCardProps) {
                   {price}{" "}
                   <Text
                     text={(() => {
-                      const unitStr = unit ? ` / ${unit}` : ""
+                      const cleanUnit = getUnitDisplayName(unit)
+                      const unitStr = cleanUnit ? ` / ${cleanUnit}` : ""
                       return priceType === "NEGOTIABLE"
                         ? `${translate("common:currency")}${unitStr} (${translate("addListing:priceTypeNegotiable")})`
                         : `${translate("common:currency")}${unitStr}`
