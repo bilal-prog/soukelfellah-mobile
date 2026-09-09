@@ -155,6 +155,10 @@ export const SearchScreen: FC<SearchScreenProps> = memo(function SearchScreen(pr
       <FlatList
         data={filteredListings}
         keyExtractor={(item) => item?._id}
+        removeClippedSubviews={true}
+        maxToRenderPerBatch={10}
+        windowSize={10}
+        initialNumToRender={10}
         renderItem={renderListingItem}
         ListHeaderComponent={
           <SearchHeader
@@ -201,6 +205,10 @@ export const SearchScreen: FC<SearchScreenProps> = memo(function SearchScreen(pr
             <FlatList
               data={[{ _id: "all", name: translate("common:all") }, ...(dbRegions || [])]}
               keyExtractor={(item: any) => item?._id}
+              removeClippedSubviews={true}
+              maxToRenderPerBatch={10}
+              windowSize={10}
+              initialNumToRender={10}
               renderItem={({ item }: any) => (
                 <TouchableOpacity
                   style={styles.modalItem}
@@ -243,6 +251,10 @@ export const SearchScreen: FC<SearchScreenProps> = memo(function SearchScreen(pr
             <FlatList
               data={[{ _id: "all", name: translate("common:all") }, ...(dbProvinces || [])]}
               keyExtractor={(item: any) => item?._id}
+              removeClippedSubviews={true}
+              maxToRenderPerBatch={10}
+              windowSize={10}
+              initialNumToRender={10}
               renderItem={({ item }: any) => (
                 <TouchableOpacity
                   style={styles.modalItem}
@@ -283,6 +295,10 @@ export const SearchScreen: FC<SearchScreenProps> = memo(function SearchScreen(pr
             <FlatList
               data={[{ _id: "all", name: translate("common:all") }, ...(dbCommunes || [])]}
               keyExtractor={(item: any) => item?._id}
+              removeClippedSubviews={true}
+              maxToRenderPerBatch={10}
+              windowSize={10}
+              initialNumToRender={10}
               renderItem={({ item }: any) => (
                 <TouchableOpacity
                   style={styles.modalItem}

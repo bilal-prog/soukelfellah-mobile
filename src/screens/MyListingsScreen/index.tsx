@@ -212,6 +212,10 @@ export const MyListingsScreen: FC<MyListingsScreenProps> = memo(function MyListi
         <FlatList
           data={visibleListings}
           keyExtractor={(item) => item?._id}
+          removeClippedSubviews={true}
+          maxToRenderPerBatch={10}
+          windowSize={10}
+          initialNumToRender={10}
           renderItem={renderMyListingCard}
           ListHeaderComponent={renderMyListingsHeader}
           ListEmptyComponent={renderMyListingsEmptyState}

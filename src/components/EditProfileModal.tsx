@@ -388,6 +388,10 @@ export const EditProfileModal: FC<EditProfileModalProps> = memo(function EditPro
                 <FlatList
                   data={dbRegions || []}
                   keyExtractor={(item: any) => item?._id}
+                  removeClippedSubviews={true}
+                  maxToRenderPerBatch={10}
+                  windowSize={10}
+                  initialNumToRender={10}
                   renderItem={({ item }: any) => (
                     <TouchableOpacity
                       style={styles.modalItem}
@@ -432,6 +436,10 @@ export const EditProfileModal: FC<EditProfileModalProps> = memo(function EditPro
                 <FlatList
                   data={dbProvinces || []}
                   keyExtractor={(item: any) => item?._id}
+                  removeClippedSubviews={true}
+                  maxToRenderPerBatch={10}
+                  windowSize={10}
+                  initialNumToRender={10}
                   renderItem={({ item }: any) => (
                     <TouchableOpacity
                       style={styles.modalItem}
@@ -475,6 +483,10 @@ export const EditProfileModal: FC<EditProfileModalProps> = memo(function EditPro
                 <FlatList
                   data={[{ _id: "none", name: translate("common:none") }, ...(dbCommunes || [])]}
                   keyExtractor={(item: any) => item?._id}
+                  removeClippedSubviews={true}
+                  maxToRenderPerBatch={10}
+                  windowSize={10}
+                  initialNumToRender={10}
                   renderItem={({ item }: any) => (
                     <TouchableOpacity
                       style={styles.modalItem}

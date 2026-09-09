@@ -464,6 +464,10 @@ export const RegisterScreen: FC<RegisterScreenProps> = memo(function RegisterScr
               <FlatList
                 data={dbRegions || []}
                 keyExtractor={(item: any) => item?._id}
+                removeClippedSubviews={true}
+                maxToRenderPerBatch={10}
+                windowSize={10}
+                initialNumToRender={10}
                 renderItem={({ item }: any) => (
                   <TouchableOpacity
                     style={styles.modalItem}
@@ -509,6 +513,10 @@ export const RegisterScreen: FC<RegisterScreenProps> = memo(function RegisterScr
               <FlatList
                 data={dbProvinces || []}
                 keyExtractor={(item: any) => item?._id}
+                removeClippedSubviews={true}
+                maxToRenderPerBatch={10}
+                windowSize={10}
+                initialNumToRender={10}
                 renderItem={({ item }: any) => (
                   <TouchableOpacity
                     style={styles.modalItem}
@@ -553,6 +561,10 @@ export const RegisterScreen: FC<RegisterScreenProps> = memo(function RegisterScr
               <FlatList
                 data={[{ _id: "none", name: translate("common:none") }, ...(dbCommunes || [])]}
                 keyExtractor={(item: any) => item?._id}
+                removeClippedSubviews={true}
+                maxToRenderPerBatch={10}
+                windowSize={10}
+                initialNumToRender={10}
                 renderItem={({ item }: any) => (
                   <TouchableOpacity
                     style={styles.modalItem}

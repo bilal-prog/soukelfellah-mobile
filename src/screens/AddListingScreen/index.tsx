@@ -1196,6 +1196,10 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
               <FlatList
                 data={dbRegions || []}
                 keyExtractor={(item: any) => item?._id}
+                removeClippedSubviews={true}
+                maxToRenderPerBatch={10}
+                windowSize={10}
+                initialNumToRender={10}
                 renderItem={({ item }: any) => (
                   <TouchableOpacity
                     style={styles.modalItem}
@@ -1240,6 +1244,10 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
               <FlatList
                 data={dbProvinces || []}
                 keyExtractor={(item: any) => item?._id}
+                removeClippedSubviews={true}
+                maxToRenderPerBatch={10}
+                windowSize={10}
+                initialNumToRender={10}
                 renderItem={({ item }: any) => (
                   <TouchableOpacity
                     style={styles.modalItem}
@@ -1283,6 +1291,10 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
               <FlatList
                 data={[{ _id: "none", name: translate("common:none") }, ...(dbCommunes || [])]}
                 keyExtractor={(item: any) => item?._id}
+                removeClippedSubviews={true}
+                maxToRenderPerBatch={10}
+                windowSize={10}
+                initialNumToRender={10}
                 renderItem={({ item }: any) => (
                   <TouchableOpacity
                     style={styles.modalItem}
@@ -1322,6 +1334,10 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
             <FlatList
               data={availableCategories}
               keyExtractor={(item: any) => item?._id}
+              removeClippedSubviews={true}
+              maxToRenderPerBatch={10}
+              windowSize={10}
+              initialNumToRender={10}
               renderItem={({ item }: any) => (
                 <TouchableOpacity
                   style={styles.modalItem}
@@ -1359,6 +1375,10 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
             <FlatList
               data={filteredProductTypes}
               keyExtractor={(item: any) => item?._id}
+              removeClippedSubviews={true}
+              maxToRenderPerBatch={10}
+              windowSize={10}
+              initialNumToRender={10}
               renderItem={({ item }: any) => (
                 <TouchableOpacity
                   style={styles.modalItem}
@@ -1412,6 +1432,10 @@ export const AddListingScreen: FC<AddListingScreenProps> = memo(function AddList
             <FlatList
               data={mappedAllowedUnits}
               keyExtractor={(item: any) => item?._id}
+              removeClippedSubviews={true}
+              maxToRenderPerBatch={10}
+              windowSize={10}
+              initialNumToRender={10}
               renderItem={({ item }: any) => (
                 <TouchableOpacity
                   style={styles.modalItem}
