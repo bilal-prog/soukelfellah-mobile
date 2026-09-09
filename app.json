@@ -59,7 +59,13 @@
     "bundler": "metro"
   },
   "plugins": [
-    "expo-localization",
+    [
+      "expo-localization",
+      {
+        "supportsRTL": true,
+        "forcesRTL": true
+      }
+    ],
     "expo-font",
     [
       "expo-splash-screen",
