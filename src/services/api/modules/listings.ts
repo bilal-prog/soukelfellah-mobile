@@ -83,6 +83,7 @@ export interface CreateListingParams {
   location: LocationSchema
   modelYear?: string
   hours?: string
+  source?: "web_app" | "mobile_app"
 }
 
 export interface UploadFileResponse {
@@ -117,7 +118,7 @@ export const getListingDetails = async (id: string) => {
 export const createListing = async (params: CreateListingParams) => {
   const response = await apiClient.post<{ success: boolean; data: ApiListing }>(
     "/api/listings",
-    params,
+    { source: "mobile_app", ...params },
   )
   if (!response.ok) {
     return { kind: "failure", error: response.data || response.problem } as const
